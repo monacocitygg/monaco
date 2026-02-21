@@ -21,14 +21,6 @@ Config = {}
 
 Config.Animations = {
     {
-        id    = "none",
-        label = "Nenhuma",
-        icon  = "mdi-cancel",
-        dict  = nil,
-        anim  = nil,
-        prop  = nil,
-    },
-    {
         id    = "radio_clip",
         label = "Rádio Padrão",
         icon  = "mdi-radio-handheld",

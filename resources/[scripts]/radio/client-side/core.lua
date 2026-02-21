@@ -14,7 +14,7 @@ vSERVER = Tunnel.getInterface("radio")
 local Frequency = 0
 local Object = nil
 local Timer = GetGameTimer()
-local CurrentAnim = "none"
+local CurrentAnim = "radio_clip"
 local AnimPlaying = false
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- ANIMATION FUNCTIONS
