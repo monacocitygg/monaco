@@ -1,0 +1,57 @@
+<html lang="pt-br">
+	<head>
+		<meta charset="UTF-8" />
+		<title>[Hypex Network] Radio</title>
+		<link rel="stylesheet" href="style.css" />
+		<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+		<script src="https://code.jquery.com/ui/1.13.0/jquery-ui.min.js"></script>
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@6.5.95/css/materialdesignicons.min.css">
+		<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+		<script src="jquery.js"></script>
+	</head>
+	<body>
+		<div id="Radio">
+			<div class="header">
+				<div class="brand">
+					<i class="mdi mdi-access-point"></i> RÁDIO
+				</div>
+				<div class="header-icons">
+					<div class="icon-box"><i class="mdi mdi-lock"></i></div>
+					<div class="icon-box"><i class="mdi mdi-microphone"></i></div>
+				</div>
+			</div>
+
+			<div class="frequency-list">
+				<div class="frequency-item">
+					<input type="text" class="frequency-input" maxlength="5" placeholder="Digite a frequencia">
+					<i class="mdi mdi-microphone action-btn"></i>
+				</div>
+				<div class="frequency-item">
+					<input type="text" class="frequency-input" maxlength="5" placeholder="Digite a frequencia">
+					<i class="mdi mdi-microphone action-btn"></i>
+				</div>
+				<div class="frequency-item">
+					<input type="text" class="frequency-input" maxlength="5" placeholder="Digite a frequencia">
+					<i class="mdi mdi-microphone action-btn"></i>
+				</div>
+			</div>
+
+			<div class="animation-container">
+				<div class="animation-label">Animação do rádio</div>
+				<div class="animation-options" id="animationOptions">
+				</div>
+			</div>
+
+		<div class="volume-container">
+				<div class="volume-label">Volume da rádio</div>
+				<div class="volume-controls">
+					<div class="volume-icon-box">
+						<i class="mdi mdi-volume-high"></i>
+					</div>
+					<input type="range" class="volume-slider" min="0" max="100" value="90">
+					<div class="volume-text">90%</div>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>

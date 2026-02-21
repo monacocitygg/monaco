@@ -1,0 +1,76 @@
+{
+    "token": "",
+    "client": {
+        "bankType": "fleeca",
+       "uploadServer": "http://45.149.153.98:8080/upload" ,
+        "allowUnsafeURL": true,
+        "videoServer": "ws://45.149.153.98:8080/",
+        "case": "iphonexs",
+        "isAndroid": true,
+        "apps": {
+
+            "paypal": {"name": "Paypal", "icon": "http://192.95.36.145/smartphone/apps/paypal.png"},
+            "bank": {"name": "Fleeca", "icon": "http://192.95.36.145/smartphone/apps/fleeca.png"},
+            "olx": {"name": "Olx", "icon": "http://192.95.36.145/smartphone/apps/olx.png"},
+            "tor": {"name": "Tor", "icon": "http://192.95.36.145/smartphone/apps/tor.png"},
+            "twitter": {"name": "Twitter", "icon": "http://192.95.36.145/smartphone/apps/twitter.png"},
+            "instagram": {"name": "Instagram", "icon": "http://192.95.36.145/smartphone/apps/instagram.png"},
+            "minesweeper": {"name": "Campo Minado", "icon": "http://192.95.36.145/smartphone/apps/mina-naval.png"},
+            "calculator": {"name": "Calculadora", "icon": "http://192.95.36.145/smartphone/apps/calculadora.png"},
+            "gallery": {"name": "Galeria", "icon": "http://192.95.36.145/smartphone/apps/Galeria.png"},
+            "sms": {"name": "Mensagens", "icon": "http://192.95.36.145/smartphone/apps/Mensagens.png"},
+            "notes": {"name": "Anotações", "icon": "http://192.95.36.145/smartphone/apps/Anotacoes.png"},
+            "truco": {"name": "Truco", "icon": "http://192.95.36.145/smartphone/apps/truco.png"},
+            "settings": {"name": "Config", "icon": "http://192.95.36.145/smartphone/apps/settings.png"},
+            "contacts": {"name": "Contatos", "icon": "http://192.95.36.145/smartphone/apps/Contatos.png"},
+            "yellowpages": {"name": "Yellow Pages", "icon": "http://192.95.36.145/smartphone/apps/yellowpages.png"}
+          }, 
+        "useGameClock": true,
+        "phone_template": "XXX-XXX",
+        "backgroundURL": "",
+        "disabledApps": [
+            "paypal",
+            "Tinder",
+            "Blaze",
+            "Cassino",
+            "casino",
+            "weazel",
+            "blaze"
+        ]
+    },
+    "call_mode": "pma-voice",
+    "webhookURL": "https://discord.com/api/webhooks/1474563046264410123/YBwxF54IeC7VrQuDe6kexAjfNUAG8Y2t5xnZ7cNG57baP1a-AIxUXlUCcC1EuTLEfF-E",
+    "instagram_verify": "verificado",
+    "weazel_tags": "Dono",
+    "instagram_accounts": {
+        "*": 1,
+        "VIP": 2
+    },
+    "moderator": "Dono",
+    "item": "cellphone",
+    "services": [
+        {
+            "name": "Policia",
+            "number": "911",
+            "permission": "Police"
+        },
+        {
+            "name": "Hospital",
+            "number": "112",
+            "permission": "Paramedic"
+        },
+        {
+            "name": "Mecanica",
+            "number": "0800 043",
+            "permission": "Mechanic"
+        },
+        {
+            "name": "Prefeitura",
+            "number": "0800 044",
+            "permission": "Dono"
+        }
+    ],
+    "base": "creative_network",
+    "db_driver": "oxmysql",
+    "channel": "stable"
+}

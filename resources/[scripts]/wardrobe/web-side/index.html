@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wardrobe</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container" style="display: none;">
+        <div class="header">
+            <div class="title-section">
+                <div class="icon-box">
+                    <i class="fa-solid fa-shirt"></i>
+                </div>
+                <div class="text-box">
+                    <h1>Armário</h1>
+                    <p>Gerencie suas roupas salvas</p>
+                </div>
+            </div>
+            <div class="actions">
+                <button id="equip-btn" disabled><i class="fa-solid fa-check"></i> Equipar</button>
+                <button id="edit-btn" disabled><i class="fa-solid fa-pen-to-square"></i> Editar</button>
+                <button id="delete-btn" disabled><i class="fa-solid fa-trash"></i> Excluir</button>
+            </div>
+        </div>
+        
+        <div class="content">
+            <div class="grid" id="outfit-grid">
+                <!-- Items will be injected here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Name Input Modal -->
+    <div class="modal" id="name-modal" style="display: none;">
+        <div class="modal-content">
+            <h2>Nome do Preset</h2>
+            <input type="text" id="preset-name" placeholder="Digite o nome..." maxlength="20">
+            <div class="modal-actions">
+                <button id="cancel-save">Cancelar</button>
+                <button id="confirm-save">Salvar</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

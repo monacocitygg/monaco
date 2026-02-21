@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Shop Interface</title>
+    <link href="style.css" rel="stylesheet" type="text/css"/>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div id="app">
+        <header>
+            <div class="header-left">
+                <div class="cart-icon-box">
+                    <i class="fa-solid fa-cart-shopping"></i>
+                </div>
+                <div class="header-texts">
+                    <span class="sub-title">Compra seus itens</span>
+                    <h1 class="shop-title">Loja de departamento</h1>
+                </div>
+            </div>
+            
+            <div class="search-bar">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" id="search-input" placeholder="Pesquisar">
+            </div>
+
+            <div class="header-right">
+                <div class="balance-box">
+                    <div class="coin-icon">R$</div>
+                    <span id="player-balance">0</span>
+                </div>
+            </div>
+        </header>
+
+        <main>
+            <div class="content-area">
+                <div class="categories-bar">
+                    <span class="section-title">Lista de produtos</span>
+                </div>
+
+                <div class="products-grid" id="products-list">
+                    <!-- Products will be injected here -->
+                </div>
+            </div>
+
+            <aside class="cart-sidebar">
+                <h2 class="cart-title">Carrinho</h2>
+                <div class="cart-items" id="cart-list">
+                    <div class="empty-cart-message">Carrinho vazio</div>
+                </div>
+                
+                <div class="cart-footer">
+                    <div class="total-row">
+                        <span>Total do valor:</span>
+                        <span id="cart-total">R$ 0</span>
+                    </div>
+                    <button id="checkout-btn" class="checkout-btn" disabled>Comprar</button>
+                    <div class="exit-hint">
+                        <span class="key-badge">ESC</span> Sair da Loja de departamento
+                    </div>
+                </div>
+            </aside>
+        </main>
+    </div>
+    <script src="jquery.js"></script>
+</body>
+</html>

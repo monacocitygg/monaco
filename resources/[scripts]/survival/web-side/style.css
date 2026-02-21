@@ -1,0 +1,177 @@
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+	font-family: "Montserrat", sans-serif;
+	user-select: none;
+}
+
+body, html {
+	width: 100%;
+	height: 100%;
+	overflow: hidden;
+}
+
+#deathDiv {
+	display: none;
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	top: 0;
+	left: 0;
+	background: rgba(0, 0, 0, 0.8);
+}
+
+.container {
+	position: absolute;
+	bottom: 50px;
+	width: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+/* Left Side - Now Centered */
+.left-side {
+	color: white;
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+	align-items: center;
+}
+
+/* Removed Title Group - RESTORED and Updated */
+.title-group {
+	display: flex;
+	flex-direction: column;
+    align-items: center;
+}
+
+.title-group .sub-title {
+	font-size: 24px;
+	font-weight: 300;
+	color: #ffffff;
+	letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+.title-group .main-title {
+	font-size: 64px;
+	font-weight: 900;
+	color: #8257E5; /* Purple Color */
+	line-height: 1;
+	text-shadow: 0 0 20px rgba(160, 32, 240, 0.4); /* Purple glow */
+    text-transform: uppercase;
+    margin-bottom: 10px;
+}
+
+.heartbeat-line {
+	width: 500px;
+	height: 80px;
+	margin: 0;
+	position: relative;
+    /* Removed background */
+    background: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.heartbeat-line::after {
+    /* Removed gradient overlay */
+    content: none;
+}
+
+/* Remove previous definition of pulse-svg polyline to avoid conflict/duplication if any, 
+   although in this file we just added the animation block above. 
+   Wait, looking at previous Read output, the original definition was at lines 83-89. 
+   I need to remove that original definition or merge it. 
+   Let's replace the original block to be empty or just comments, since I redefined it above with animation. */
+
+
+/* Make the heartbeat part slightly brighter/different color */
+.pulse-svg {
+    width: 100%;
+    height: 100%;
+    filter: drop-shadow(0 0 4px rgba(160, 32, 240, 0.6)); /* Purple Glow */
+}
+
+/* Animation for the heartbeat line */
+.pulse-svg polyline {
+	fill: none;
+	stroke: #8257E5; /* Purple Color */
+	stroke-width: 3;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-dasharray: 1000;
+    stroke-dashoffset: 1000;
+    animation: pulse 2.5s linear infinite;
+}
+
+@keyframes pulse {
+    0% {
+        stroke-dashoffset: 1000;
+    }
+    100% {
+        stroke-dashoffset: 0;
+    }
+}
+
+
+.info-text p {
+	font-size: 14px;
+	margin-bottom: 5px;
+	color: #d0d3d4;
+	font-weight: 500;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+#timer-text {
+	font-weight: 400;
+    color: #8257E5; /* Purple Color */
+}
+
+#seconds {
+	font-weight: 700;
+	color: #fff;
+}
+
+/* Support for <color> tag from Lua */
+color {
+    color: #8257E5; /* Purple Color */
+    font-weight: 700;
+}
+
+/* Right Side Removed */
+/* .right-side {
+	text-align: right;
+	margin-bottom: 20px;
+}
+
+.death-info-box {
+	background: rgba(30, 30, 30, 0.6);
+	border: 1px solid rgba(255, 255, 255, 0.1);
+	border-radius: 6px;
+	padding: 15px 25px;
+	display: flex;
+	flex-direction: column;
+	align-items: flex-end;
+    backdrop-filter: blur(5px);
+}
+
+.death-info-box .label {
+	font-size: 11px;
+	color: #7f8c8d;
+	margin-bottom: 5px;
+	text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.death-info-box .date {
+	font-size: 14px;
+	color: #ecf0f1;
+	font-weight: 500;
+    letter-spacing: 0.5px;
+} */

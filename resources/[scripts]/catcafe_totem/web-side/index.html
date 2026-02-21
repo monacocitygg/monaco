@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Totem</title>
+    <link href="style.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    <script src="nui://game/ui/jquery.js" type="text/javascript"></script>
+</head>
+<body>
+    <div id="container">
+        <div class="header">
+            <div class="banner">
+                <span>banner<br>330x60</span>
+            </div>
+            <div class="subtitle">AUTO ATENDIMENTO</div>
+        </div>
+        
+        <div class="items-list" id="itemsList">
+            <!-- Items will be injected here -->
+        </div>
+
+        <div class="footer">
+            <div class="details-header">DETALHES DO SEU PEDIDO</div>
+            <div class="details-row">
+                <span>ITENS</span>
+                <span id="totalItems">0</span>
+            </div>
+            <div class="details-row">
+                <span>TOTAL</span>
+                <span id="totalPrice">R$ 0</span>
+            </div>
+            
+            <div class="buttons">
+                <button class="btn-cancel" onclick="closeUI()">CANCELAR</button>
+                <button class="btn-restart" onclick="resetCart()">RECOMEÇAR</button>
+                <button class="btn-confirm" onclick="confirmBuy()">CONFIRMAR</button>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

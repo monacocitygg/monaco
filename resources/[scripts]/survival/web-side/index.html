@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+	<head>
+		<meta charset="UTF-8" />
+		<title>[Creative Network] Survival</title>
+		<link rel="stylesheet" href="style.css" />
+		<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;300;400;500;600;700;900&display=swap" rel="stylesheet">
+		<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+		<script src="https://code.jquery.com/ui/1.13.0/jquery-ui.min.js"></script>
+		<script src="jquery.js"></script>
+	</head>
+	<body>
+		<div id="deathDiv">
+			<div class="container">
+				<div class="left-side">
+					<div class="title-group">
+						<span class="sub-title">Você está</span>
+						<h1 class="main-title">Ferido</h1>
+					</div>
+					<div class="heartbeat-line">
+						<svg viewBox="0 0 500 100" class="pulse-svg" preserveAspectRatio="none">
+							<polyline points="0,50 150,50 160,20 170,80 180,50 190,50 200,10 210,90 220,50 500,50" />
+						</svg>
+					</div>
+					<div class="info-text">
+						<p>Aguarde os primeiros socorros.</p>
+						<p id="timer-text">Aguarde <span id="seconds"></span> segundos</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>

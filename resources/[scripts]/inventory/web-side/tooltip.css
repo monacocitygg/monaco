@@ -1,0 +1,64 @@
+
+/* Tooltip Styling */
+.ui-tooltip {
+	position: absolute;
+	z-index: 9999;
+	background-color: rgba(15, 15, 15, 0.95) !important;
+	border: 1px solid rgba(255, 255, 255, 0.1) !important;
+	border-radius: 6px;
+	padding: 10px;
+	color: #fff;
+	box-shadow: 0 0 15px rgba(0,0,0,0.5) !important;
+	pointer-events: none;
+	max-width: 300px;
+}
+
+.ui-tooltip-content {
+	position: relative;
+	padding: 0;
+	font-family: "Montserrat", sans-serif;
+	font-size: 0.8rem;
+}
+
+.ui-tooltip-content item {
+	font-weight: 800;
+	color: #fff;
+	font-size: 1rem;
+	text-transform: uppercase;
+	display: block;
+	margin-bottom: 5px;
+}
+
+.ui-tooltip-content description {
+	color: #ccc;
+	font-size: 0.8rem;
+	display: block;
+	margin-top: 5px;
+	margin-bottom: 5px;
+	line-height: 1.2;
+	max-width: 200px;
+}
+
+.ui-tooltip-content legenda {
+	color: #888;
+	font-size: 0.75rem;
+	font-weight: bold;
+	border-top: 1px solid rgba(255,255,255,0.1);
+	padding-top: 5px;
+	margin-top: 8px;
+	display: block;
+}
+
+.ui-tooltip-content r {
+	color: var(--primary-color);
+	font-weight: bold;
+}
+
+.ui-tooltip-content green {
+	color: #2ecc71;
+}
+
+.ui-tooltip-content s {
+	color: #555;
+	margin: 0 5px;
+}

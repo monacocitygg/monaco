@@ -1,0 +1,264 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Montserrat', sans-serif;
+    user-select: none;
+    color: white; /* Ensure text is white by default */
+}
+
+body {
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    background: linear-gradient(90deg, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.9) 35%, rgba(0,0,0,0) 100%);
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.container {
+    width: 500px;
+    height: auto;
+    max-height: 90vh;
+    margin-left: 5vw;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    /* Optional: subtle shadow behind the whole UI area for contrast */
+    filter: drop-shadow(0 0 20px rgba(0,0,0,0.5));
+}
+
+header {
+    margin-bottom: 15px;
+    padding-left: 10px;
+    flex-shrink: 0;
+}
+
+header h1 {
+    font-size: 3.5rem;
+    font-weight: 900;
+    color: #ff00ff;
+    text-transform: uppercase;
+    line-height: 0.9;
+    letter-spacing: -1px;
+    text-shadow: 2px 2px 0px rgba(0,0,0,0.5);
+}
+
+header h2 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #ffffff;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    margin-top: 5px;
+    margin-left: 5px;
+    opacity: 0.9;
+}
+
+/* Vehicle List */
+.vehicle-list {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden; /* Prevent horizontal scrollbar */
+    padding-right: 10px;
+    margin-bottom: 10px;
+    padding-left: 10px; /* Space for hover effects */
+    min-height: 200px;
+}
+
+/* Scrollbar */
+.vehicle-list::-webkit-scrollbar {
+    width: 4px;
+}
+.vehicle-list::-webkit-scrollbar:horizontal {
+    height: 0;
+    display: none;
+}
+.vehicle-list::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.2);
+}
+.vehicle-list::-webkit-scrollbar-thumb {
+    background: #ff00ff;
+    border-radius: 2px;
+}
+
+/* Vehicle Item */
+.vehicle-item {
+    background: rgba(20, 20, 20, 0.9);
+    margin-bottom: 8px; /* Slightly more gap */
+    height: 95px; /* Reduced height from 120px */
+    position: relative;
+    border-left: 4px solid transparent;
+    transition: all 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 0 0 20px;
+    overflow: hidden; /* Ensure image doesn't stick out */
+}
+
+.vehicle-item:hover {
+    background: rgba(40, 40, 40, 0.95);
+    transform: translateX(5px);
+}
+
+.vehicle-item.active {
+    border-left: 6px solid #ff00ff;
+    border-top: 2px solid #ff00ff;
+    border-bottom: 2px solid #ff00ff;
+    border-right: 2px solid #ff00ff;
+    background: rgba(30, 30, 30, 0.98);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+    z-index: 10; /* Bring to front */
+}
+
+/* Item Left Content */
+.item-left {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 100%;
+    width: 55%;
+    z-index: 2;
+}
+
+.item-info {
+    margin-bottom: 8px; /* Reduced bottom margin */
+}
+
+.vehicle-name {
+    color: #fff;
+    font-size: 1.05rem; /* Slightly smaller name */
+    font-weight: 800;
+    text-transform: uppercase;
+    line-height: 1.1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+}
+
+.vehicle-plate {
+    color: #bbb;
+    font-size: 0.75rem; /* Slightly smaller plate */
+    font-weight: 600;
+    text-transform: uppercase;
+    margin-top: 2px;
+    letter-spacing: 1px;
+}
+
+/* Stats Container */
+.item-stats {
+    display: flex;
+    gap: 15px; /* Increased gap for separate look */
+    /* Removed background/border-radius to match transparency in cropped ref */
+    background: transparent;
+    width: fit-content;
+}
+
+/* Stat Box */
+.stat-box {
+    /* Removed padding/border to match clean look */
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center align items */
+    justify-content: center;
+    min-width: 40px;
+    border: none;
+}
+
+.stat-box i {
+    color: #ff00ff;
+    font-size: 0.9rem; /* Reduced icon size */
+    margin-bottom: 3px;
+}
+
+.stat-box span {
+    color: #fff;
+    font-size: 0.8rem; /* Reduced text size */
+    font-weight: 800;
+}
+
+/* Item Right (Image) */
+.item-right {
+    position: absolute;
+    right: 0; /* Align to right edge to prevent clipping */
+    top: 50%;
+    transform: translateY(-50%);
+    width: 200px; /* Slightly reduced width */
+    height: 100%;
+    z-index: 1;
+    pointer-events: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.item-right img {
+    width: 100%;
+    height: 100%; /* Force fit within container height */
+    object-fit: contain; /* Ensure aspect ratio is maintained */
+    filter: drop-shadow(5px 5px 5px rgba(0,0,0,0.5));
+}
+
+/* Actions Footer */
+.actions {
+    margin-top: 0; /* Remove margin top */
+    display: flex;
+    flex-direction: column;
+    gap: 5px; /* Slight gap */
+    padding-left: 10px;
+    flex-shrink: 0;
+}
+
+.action-row {
+    display: flex;
+    gap: 5px; /* Slight gap */
+}
+
+.btn {
+    flex: 1;
+    padding: 15px 0; /* Taller buttons */
+    border: none;
+    font-weight: 900;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.2s;
+    color: #fff;
+    letter-spacing: 0.5px;
+    clip-path: none; /* Removed sharp clip-path for cleaner standard button look, or keep if user likes sharp */
+    border-radius: 4px; /* Added subtle radius */
+}
+
+.btn:hover {
+    filter: brightness(1.2);
+    transform: translateY(-2px);
+}
+
+.btn:active {
+    transform: translateY(0);
+}
+
+.btn-pink {
+    background: #ff00ff;
+    box-shadow: 0 4px 10px rgba(255, 0, 255, 0.3); /* Restored shadow for pop */
+}
+
+.btn-grey {
+    background: #4a4a4a;
+}
+
+.btn-dark {
+    background: #222222;
+}
+
+.btn-full {
+    width: 100%;
+    background: #333333;
+    padding: 15px 0;
+    font-weight: 700;
+}

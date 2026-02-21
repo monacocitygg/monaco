@@ -1,0 +1,58 @@
+body {
+	margin: 0;
+	padding: 0;
+	color: #ccc;
+	text-shadow: 1px 1px rgba(0,0,0,0.25);
+}
+
+* {
+	overflow: hidden;
+	user-select: none;
+	box-sizing: border-box;
+}
+
+.Target {
+	width: 100vw;
+	height: 100vh;
+	display: none;
+	align-items: center;
+	justify-content: center;
+}
+
+.Wrapper {
+	position: absolute;
+	top: calc(50% - 18px);
+	left: calc(50% + 32px);
+}
+
+.Eye {
+	font-size: 1.5vh;
+}
+
+.Label {
+	float: left;
+	letter-spacing: 1px;
+}
+
+.Text {
+	font-size: 13px;
+	list-style: none;
+	user-select: none;
+	white-space: nowrap;
+	font-family: "Roboto";
+}
+
+.Text div {
+	padding: 8px 12px;
+	display: block;
+	margin: 0 0 5px;
+	border-radius: 4px;
+	background: rgba(17, 17, 17, 0.384);
+	color: #fff;
+	font-weight: 700;
+	text-transform: uppercase;
+	font-size: 11px;
+	box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+	transition: all 0.2s ease;
+	cursor: pointer;
+}

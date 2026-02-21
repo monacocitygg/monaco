@@ -1,0 +1,266 @@
+@import "https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap";
+
+html {
+    overflow: hidden !important;
+    background: transparent !important;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    background: transparent !important;
+    margin: 0;
+    padding: 0;
+}
+
+#notifications {
+    position: absolute;
+    left: 20px;
+    top: 60%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 250px;
+    z-index: 99999;
+}
+
+#notifications-police {
+    position: absolute;
+    top: 50px;
+    left: 50px; /* Posicionado no topo esquerdo */
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 320px; /* Mais largo para caber endereços longos */
+    z-index: 99999;
+}
+
+#notifications-ilegal {
+    position: absolute;
+    top: 150px; /* Mais para baixo que a policia */
+    left: 50px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 320px;
+    z-index: 99999;
+}
+
+.notification {
+    position: relative;
+    border-radius: 10px; /* Moderno mas sólido */
+    display: flex;
+    align-items: center;
+    padding: 12px 14px;
+    /* box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5); Sombra mais forte para destacar do jogo */
+    overflow: hidden;
+    color: #fff;
+    min-height: 50px;
+    /* background-color: #101010; /* Base sólida */
+    /* border: 1px solid rgba(255, 255, 255, 0.05); */ 
+    transition: transform 0.3s ease;
+}
+
+/* Ícone Box Sólido e Vibrante */
+.notify-icon-box {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 12px;
+    font-size: 14px;
+    flex-shrink: 0;
+    color: #fff;
+    font-weight: bold;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+
+/* Conteúdo */
+.notify-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-right: 6px;
+}
+
+.notify-title {
+    font-weight: 700;
+    font-size: 12px;
+    text-transform: uppercase;
+    margin-bottom: 2px;
+    letter-spacing: 0.4px;
+    color: #fff;
+    line-height: 1;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+}
+
+.notify-message {
+    font-weight: 400;
+    font-size: 10px;
+    color: #e0e0e0; /* Texto bem claro para leitura fácil */
+    line-height: 1.2;
+}
+
+/* Timer Circular Branco Limpo */
+.notify-timer-circle {
+    width: 15px;
+    height: 15px;
+    flex-shrink: 0;
+    position: relative;
+    opacity: 0.9;
+}
+
+.notify-timer-circle svg {
+    width: 100%;
+    height: 100%;
+    transform: rotate(-90deg);
+}
+
+.circle-bg {
+    fill: none;
+    stroke: rgba(255, 255, 255, 0.15);
+    stroke-width: 3;
+}
+
+.circle-progress {
+    fill: none;
+    stroke-width: 3;
+    stroke-linecap: round;
+    stroke: #fff !important; /* Timer sempre branco para ser clean */
+}
+
+/* --- BACKGROUNDS GRADIENTES SÓLIDOS (Modern Dark) --- */
+/* O gradiente agora é forte e opaco, sem transparência feia */
+
+/* Sucesso - Verde */
+.notification.sucesso {
+    background: linear-gradient(90deg, #1b5e20 0%, #0a0a0a 60%);
+    border-left: 2px solid #2ecc71; /* Borda fina para acabamento premium */
+}
+.notification.sucesso .notify-icon-box {
+    background: #2ecc71;
+    box-shadow: 0 0 12px rgba(46, 204, 113, 0.4);
+}
+
+/* Erro - Vermelho */
+.notification.negado {
+    background: linear-gradient(90deg, #1d1d1d67 0%, #0a0a0a 60%);
+    border-left: 2px solid #e74c3c;
+}
+.notification.negado .notify-icon-box {
+    background: #e74c3c;
+    box-shadow: 0 0 12px rgba(231, 76, 60, 0.4);
+}
+
+/* Aviso - Roxo */
+.notification.aviso {
+    background: linear-gradient(90deg, #1d1d1d67 0%, #0a0a0a 60%);
+    border-left: 2px solid #bb892d;
+}
+.notification.aviso .notify-icon-box {
+    background: #bb892d;
+    box-shadow: 0 0 12px rgba(182, 142, 89, 0.4);
+}
+
+/* Info - Azul */
+.notification.info {
+    background: linear-gradient(90deg,#1d1d1d67 0%, #0a0a0a 60%);
+    border-left: 2px solid #3498db;
+}
+.notification.info .notify-icon-box {
+    background: #3498db;
+    box-shadow: 0 0 12px rgba(52, 152, 219, 0.4);
+}
+
+/* Policia - Estilo Personalizado */
+.notification.policia {
+    background: linear-gradient(180deg, #4a148c 0%, #0a0a0a 100%); /* Roxo para preto (Vertical) */
+    border: none;
+    border-left: 2px solid #9b59b6; /* Detalhe roxo na esquerda */
+    border-radius: 6px; /* Menos arredondado conforme pedido */
+    padding: 15px 18px; /* Maior tamanho */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+}
+
+.notification.policia .notify-icon-box {
+    background: transparent; /* Fundo transparente para a logo */
+    box-shadow: none;
+    width: 55px; /* Ícone bem maior */
+    height: 55px;
+    margin-right: 15px;
+}
+
+.notification.policia .notify-content {
+    justify-content: center;
+}
+
+.notification.policia .notify-title {
+    color: #fff;
+    font-size: 12px;
+    font-weight: 700;
+    margin-bottom: 2px;
+    text-transform: uppercase;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+    letter-spacing: 0.4px;
+}
+
+.notification.policia .notify-message {
+    font-size: 10px;
+    color: #e0e0e0;
+    font-weight: 400;
+    line-height: 1.2;
+    text-transform: none;
+}
+
+.notification.policia .notify-timer-circle {
+    display: block;
+    margin-left: auto;
+    width: 15px;
+    height: 15px;
+}
+
+/* Ilegal - Estilo Personalizado (Vermelho) */
+.notification.ilegal {
+    background: linear-gradient(180deg, #8b0000 0%, #0a0a0a 100%); /* Vermelho escuro para preto */
+    border: none;
+    border-left: 2px solid #ff0000; /* Detalhe vermelho na esquerda */
+    border-radius: 6px;
+    padding: 15px 12px; /* Reduzido padding lateral */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+    opacity: 0.9; /* Opacidade reduzida conforme solicitado */
+}
+
+.notification.ilegal .notify-icon-box {
+    display: none;
+}
+
+.notification.ilegal .notify-content {
+    justify-content: center;
+}
+
+.notification.ilegal .notify-title {
+    color: #fff;
+    font-size: 12px;
+    font-weight: 700;
+    margin-bottom: 2px;
+    text-transform: uppercase;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+    letter-spacing: 0.4px;
+}
+
+.notification.ilegal .notify-message {
+    font-size: 10px;
+    color: #e0e0e0;
+    font-weight: 400;
+    line-height: 1.2;
+    text-transform: none;
+}
+
+.notification.ilegal .notify-timer-circle {
+    display: block;
+    margin-left: auto;
+    width: 15px;
+    height: 15px;
+}

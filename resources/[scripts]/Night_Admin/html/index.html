@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title></title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="css/style.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,700" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
+</head>
+
+<body>
+
+    <div class="shadow"></div>
+    <div class="shadow2"></div>
+    <div class="paineladm">
+        <div class="textoatras">
+            <h3 class="text">ADMINISTRATIVO</h3>
+        </div>
+        <div class="menu">
+            <h2>Painel</h2>
+            <div class="opcoes">
+                <div class="dados">
+                    <div class="cargo">MODERADOR</div>
+                    <div class="nome">Lachef #01</div>
+                </div>
+                <div class="bloco players" data-section="players">
+                    <div class="imagem">
+                        <img src="img/players.png">
+                    </div>
+                    <div class="nomeopcao">Players</div>
+                </div>
+                <div class="bloco punishments" data-section="banimentos">
+                    <div class="imagem">
+                        <img src="img/ban.png">
+                    </div>
+                    <div class="nomeopcao">Punições</div>
+                </div>
+                <div class="bloco messages" data-section="mensagens">
+                    <div class="imagem">
+                        <img src="img/mensagens.png">
+                    </div>
+                    <div class="nomeopcao">Mensagens</div>
+                </div>
+                <div class="bloco spawnitems" data-section="spawnitens">
+                    <div class="imagem">
+                        <img src="img/spawn.png">
+                    </div>
+                    <div class="nomeopcao">Spawn Itens</div>
+                </div>
+                <div class="bloco spawnvehicles" data-section="spawnveiculos">
+                    <div class="imagem">
+                        <img src="img/spawn.png">
+                    </div>
+                    <div class="nomeopcao">Spawn Carros</div>
+                </div>
+            </div>
+        </div>
+        <div class="conteudo">
+            <div class="escolhido">
+
+                <!--Players-->
+                <div class="section players">
+                    <div class="list">
+                        <div class="search">
+                            <div class="inbox">
+                                <i class="fas fa-search"></i>
+                                <input id="txtBusca" placeholder="Pesquisar...">
+                            </div>
+                        </div>
+                        <div class="todosplayers" id="principal"></div>
+                    </div>
+                    <div class="dadosplayer" style="display: none;">
+                        <div class="dadospessoal"></div>
+                        <div class="dadospersonagem">
+                            <div class="inventario">
+                                <h3 class="titulo">Inventario</h3>
+                                <div class="pertences"></div>
+                            </div>
+                            <div class="cargos">
+                                <h3 class="titulo">Cargos</h3>
+                                <div class="ativos"></div>
+                                <div class="addcargo">
+                                    <button class="adicionar">Adicionar Cargo</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- punições -->
+                <div class="section banimentos" style="display: none;">
+                    <div class="list">
+                        <div class="search">
+                            <div class="inbox">
+                                <i class="fas fa-search"></i>
+                                <input id="txtBusca" placeholder="Pesquisar...">
+                            </div>
+                        </div>
+                        <div class="todosplayers" id="principal"></div>
+                    </div>
+                    <div class="banadv" style="display: none;">
+                        <div class="categorias">
+                            <div class="ctg">Player/Motivo</div>
+                            <div class="ctg">Tempo</div>
+                            <div class="ctg">Ações</div>
+                        </div>
+
+                        <div class="acoesbanadv"></div>
+                    </div>
+                </div>
+
+                <!-- mensagens -->
+                <div class="section mensagens" style="display: none;">
+                    <div class="list">
+                        <div class="search">
+                            <div class="inbox">
+                                <i class="fas fa-search"></i>
+                                <input id="txtBusca" placeholder="Pesquisar...">
+                            </div>
+                        </div>
+                        <div class="todosplayers" id="principal">
+                            <div class="cidadao">
+                                <div class="imagem">
+                                    <img src="img/players.png">
+                                </div>
+                                <div class="nomeopcao">
+                                    <h3 class="id">#1</h3>
+                                    <a class="nome">Lachef Mellapussy</a>
+                                    <p class="set">Vanilla</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="msgprivadas" style="display: none;">
+                        <div class="chat">
+                            <div class="chat-wrapper">
+                                <div class="message-wrapper reverse">
+                                    <img class="message-pp"
+                                        src="https://cdn.discordapp.com/attachments/813368241954619409/952652898884546560/Sem_Titulo-1.jpg"
+                                        alt="profile-pic">
+                                    <div class="message-box-wrapper">
+                                        <div class="message-box">
+                                            Irmão, sobe call suporte rapidinho, recebemos uma denuncia.
+                                        </div>
+                                        <span>5 Min.</span>
+                                    </div>
+                                </div>
+                                <div class="message-wrapper">
+                                    <img class="message-pp"
+                                        src="https://cdn.discordapp.com/attachments/958177265294925904/1027341238170562611/102292326_1129005080808456_8835217236516929536_n.png"
+                                        alt="profile-pic">
+                                    <div class="message-box-wrapper">
+                                        <div class="message-box">
+                                            Não fiz nada, já estou subindo.
+                                        </div>
+                                        <span>3 Min.</span>
+                                    </div>
+                                </div>
+                                <div class="message-wrapper">
+                                    <img class="message-pp"
+                                        src="https://cdn.discordapp.com/attachments/958177265294925904/1027341238170562611/102292326_1129005080808456_8835217236516929536_n.png"
+                                        alt="profile-pic">
+                                    <div class="message-box-wrapper">
+                                        <div class="message-box">Já estou no aguardando.</div>
+                                        <span>3 Min.</span>
+                                    </div>
+                                </div>
+                                <div class="message-wrapper reverse">
+                                    <img class="message-pp"
+                                        src="https://cdn.discordapp.com/attachments/813368241954619409/952652898884546560/Sem_Titulo-1.jpg"
+                                        alt="profile-pic">
+                                    <div class="message-box-wrapper">
+                                        <div class="message-box"><img
+                                                src="https://cdn.discordapp.com/attachments/813368241954619409/961092337033957396/unknown.png">
+                                        </div>
+                                        <span>5 Min.</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="chat-input-wrapper">
+                                <div class="input-wrapper">
+                                    <input type="text" class="chat-input" placeholder="Escreva sua mensagem...">
+                                </div>
+                                <button class="chat-send-btn">Enviar</button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                
+                <!-- Spawn -->
+                <div class="section spawnitens" style="display: none;">
+                    <div class="spawn">
+                        <div class="spawndeintens">
+                            <form class="staffspawn" action="">
+                                <label>Spawn Itens</label>
+                                <br>
+                                <p>Escreva o nome do item que deseja spawnar para você e a quantidade!</p>
+                                <br>
+                                <input placeholder="Item que deseja..." class="item" id="txtBuscaItem">
+                                <input type="number" placeholder="Quantidade..." class="item2">
+                                <div class="todositens" id="principal-item"></div>
+                                <button type="button">Fazer Spawn</button>
+                            </form>
+                            <form class="playerspawn" action="">
+                                <label>Spawn Itens para outros</label>
+                                <br>
+                                <p>Escreva o nome do item que deseja spawnar para o Player e a quantidade!</p>
+                                <br>
+                                <input placeholder="Item que deseja..." class="item3" id="txtBuscaItemPlayer">
+                                <input type="number" placeholder="Passaporte" class="item4">
+                                <input type="number" placeholder="Quantidade..." class="item5">
+                                <div class="todositens" id="principal-itemplayer"></div>
+                                <button type="button">Fazer Spawn</button>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="aviso">
+                        <h5>Atenção:</h5>
+                        <p>Todos os Spawns feitos através dessa ferramenta seram registrados em Log's via Discord.</p>
+                    </div>
+                </div>
+
+                <!-- Spawn veiculos -->
+                <div class="section spawnveiculos" style="display: none;">
+                    <div class="spawn">
+                        <div class="spawndecar">
+                            <form class="staffspawn">
+                                <label>Spawn de veiculos</label>
+                                <br>
+                                <p>Escolha o veiculo que você deseja spawnar para você.</p>
+                                <br>
+                                <div class="search">
+                                    <div class="inbox">
+                                        <i class="fas fa-search"></i>
+                                        <input class="pesquisar" id="txtBuscaVehicle" placeholder="Pesquisar Veiculo...">
+                                    </div>
+                                </div>
+                                <div class="todoscarros" id="principal-vehicle"></div>
+                                <button type="button">Fazer Spawn</button>
+                            </form>
+
+                        </div>
+                    </div>
+                    <div class="aviso">
+                        <h5>Atenção:</h5>
+                        <p>Todos os Spawns feitos através dessa ferramenta seram registrados em Log's via Discord.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="playerchat" style="display: none;">
+        <div class="chatsplayers">
+            <div class="conversas">
+                <div class="topochat">
+                    <div class="app-logo">
+                        <img src="https://cdn.discordapp.com/attachments/813368241954619409/823830750360764426/Sem_Titulo-1.png">
+                    </div>
+                    <h1 class="titulochat">Chat Administrativo</h1>
+                </div>
+            </div>
+            <div class="chatativo">
+                <div class="chat-wrapper">
+                    <div class="message-wrapper">
+                        <img class="message-pp" src="https://media.discordapp.net/attachments/813368241954619409/1029943528094183454/unknown.png?width=582&amp;height=607" alt="profile-pic">
+                        <div class="message-box-wrapper">
+                            <div class="message-box">
+                                Lorem ipsum dolor sit amet
+                            </div>
+                            <span>5 Min.</span>
+                        </div>
+                    </div>
+                    <div class="message-wrapper reverse">
+                        <img class="message-pp" src="https://media.discordapp.net/attachments/813368241954619409/955528354453393418/asd.png?width=270&amp;height=172" alt="profile-pic">
+                        <div class="message-box-wrapper">
+                            <div class="message-box">
+                                Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                            </div>
+                            <span>5 Min.</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="chat-input-wrapper">
+                    <div class="input-wrapper">
+                        <input type="text" class="chat-input" placeholder="Escreva sua mensagem...">
+                    </div>
+                    <button class="chat-send-btn">Enviar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="alerts"></div>
+
+    <center class="cargos-select" style="display: none;">
+        <div class="input">
+            <form action="">
+                <label>Digite o nome do Cargo</label>
+                <br>
+                <p>Escreva o cargo que deseja adicionar para este Player!</p>
+                <br>
+                <!-- <input placeholder="Cargo que deseja..."> -->
+                <select>
+                    <option value="" disabled selected>Cargo que deseja...</option>
+                </select>
+                <button type="button">Adicionar</button>
+            </form>
+        </div>
+    </center>
+
+    <center class="adv-reason" style="display: none;">
+        <div class="input">
+            <form action="">
+                <label>Adicionar Advertência</label>
+                <br>
+                <p>Coloque o motivo da advertência</p>
+                <br>
+                <input placeholder="motivo...">
+                <button type="button">Adicionar</button>
+            </form>
+        </div>
+    </center>
+
+    <center class="adv-ban" style="display: none;">
+        <div class="input">
+            <form action="">
+                <label>Aplicar Banimento</label>
+                <br>
+                <p>Coloque o tempo de banimento em dias</p>
+                <br>
+                <input placeholder="Tempo em minutos..." type="number">
+                <button type="button">Banir</button>
+            </form>
+        </div>
+    </center>
+
+    <center class="adv-ban-edit" style="display: none;">
+        <div class="input">
+            <form action="">
+                <label>Alterar Tempo de Banimento</label>
+                <br>
+                <p>Coloque o tempo de banimento em dias</p>
+                <br>
+                <input placeholder="Tempo em minutos..." type="number">
+                <button type="button">Alterar Tempo</button>
+            </form>
+        </div>
+    </center>
+
+    <center class="spawn-vehicle" style="display: none;">
+        <div class="input">
+            <form action="">
+                <label>Para quem deseja fazer o Spawn</label>
+                <br>
+                <p>Coloque o passaporte do player para spawnar para terceiros, para spawnar para sí mesmo basta deixar vazio!</p>
+                <br>
+                <input placeholder="Passaporte...">
+                <button type="button" class="spawnvehicle">Spawnar</button>
+                <button type="button" class="addvehicle">Adicionar na Garagem</button>
+            </form>
+        </div>
+    </center>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script src="js/script.js" type="text/javascript"></script>
+</body>
+
+</html>

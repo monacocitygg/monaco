@@ -1,0 +1,248 @@
+@charset "utf-8";
+/* CSS Document */
+
+* {
+  margin: 0 auto;
+}
+
+#conteiner {
+  width: 450px;
+  height: auto;
+  float: left;
+  margin-left: 50px;
+  margin-top: 50px;
+  display: none;
+}
+
+#box {
+  width: 92%;
+  padding: 4%;
+  height: 500px;
+  border-radius: 4px;
+  background: linear-gradient(90deg, rgba(0, 153, 255, 0.55) 0%, rgba(15, 15, 15, 0.75) 43%, rgba(15, 15, 15, 0.75) 100%);
+}
+
+#box2 {
+  width: 100%;
+  height: 60px;
+  border-radius: 4px;
+  margin-top: 15px;
+  background: linear-gradient(90deg, rgba(15, 15, 15, 0.75) 0%, rgba(15, 15, 15, 0.75) 43%, rgba(15, 15, 15, 0.75) 100%);
+  text-align: center;
+  transition: background 1s;
+}
+
+#box2:hover,
+#box2:focus {
+  background: linear-gradient(90deg, rgba(0, 153, 255, 0.75) 0%, rgba(15, 15, 15, 0.75) 29%, rgba(15, 15, 15, 0.75) 80%);
+  cursor: pointer;
+}
+
+#box2 img {
+  width: 90%;
+  height: auto;
+  margin-top: 19px;
+}
+
+#topo {
+  width: 100%;
+  height: 70px;
+}
+
+#topo h1 {
+  font-family: 'Kanit', sans-serif;
+  color: #fff;
+  font-weight: 400;
+  font-size: 45px;
+  text-align: right;
+  letter-spacing: 1px;
+}
+
+#topo span {
+  float: right;
+  color: #Fff;
+  font-family: 'Kanit', sans-serif;
+  letter-spacing: 3px;
+  margin-right: 5px;
+  margin-top: 2px;
+}
+
+.circulo {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background-color: rgba(15, 15, 15, 0.75);
+  float: left;
+  margin-right: 5px;
+  margin-top: 8px;
+}
+
+.active {
+  background-color: #fff;
+}
+
+#escrita {
+  width: 100%;
+  height: 30px;
+  margin-top: 35px;
+}
+
+#escrita span {
+  font-family: 'Kanit', sans-serif;
+  color: #fff;
+  font-weight: 300;
+  letter-spacing: 3px;
+  font-size: 15px;
+}
+
+.escrita_select {
+  padding: 5px 8px 5px 8px;
+  border-radius: 3px;
+  background-color: rgb(255, 255, 255, .1);
+  float: right;
+  font-family: 'Kanit', sans-serif;
+  color: #fff;
+  font-size: 10px;
+  margin-right: 5px;
+}
+
+.active2 {
+  background-color: #ff0000;
+  cursor: pointer;
+}
+
+#farm {
+  width: 100%;
+  height: 350px;
+  margin-top: 8px;
+  overflow: auto;
+}
+
+.btns {
+  width: 100%;
+  height: auto;
+  float: left;
+  margin-bottom: 12px;
+}
+
+.btns_foto {
+  float: left;
+  height: 80px;
+  width: 20%;
+  padding: 2%px;
+  border-radius: 3px;
+  background-color: rgba(15, 15, 15, 0.75);
+}
+
+.btns_foto img {
+  width: 100%;
+  height: auto;
+}
+
+.btn_infos {
+  float: right;
+  height: 80px;
+  width: 75%;
+  border-radius: 3px;
+  background-color: rgba(15, 15, 15, 0.75);;
+}
+
+.btn_infos h1 {
+  font-family: 'Kanit', sans-serif;
+  color: #fff;
+  font-weight: 800;
+  font-size: 28garapx;
+  float: left;
+  letter-spacing: 1px;
+  margin-left: 15px;
+  margin-top: 12px;
+}
+
+.btn_play {
+  width: 60px;
+  height: 40px;
+  padding: 8px;
+  background-color: rgb(0, 0, 0, .3);
+  float: right;
+  border-radius: 3px;
+  font-family: 'Kanit', sans-serif;
+  color: #fff;
+  font-weight: 300;
+  letter-spacing: 1px;
+  font-size: 10px;
+  text-align: center;
+  margin-top: 12px;
+  margin-right: 10px;
+}
+
+.btn_play:hover {
+  background-color: rgba(0, 26, 255, 0.25);
+  cursor: pointer;
+}
+
+.btn_play img {
+  width: 35%;
+  margin-top: 2px;
+}
+
+.imgcerto {
+  width: 60%;
+  height: auto;
+  margin-top: 30px;
+}
+
+#meiobox h1 {
+  font-family: 'Kanit', sans-serif;
+  color: #fff;
+  font-weight: 500;
+  font-size: 20px;
+  letter-spacing: 1px;
+  margin-top: 10px;
+}
+
+#meiobox P {
+  font-family: 'Kanit', sans-serif;
+  color: #fff;
+  font-weight: 500;
+  font-size: 17px;
+  letter-spacing: 1px;
+  margin-top: 10px;
+}
+
+
+
+
+
+
+
+
+
+input[type=number]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+
+}
+
+input[type=number] {
+  -moz-appearance: textfield;
+  appearance: textfield;
+
+}
+
+::-webkit-scrollbar {
+  width: 0px;
+  /* width of the entire scrollbar normalmente 12*/
+}
+
+::-webkit-scrollbar-track {
+  background: #1a1c26;
+  /* color of the tracking area */
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #fff;
+  /* color of the scroll thumb */
+  border-radius: 4px;
+  /* roundness of the scroll thumb */
+  border: 3px solid #1a1c26;
+  /* creates padding around scroll thumb */
+}

@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Monaco - HUD</title>
+        <link rel="stylesheet" href="css/index.css" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;300;400;500;700&display=swap" rel="stylesheet">
+        <link rel="stylesheet" rel=preload href="https://www.valuehost.com.br/assets/vendor/fontawesome/css/light.min.css">
+        <link rel="stylesheet" rel=preload href="https://www.valuehost.com.br/assets/vendor/fontawesome/css/solid.min.css">
+        <link rel="stylesheet" rel=preload href="https://www.valuehost.com.br/assets/vendor/fontawesome/css/duotone.min.css">
+        <link rel="stylesheet" rel=preload href="https://www.valuehost.com.br/assets/vendor/fontawesome/css/brands.min.css">
+        <link rel="stylesheet" rel=preload href="https://www.valuehost.com.br/assets/vendor/fontawesome/css/fontawesome.min.css">
+        </head>
+
+    <body>
+		<div id="Textform"></div>
+
+        <main class="hud">
+            <section class="hud" style="display: none;">
+                <header class="logo-container">
+                    <img src="images/logo.png" />
+                </header>
+                <section class="map-container">
+                    <div id="direction" class="status-container" style="display: flex;--height: 20%;right: 30px;bottom: 70px;position: absolute;opacity: 1;">
+                        <div class="status-content new-layout">
+                            <!-- Stamina Box (Icon + Bar) -->
+                            <div class="hud-row stamina-row" style="display: none; height: 16px; margin-bottom: 4px; justify-content: flex-end;">
+                                <div class="stamina-box" style="display: flex; align-items: center; background: rgba(20, 20, 20, 0.85); padding: 2px 5px; border-radius: 2px; margin-right: 2px;">
+                                    <div class="bar-container stamina-bar" style="width: 75px; height: 10px; margin-right: 5px;">
+                                        <div class="bar-fill stamina-bar-fill"></div>
+                                    </div>
+                                    <i class="stamina-icon fa-solid fa-bolt-lightning" style="color: #FFD700; font-size: 10px;"></i>
+                                </div>
+                            </div>
+
+                            <div class="hud-row">
+                                <div class="bar-container">
+                                    <div class="bar-fill health-bar-fill"></div>
+                                </div>
+                                <div class="NaviButton">
+                                    <i class="icone fa-solid fa-heart-pulse" style="color: #ffffff;"></i>
+    
+                                    <svg viewBox="0 0 120 120">
+                                        <polygon class="Fill" points="114,60 87,106.76 33,106.76 6,60 33,13.24 87,13.24" fill="#FF174460" />
+                                        <polygon class="Circle" points="114,60 87,106.76 33,106.76 6,60 33,13.24 87,13.24" stroke="#FF174480" fill="none" pathLength="100" />
+                                        <polygon class="Circle Health" points="114,60 87,106.76 33,106.76 6,60 33,13.24 87,13.24" stroke="#FF1744" fill="none" pathLength="100" />
+                                    </svg>
+                                </div>
+                                <div class="NaviButton">
+                                    <i class="icone fa-solid fa-utensils" style="color: #ffffff;"></i>
+    
+                                    <svg viewBox="0 0 120 120">
+                                        <polygon class="Fill" points="114,60 87,106.76 33,106.76 6,60 33,13.24 87,13.24" fill="#FF910060" />
+                                        <polygon class="Circle" points="114,60 87,106.76 33,106.76 6,60 33,13.24 87,13.24" stroke="#FF910080" fill="none" pathLength="100" />
+                                        <polygon class="Circle Hunger" points="114,60 87,106.76 33,106.76 6,60 33,13.24 87,13.24" stroke="#FF9100" fill="none" pathLength="100" />
+                                    </svg>
+                                </div>
+                            </div>
+
+                            <div class="hud-row">
+                                <div class="bar-container">
+                                    <div class="bar-fill armor-bar-fill"></div>
+                                </div>
+                                <div class="NaviButton Armour">
+                                    <i class="icone fa-solid fa-shield" style="color: #ffffff;"></i>
+    
+                                    <svg viewBox="0 0 120 120">
+                                        <polygon class="Fill" points="114,60 87,106.76 33,106.76 6,60 33,13.24 87,13.24" fill="#2979FF60" />
+                                        <polygon class="Circle" points="114,60 87,106.76 33,106.76 6,60 33,13.24 87,13.24" stroke="#2979FF80" fill="none" pathLength="100" />
+                                        <polygon class="Circle Vest" points="114,60 87,106.76 33,106.76 6,60 33,13.24 87,13.24" stroke="#2979FF" fill="none" pathLength="100" />
+                                    </svg>
+                                </div>
+                                <div class="NaviButton">
+                                    <i class="icone fa-solid fa-droplet" style="color: #ffffff;"></i>
+    
+                                    <svg viewBox="0 0 120 120">
+                                        <polygon class="Fill" points="114,60 87,106.76 33,106.76 6,60 33,13.24 87,13.24" fill="#00E5FF60" />
+                                        <polygon class="Circle" points="114,60 87,106.76 33,106.76 6,60 33,13.24 87,13.24" stroke="#00E5FF80" fill="none" pathLength="100" />
+                                        <polygon class="Circle Thirst" points="114,60 87,106.76 33,106.76 6,60 33,13.24 87,13.24" stroke="#00E5FF" fill="none" pathLength="100" />
+                                    </svg>
+                                </div>
+                            </div>
+    
+                            <div class="NaviButton Stresss" style="display: none;">
+                                <i class="icone fa-duotone fa-brain" style="color: #ffffff;"></i>
+
+                                <svg viewBox="0 0 120 120">
+                                    <polygon class="Fill" points="114,60 87,106.76 33,106.76 6,60 33,13.24 87,13.24" fill="#5F00E660" />
+                                    <polygon class="Circle" points="114,60 87,106.76 33,106.76 6,60 33,13.24 87,13.24" stroke="#5F00E650" fill="none" pathLength="100" />
+                                    <polygon class="Circle Stress" points="114,60 87,106.76 33,106.76 6,60 33,13.24 87,13.24" stroke="#5F00E6" fill="none" pathLength="100" />
+                                </svg>
+                            </div>
+
+                            <div class="NaviButton Stamines" style="display: none;">
+                                <i class="icone fa-duotone fa-bolt" style="color: #ffffff;"></i>
+
+                                <svg viewBox="0 0 120 120">
+                                    <polygon class="Fill" points="114,60 87,106.76 33,106.76 6,60 33,13.24 87,13.24" fill="#5F00E660" />
+                                    <polygon class="Circle" points="114,60 87,106.76 33,106.76 6,60 33,13.24 87,13.24" stroke="#5F00E650" fill="none" pathLength="100" />
+                                    <polygon class="Circle Stamine" points="114,60 87,106.76 33,106.76 6,60 33,13.24 87,13.24" stroke="#5F00E6" fill="none" pathLength="100" />
+                                </svg>
+                            </div>
+
+                            <div class="NaviButton Lucks" style="display: none;">
+                                <i class="icone fa-duotone fa-clover" style="color: #ffffff;"></i>
+
+                                <svg viewBox="0 0 120 120">
+                                    <polygon class="Fill" points="114,60 87,106.76 33,106.76 6,60 33,13.24 87,13.24" fill="#5F00E660" />
+                                    <polygon class="Circle" points="114,60 87,106.76 33,106.76 6,60 33,13.24 87,13.24" stroke="#5F00E650" fill="none" pathLength="100" />
+                                    <polygon class="Circle Luck" points="114,60 87,106.76 33,106.76 6,60 33,13.24 87,13.24" stroke="#5F00E6" fill="none" pathLength="100" />
+                                </svg>
+                            </div>
+
+                            <div class="NaviButton Dexteritys" style="display: none;">
+                                <i class="icone fa-duotone fa-hand-sparkles" style="color: #ffffff;"></i>
+
+                                <svg viewBox="0 0 120 120">
+                                    <polygon class="Fill" points="114,60 87,106.76 33,106.76 6,60 33,13.24 87,13.24" fill="#5F00E660" />
+                                    <polygon class="Circle" points="114,60 87,106.76 33,106.76 6,60 33,13.24 87,13.24" stroke="#5F00E650" fill="none" pathLength="100" />
+                                    <polygon class="Circle Dexterity" points="114,60 87,106.76 33,106.76 6,60 33,13.24 87,13.24" stroke="#5F00E6" fill="none" pathLength="100" />
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <div class="essentials">
+                    <div class="information">
+                        <div class="voice-container">
+                            <!-- Time Section -->
+                            <div class="top-info-group">
+                                <span class="time-text">00:00</span>
+                                <div class="NaviButton">
+                                    <i class="icone fa-solid fa-clock" style="color: #ffffff;"></i>
+                                    <svg viewBox="0 0 120 120">
+                                        <polygon class="Fill" points="114,60 87,106.76 33,106.76 6,60 33,13.24 87,13.24" fill="#A0A0A060" />
+                                        <polygon class="Circle" points="114,60 87,106.76 33,106.76 6,60 33,13.24 87,13.24" stroke="#A0A0A050" fill="none" pathLength="100" />
+                                        <polygon class="Circle" points="114,60 87,106.76 33,106.76 6,60 33,13.24 87,13.24" stroke="#A0A0A0" fill="none" pathLength="100" />
+                                    </svg>
+                                </div>
+                            </div>
+
+                            <!-- Voice Text -->
+                            <div class="top-info-group voice-text-group">
+                                <span class="tom">Normal</span>
+                            </div>
+
+                            <!-- Voice Box -->
+                            <div class="top-info-group">
+                                <div class="voice-bars">
+                                    <div class="v-bar"></div>
+                                    <div class="v-bar"></div>
+                                    <div class="v-bar"></div>
+                                </div>
+                                <div class="NaviButton">
+                                    <i class="icone fa-duotone fa-microphone" style="color: #ffffff;"></i>
+                                    <svg viewBox="0 0 120 120">
+                                        <polygon class="Fill" points="114,60 87,106.76 33,106.76 6,60 33,13.24 87,13.24" fill="#A0A0A060" />
+                                        <polygon class="Circle" points="114,60 87,106.76 33,106.76 6,60 33,13.24 87,13.24" stroke="#A0A0A050" fill="none" pathLength="100" />
+                                        <polygon class="Circle" points="114,60 87,106.76 33,106.76 6,60 33,13.24 87,13.24" stroke="#A0A0A0" fill="none" pathLength="100" />
+                                    </svg>
+                                </div>
+                            </div>
+                            
+                            <!-- Radio -->
+                            <div class="radio top-info-group" style="display: none;">
+                                <span class="freq"></span>
+                                <div class="NaviButton">
+                                    <i class="icone fa-duotone fa-walkie-talkie" style="color: #ffffff;"></i>
+                                    <svg viewBox="0 0 120 120">
+                                        <polygon class="Fill" points="114,60 87,106.76 33,106.76 6,60 33,13.24 87,13.24" fill="#A0A0A060" />
+                                        <polygon class="Circle" points="114,60 87,106.76 33,106.76 6,60 33,13.24 87,13.24" stroke="#A0A0A050" fill="none" pathLength="100" />
+                                        <polygon class="Circle" points="114,60 87,106.76 33,106.76 6,60 33,13.24 87,13.24" stroke="#A0A0A0" fill="none" pathLength="100" />
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="voice-container" style="margin-top: -5px;">
+                            <div class="wanted" style="display: none;">
+                                <div class="wanted-bg">
+                                    <i class="fa-light fa-siren-on"></i>
+                                </div>
+                                <text>
+                                    <p>Procurado <b class="wanted-time">00:00</b></p>
+                                </text>
+                            </div>
+                            <div class="reposed" style="display: none;">
+                                <div class="reposed-bg">
+                                    <i class="fa-light fa-bed-pulse"></i>
+                                </div>
+                                <text>
+                                    <p>Repouso <b class="reposed-time">00:00</b></p>
+                                </text>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="weapon">
+                        <div class="weapon-name">GC36</div>
+                        <div class="ammo-box">
+                            <div class="ammo-icon">
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                            </div>
+                            <div class="ammo-data">
+                                <span class="ammo-clip">30</span><span class="ammo-remaining">/300</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="status">
+                        <div class="velocimeterHud" style="display: none;">
+                            <div class="hud-top">
+                                <span class="hud-direction">N</span>
+                                <span class="hud-gear">1</span>
+                            </div>
+                            
+                            <div class="hud-middle">
+                                <div class="speed-container">
+                                    <div class="velo">0</div>
+                                    <div class="kmh">KM/H</div>
+                                </div>
+                                <div class="rpm-bars"></div>
+                            </div>
+
+                            <div class="hud-bottom">
+                                <div class="NaviButton">
+                                    <i class="icone fa-solid fa-wrench" style="color: #ffffff;"></i>
+                                    <svg viewBox="0 0 120 120">
+                                        <polygon class="Fill" points="114,60 87,106.76 33,106.76 6,60 33,13.24 87,13.24" fill="#5F00E660" />
+                                        <polygon class="Circle" points="114,60 87,106.76 33,106.76 6,60 33,13.24 87,13.24" stroke="#5F00E650" fill="none" pathLength="100" />
+                                        <polygon class="Circle EngineHex" points="114,60 87,106.76 33,106.76 6,60 33,13.24 87,13.24" stroke="#5F00E6" fill="none" pathLength="100" />
+                                    </svg>
+                                </div>
+                                <div class="middle-icons">
+                                    <i class="seatbelt fa-solid fa-user-slash"></i>
+                                    <i class="engine fa-solid fa-engine-warning"></i>
+                                    <i class="lock fa-solid fa-lock-open"></i>
+                                    <i class="handbrake fa-solid fa-circle-exclamation"></i>
+                                </div>
+                                <div class="NaviButton">
+                                    <i class="icone fa-solid fa-gas-pump" style="color: #ffffff;"></i>
+                                    <svg viewBox="0 0 120 120">
+                                        <polygon class="Fill" points="114,60 87,106.76 33,106.76 6,60 33,13.24 87,13.24" fill="#5F00E660" />
+                                        <polygon class="Circle" points="114,60 87,106.76 33,106.76 6,60 33,13.24 87,13.24" stroke="#5F00E650" fill="none" pathLength="100" />
+                                        <polygon class="Circle FuelHex" points="114,60 87,106.76 33,106.76 6,60 33,13.24 87,13.24" stroke="#5F00E6" fill="none" pathLength="100" />
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <div class="progress" style="display: none;">
+                <div class="progress-info progress-center">
+                    <div class="progress-hex">
+                        <svg class="hex-svg" viewBox="0 0 120 120" preserveAspectRatio="xMidYMid meet">
+                            <polygon class="hex-border" points="114,60 87,106.76 33,106.76 6,60 33,13.24 87,13.24" />
+                        </svg>
+                        <span class="progress-percent">0</span>
+                    </div>
+                    <span class="progress-text">Espere um momento</span>
+                    <span class="progress-subtitle">Espere até o tempo se acabar para ação sair como o planejado e sem problemas.</span>
+                </div>
+            </div>
+        </main>
+
+        <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
+        <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.min.js" integrity="sha256-hlKLmzaRlE8SCJC1Kw8zoUbU8BxA+8kR3gseuKfMjxA=" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js" integrity="sha256-KzZiKy0DWYsnwMF+X1DvQngQ2/FxF7MF3Ff72XcpuPs=" crossorigin="anonymous"></script>
+        <script src="js/index.js"></script>
+    </body>
+</html>

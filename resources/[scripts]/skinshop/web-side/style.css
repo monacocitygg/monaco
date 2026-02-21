@@ -1,0 +1,432 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Montserrat', sans-serif;
+    user-select: none;
+}
+
+body {
+    background-color: transparent;
+    overflow: hidden;
+    width: 100vw;
+    height: 100vh;
+}
+
+#app {
+    display: none;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.9) 25%, rgba(0,0,0,0.4) 50%, transparent 100%);
+}
+
+.container {
+    position: absolute;
+    left: 4vh;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 28vw;
+    height: 85vh;
+    display: flex;
+    flex-direction: column;
+    padding: 2vh;
+}
+
+/* Header */
+.header {
+    margin-bottom: 3vh;
+}
+
+.header h2 {
+    color: #fff;
+    font-size: 1rem;
+    font-weight: 600;
+    letter-spacing: 2px;
+    opacity: 0.8;
+    margin-bottom: 0.5vh;
+}
+
+.header h1 {
+    color: #fff;
+    font-size: 3.5rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    line-height: 1;
+    background: linear-gradient(180deg, #ffffff 0%, #aaaaaa 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* Tabs */
+.tabs {
+    display: flex;
+    gap: 1.5vh;
+    margin-bottom: 4vh;
+}
+
+.tab {
+    width: 6vh;
+    height: 6vh;
+    background: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    /* Remove clip-path from parent */
+    clip-path: none;
+    border: none;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+/* Hexagon Shape via Pseudo-elements */
+.tab::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(255, 255, 255, 0.15); /* Border Color */
+    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+    z-index: 0;
+    transition: all 0.3s ease;
+}
+
+.tab::after {
+    content: '';
+    position: absolute;
+    inset: 2px; /* Border thickness */
+    background: rgba(0, 0, 0, 0.8); /* Inner Fill */
+    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+    z-index: 1;
+    transition: all 0.3s ease;
+}
+
+.tab svg {
+    width: 40%;
+    height: 40%;
+    transition: all 0.3s ease;
+    z-index: 2;
+    position: relative;
+}
+
+.tab.active {
+    color: #8a2be2;
+}
+
+.tab.active::before {
+    background: rgba(138, 43, 226, 0.5); /* Active Border Color same as hover */
+    box-shadow: 0 0 15px rgba(138, 43, 226, 0.5); /* Glow attempt (might be clipped but let's try) */
+}
+
+.tab.active::after {
+    /* Keeping inner background dark */
+    background: rgba(0, 0, 0, 0.8);
+}
+
+.tab.active svg {
+    opacity: 1;
+    filter: drop-shadow(0 0 5px rgba(138, 43, 226, 0.5));
+}
+
+.tab:hover {
+    color: #8a2be2;
+}
+
+.tab:hover::before {
+    background: rgba(138, 43, 226, 0.5);
+}
+
+/* Camera Controls */
+.camera-controls {
+    position: absolute;
+    right: 5vh;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: 2vh;
+}
+
+.cam-btn {
+    width: 6vh;
+    height: 6vh;
+    background: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    clip-path: none;
+    border: none;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.cam-btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(255, 255, 255, 0.15);
+    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+    z-index: 0;
+    transition: all 0.3s ease;
+}
+
+.cam-btn::after {
+    content: '';
+    position: absolute;
+    inset: 2px;
+    background: rgba(0, 0, 0, 0.8);
+    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+    z-index: 1;
+    transition: all 0.3s ease;
+}
+
+.cam-btn svg {
+    width: 40%;
+    height: 40%;
+    opacity: 0.5;
+    transition: all 0.3s ease;
+    z-index: 2;
+    position: relative;
+}
+
+.cam-btn:hover {
+    color: #8a2be2;
+}
+
+.cam-btn:hover::before {
+    background: rgba(138, 43, 226, 0.5);
+}
+
+.cam-btn.active {
+    color: #8a2be2;
+}
+
+.cam-btn.active::before {
+    background: rgba(138, 43, 226, 0.5);
+}
+
+.cam-btn.active::after {
+    background: rgba(0, 0, 0, 0.8);
+}
+
+.cam-btn.active svg {
+    opacity: 1;
+    filter: drop-shadow(0 0 5px rgba(138, 43, 226, 0.5));
+}
+
+/* Content Area */
+.content {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding-right: 1vh;
+}
+
+.content::-webkit-scrollbar {
+    width: 4px;
+}
+
+.content::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.content::-webkit-scrollbar-thumb {
+    background: #8a2be2;
+    border-radius: 2px;
+}
+
+/* Category Items */
+.category-item {
+    margin-bottom: 2.5vh;
+}
+
+.category-label {
+    color: #fff;
+    font-size: 0.8rem;
+    font-weight: 700;
+    margin-bottom: 1vh;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.controls {
+    display: flex;
+    gap: 1.5vh;
+    width: 100%;
+}
+
+/* Control Group: now it's just a wrapper for buttons */
+.control-group {
+    display: flex;
+    align-items: center;
+    gap: 0.5vh;
+    /* Removed flex: 1 to prevent stretching/shrinking issues if container is small */
+    /* Instead we let them take natural width or split evenly */
+    width: 48%; 
+    justify-content: space-between;
+}
+
+/* Individual Buttons for Boxy Look */
+.control-btn {
+    width: 3.5vh;
+    height: 3.5vh;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: rgba(255, 255, 255, 0.7);
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 4px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.2s;
+    font-size: 0.8rem;
+}
+/* ... hover active ... */
+
+/* Value Display Box */
+.control-value {
+    /* removed flex: 1 */
+    /* width: 5vh; replaced with flex-grow to fill remaining space in the group */
+    flex: 1;
+    min-width: 0; /* allows shrinking if needed */
+    height: 3.5vh;
+    text-align: center;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 4px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #fff;
+    font-weight: 700;
+    font-size: 0.9rem;
+    outline: none;
+    -moz-appearance: textfield;
+}
+
+.control-value::-webkit-outer-spin-button,
+.control-value::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.control-value:focus {
+    border-color: #8a2be2;
+    background: rgba(0, 0, 0, 0.5);
+    box-shadow: 0 0 5px rgba(138, 43, 226, 0.2);
+}
+
+/* Active State for selected texture/item if needed */
+.control-group.active .control-value {
+    color: #8a2be2;
+    border-color: rgba(138, 43, 226, 0.3);
+    background: rgba(138, 43, 226, 0.05);
+}
+
+/* Footer Actions */
+.actions {
+    margin-top: 3vh;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5vh;
+}
+
+/* Rotation Slider */
+.rotation-slider {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 1vh;
+    height: 5vh;
+    background: rgba(0, 0, 0, 0.4);
+    border-radius: 4px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    margin-bottom: 1vh;
+}
+
+.slider-btn {
+    color: rgba(255, 255, 255, 0.5);
+    cursor: pointer;
+    padding: 0.5vh;
+    font-size: 1.2rem;
+}
+
+.slider-btn:hover {
+    color: #fff;
+}
+
+.slider-track {
+    flex: 1;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.1);
+    margin: 0 2vh;
+    border-radius: 2px;
+    position: relative;
+}
+
+.slider-thumb {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 0.8vh;
+    height: 1.5vh;
+    background: #8a2be2;
+    border-radius: 2px;
+    box-shadow: 0 0 10px rgba(138, 43, 226, 0.5);
+}
+
+/* Action Buttons */
+.btn {
+    width: 100%;
+    height: 5vh;
+    border: none;
+    border-radius: 4px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 0.9rem;
+}
+
+.btn-reset {
+    background: transparent;
+    color: #fff;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.btn-reset:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.3);
+}
+
+.btn-confirm {
+    background: #8a2be2;
+    color: #fff;
+    border: none;
+    box-shadow: 0 4px 15px rgba(138, 43, 226, 0.2);
+}
+
+.btn-confirm:hover {
+    background: #9b59b6;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(138, 43, 226, 0.3);
+}
+
+/* Background Decoration - Vertical Text */
+.bg-decoration {
+    position: absolute;
+    left: 28vw;
+    top: 30%;
+    transform: rotate(-90deg);
+    transform-origin: left bottom;
+    font-size: 12vh;
+    font-weight: 900;
+    color: rgba(255, 255, 255, 0.03);
+    pointer-events: none;
+    white-space: nowrap;
+    letter-spacing: 1vh;
+}

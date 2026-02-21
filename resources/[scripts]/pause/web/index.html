@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pause Menu</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Roboto+Mono:wght@500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <div class="app-overlay">
+        <div class="app-window">
+            <!-- Header -->
+            <div class="app-header">
+                <div class="header-left">
+                    <div class="app-logo">
+                        <div class="logo-icon"><i class="fa-solid fa-bag-shopping"></i></div>
+                        <div class="logo-text">
+                            <h1>LOJA VIP</h1>
+                            <p>Troque seus pontos por vantagens exclusivas</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="header-right">
+                    <!-- Search could be added here if functional, keeping it visual for now if needed -->
+                    <div class="search-box">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        <input type="text" placeholder="Pesquisar">
+                    </div>
+                    <div class="currency-pill">
+                        <i class="fa-brands fa-bitcoin"></i>
+                        <span id="user-diamonds-header">0</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Navigation Tabs -->
+            <div class="app-nav">
+                <div class="nav-item active" data-tab="shop">Loja</div>
+                <div class="nav-item" data-tab="boxes">Caixas</div>
+                <div class="nav-item" data-tab="vehicles">Carros</div>
+            </div>
+
+            <!-- Content Area -->
+            <div class="app-content">
+                <!-- Shop Section -->
+                <div id="shop-section" class="section active">
+                    <div id="shop-grid" class="grid-layout">
+                        <!-- JS Injected -->
+                    </div>
+                </div>
+
+                <!-- Boxes Section -->
+                <div id="boxes-section" class="section">
+                    <div class="boxes-sub-nav">
+                        <button class="sub-nav-btn active" data-sub="all">Loja de Caixas</button>
+                        <button class="sub-nav-btn" data-sub="my-boxes">Minhas Caixas</button>
+                    </div>
+
+                    <div id="boxes-grid" class="grid-layout">
+                        <!-- JS Injected -->
+                    </div>
+                    <div id="boxes-empty" class="empty-state" style="display: none;">
+                        <i class="fa-solid fa-box-open"></i>
+                        <h3>Nenhuma Caixa</h3>
+                    </div>
+
+                    <div id="my-boxes-grid" class="grid-layout" style="display: none;">
+                        <!-- JS Injected -->
+                    </div>
+                    <div id="my-boxes-empty" class="empty-state" style="display: none;">
+                        <i class="fa-solid fa-box-archive"></i>
+                        <h3>Nenhuma Caixa Adquirida</h3>
+                    </div>
+                </div>
+
+                <!-- Vehicles Section -->
+                <div id="vehicles-section" class="section">
+                    <div id="vehicles-grid" class="grid-layout">
+                        <!-- JS Injected -->
+                    </div>
+                    <div id="vehicles-empty" class="empty-state" style="display: none;">
+                        <i class="fa-solid fa-car"></i>
+                        <h3>Nenhum Veículo Disponível</h3>
+                    </div>
+                </div>
+
+                <!-- Box Opening Section -->
+                <div id="box-opening-section" class="section">
+                    <div class="opening-header">
+                        <button class="back-btn" onclick="closeOpeningScreen()"><i class="fa-solid fa-chevron-left"></i> Voltar</button>
+                        <h2 id="opening-box-name">Caixa Nome (x0)</h2>
+                    </div>
+                    
+                    <div class="opening-main">
+                        <div id="box-static-display" class="box-display-area">
+                            <div class="display-bracket left">
+                                <div class="cap-top"></div>
+                                <div class="cap-bottom"></div>
+                            </div>
+                            <img id="opening-box-img" src="" alt="Box">
+                            <div class="display-bracket right">
+                                <div class="cap-top"></div>
+                                <div class="cap-bottom"></div>
+                            </div>
+                        </div>
+
+                        <!-- Roulette (Hidden by default) -->
+                        <div id="roulette-view" class="roulette-wrapper" style="display: none;">
+                            <div class="roulette-marker"></div>
+                            <div class="roulette-container">
+                                <div id="roulette-track" class="roulette-track">
+                                    <!-- Items injected here -->
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="opening-controls">
+                            <div class="quantity-control">
+                                <label>Quantidade:</label>
+                                <div class="qty-selector">
+                                    <button class="qty-btn active" onclick="selectQty(1)">1</button>
+                                    <button class="qty-btn" onclick="selectQty(2)">2</button>
+                                    <button class="qty-btn" onclick="selectQty(3)">3</button>
+                                    <button class="qty-btn" onclick="selectQty(4)">4</button>
+                                    <button class="qty-btn" onclick="selectQty(5)">5</button>
+                                </div>
+                            </div>
+                            
+                            <button id="btn-open-box" class="action-btn-large">Abrir Caixa</button>
+                        </div>
+                    </div>
+
+                    <div class="opening-contents-area">
+                        <h3><i class="fa-solid fa-gift"></i> A caixa contém:</h3>
+                        <div id="opening-items-grid" class="opening-grid">
+                            <!-- JS Injected -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="preview-overlay" style="display: none; position: absolute; bottom: 50px; z-index: 999;">
+            <button class="action-btn-large" onclick="closePreview()">Voltar</button>
+        </div>
+    </div>
+
+    <!-- Confirmation Modal -->
+    <div id="confirmation-modal" class="modal-overlay">
+        <div class="modal-content">
+            <h3>Confirmar Compra</h3>
+            <p>
+                Você tem certeza que deseja comprar o item <br>
+                <span id="confirm-item-name" style="color: #fff; font-weight: 700;">ITEM</span><br>
+                por <span style="color: #7c3aed; font-weight: 700;"><i class="fa-brands fa-bitcoin"></i> <span id="confirm-item-price">0</span></span>?
+            </p>
+            
+            <div class="modal-actions">
+                <button class="modal-btn cancel" onclick="closeModal()">CANCELAR</button>
+                <button class="modal-btn confirm" id="confirm-buy-btn" onclick="processBuy()">CONFIRMAR</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Box Contents Modal -->
+    <div id="box-contents-modal" class="modal-overlay">
+        <div class="modal-content box-contents">
+            <h3>Conteúdo da Caixa</h3>
+            <div id="box-items-list" class="box-items-grid">
+                <!-- JS Injected -->
+            </div>
+            <div class="modal-actions">
+                <button class="modal-btn cancel" onclick="closeBoxModal()">FECHAR</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Reward Modal -->
+    <div id="reward-modal" class="modal-overlay">
+        <div class="modal-content reward-content">
+            <h2 class="reward-title"><i class="fa-solid fa-star" style="color: #f59e0b; margin-right: 10px; font-size: 1.2rem;"></i> RECOMPENSAS:</h2>
+            <div class="reward-card-display">
+                <div class="reward-rarity-container">
+                    <div class="reward-rarity-badge" id="reward-rarity">COMUM</div>
+                </div>
+                <img id="reward-img" src="" alt="Reward">
+                <div class="reward-name-display" id="reward-name">Item Name</div>
+            </div>
+            <button class="reward-back-btn" onclick="closeRewardModal()">Voltar</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

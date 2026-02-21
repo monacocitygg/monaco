@@ -1,0 +1,216 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Poppins', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: transparent;
+    user-select: none;
+    overflow: hidden;
+}
+
+.container {
+    width: 80%;
+    height: 80%;
+    background: rgba(30, 30, 30, 0.95);
+    border-radius: 15px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.5);
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    color: #fff;
+    border: 1px solid #333;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #444;
+}
+
+.title-section {
+    display: flex;
+    align-items: center;
+}
+
+.icon-box {
+    width: 50px;
+    height: 50px;
+    background: #8257E5;
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 24px;
+    margin-right: 15px;
+    color: #fff;
+}
+
+.text-box h1 {
+    margin: 0;
+    font-size: 24px;
+    font-weight: 600;
+}
+
+.text-box p {
+    margin: 0;
+    font-size: 14px;
+    color: #aaa;
+}
+
+.actions button {
+    background: #333;
+    border: 1px solid #555;
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-family: inherit;
+    font-weight: 500;
+    transition: 0.2s;
+    margin-left: 10px;
+}
+
+.actions button:hover:not(:disabled) {
+    background: #444;
+}
+
+.actions button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.content {
+    flex: 1;
+    overflow-y: auto;
+    padding-top: 20px;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
+}
+
+.card {
+    background: #252525;
+    border: 1px solid #333;
+    border-radius: 10px;
+    height: 200px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: 0.2s;
+    position: relative;
+}
+
+.card:hover {
+    background: #2a2a2a;
+    border-color: #555;
+}
+
+.card.selected {
+    border-color: #8257E5;
+    background: rgba(224, 71, 255, 0.1);
+}
+
+.card i {
+    font-size: 40px;
+    margin-bottom: 10px;
+    color: #555;
+}
+
+.card .card-text {
+    font-size: 14px;
+    color: #aaa;
+}
+
+.card.populated i {
+    color: #fff;
+}
+
+.card.populated .card-text {
+    color: #fff;
+    font-weight: 600;
+}
+
+.card.empty i {
+    color: #555;
+}
+
+.modal {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 100;
+}
+
+.modal-content {
+    background: #252525;
+    padding: 20px;
+    border-radius: 10px;
+    width: 300px;
+    border: 1px solid #444;
+    text-align: center;
+}
+
+.modal-content h2 {
+    margin-top: 0;
+    color: #fff;
+    font-size: 18px;
+}
+
+.modal-content input {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    background: #333;
+    border: 1px solid #444;
+    color: #fff;
+    border-radius: 5px;
+    box-sizing: border-box;
+    outline: none;
+}
+
+.modal-content input:focus {
+    border-color: #8257E5;
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+}
+
+.modal-actions button {
+    width: 48%;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+#cancel-save {
+    background: #444;
+    color: #fff;
+}
+
+#confirm-save {
+    background: #8257E5;
+    color: #fff;
+}

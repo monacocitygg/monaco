@@ -1,0 +1,133 @@
+<html lang="pt-br">
+	<head>
+		<title>Notify Ticket - Capital Network</title>
+		<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+		<script src="https://code.jquery.com/ui/1.13.0/jquery-ui.min.js" integrity="sha256-hlKLmzaRlE8SCJC1Kw8zoUbU8BxA+8kR3gseuKfMjxA=" crossorigin="anonymous"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js" integrity="sha256-KzZiKy0DWYsnwMF+X1DvQngQ2/FxF7MF3Ff72XcpuPs=" crossorigin="anonymous"></script>
+		<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;700;900&display=swap" rel="stylesheet">
+		<link href="css.css" rel="stylesheet" type="text/css"/>
+	</head>
+
+	<body>
+		<div class="body">
+
+		</div>
+	</body>
+
+	<script>
+		$(document).ready(function(){
+			let blocked = false
+			let list = []
+
+			window.addEventListener("message",function(event){
+				switch(event.data.action){
+					case 'notify':
+						addNotification(event.data.data)
+					break
+
+					case 'showAll':
+						if (list.length > 0){
+							showLast()
+							$.post("http://notifycall/focusOn")
+						}
+					break
+
+					case 'hideAll':
+						hideAll()
+						$.post("http://notifycall/focusOff")
+					break
+				}
+			});
+
+			document.onkeyup = function(data){
+				if (data.which == 27){
+					hideAll()
+					$.post("http://notifycall/focusOff")
+				}
+			};
+
+			$(document).on("click","#loc",function(){
+				$.post("http://notifycall/setWay",JSON.stringify({ x: $(this).attr("data-x"), y: $(this).attr("data-y") }))
+			});
+
+			$(document).on("click","#phone",function(){
+				$.post("http://notifycall/phoneCall",JSON.stringify({ phone: $(this).attr("data-phone") }))
+			});
+
+			$(document).on("click","#close",function(){
+				value = $(this).parent().attr("data-value")
+				newList = list.filter(data => data.includes(value) == false)
+				list = newList
+				$(this).parent().remove()
+				if (list.length <= 0){
+					hideAll()
+					$.post("http://notifycall/focusOff")
+				}
+			});
+
+
+			const hideAll = () => {
+				blocked = false
+				$(".body").css("overflow","hidden")
+				$(".body").html("")
+			};
+
+			const addNotification = data => {
+				if (list.length > 9) list.shift()
+				let ACAO = {
+					["AÇÃO"] :"ACAO"
+				}
+				const html = `
+				<div class="notification notification-${ACAO[data.code] ?? data.code}" data-value="${data.id}">
+					<div class="close" id="close">
+						<i class="fa fa-times"></i>
+					</div>
+					<div class="b-top b-top-${ACAO[data.code] ??data.code}"></div>
+					<div class="section">
+						<div class="container">
+							${data.code === undefined ? "" : `<div class="code code-${ACAO[data.code] ??data.code}">${data.code}</div>`}
+							<div class="titulo">${data.title}</div>
+							${data.criminal === undefined ? "" : `<div class="content-line"><i class="fa fa-user-ninja icon"></i><span>${data.criminal}</span></div>`}
+							${data.street === undefined ? "" : `<div class="content-line"><i class="fa fa-map-marker-alt icon"></i><span>${data.street}</span></div>`}
+							${data.name === undefined ? "" : `<div class="content-line"><i class="fa fa-user icon"></i><span>${data.name}</span></div>`}
+							${data.vehicle === undefined ? "" : `<div class="content-line"><i class="fa fa-car icon"></i><span>${data.vehicle}</span></div>`}
+							${data.text === undefined ? "" : `<div class="texto">${data.text}</div>`}
+						</div>
+						<div class="actions">
+							<div class="chamados chamados-${ACAO[data.code] ?? data.code}" id="loc" data-x="${data.x}" data-y="${data.y}"><i class="fas fa-map-marker-alt fa-lg"></i></div>
+							${data.phone === undefined ? "" : `<div class="chamados chamados-${ACAO[data.code] ?? data.code}" id="phone" data-phone="${data.phone}"><i class="fas fa-phone-alt"></i></div>`}
+						</div>
+						${data.time === undefined ? "" : `<div class="time"><i class="fa fa-clock icon"></i><span>${data.time}</span></div>`}
+					</div>
+				</div>`
+				list.push(html)
+
+				if (!blocked){
+					if(ACAO[data.code] == "ACAO"){
+                        $(html).prependTo(".body")
+                        .hide()
+                        .show("slide",{ direction: "right" },250)
+                        .delay(20000)
+                        .hide("slide",{ direction: "right" },250)
+                    }
+                    else{
+                        $(html).prependTo(".body")
+                        .hide()
+                        .show("slide",{ direction: "right" },250)
+                        .delay(5000)
+                        .hide("slide",{ direction: "right" },250)
+                    }
+				}
+			};
+
+			const showLast = () => {
+				hideAll()
+				blocked = true
+				$(".body").css("overflow-y","scroll")
+				for (i in list){
+					$(list[i]).prependTo(".body")
+				}
+			};
+		});
+	</script>
+</html>

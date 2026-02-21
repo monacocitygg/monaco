@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Garage UI</title>
+    <link href="css.css" rel="stylesheet" type="text/css"/>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://site-assets.fontawesome.com/releases/v6.1.1/css/all.css">
+</head>
+<body style="display: none">
+    <div class="container">
+        <!-- Header -->
+        <header>
+            <h1>GARAGEM</h1>
+            <h2>SELECIONE UM VEÍCULO</h2>
+        </header>
+
+        <!-- Vehicle List -->
+        <main class="vehicle-list" id="displayHud">
+            <!-- List items injected via JS -->
+        </main>
+
+        <!-- Action Buttons -->
+        <div class="actions">
+            <div class="action-row">
+                <button id="storeSpecific" class="btn btn-grey">GUARDAR</button>
+                <button id="spawnVehicle" class="btn btn-pink">RETIRAR</button>
+            </div>
+            <div class="action-row">
+                <button id="sellVehicle" class="btn btn-dark">VENDER</button>
+                <button id="taxVehicle" class="btn btn-dark">PAGAR TAXA</button>
+            </div>
+            <button id="storeVehicle" class="btn btn-full">GUARDAR VEÍCULO PRÓXIMO</button>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script src="jquery.js"></script>
+</body>
+</html>

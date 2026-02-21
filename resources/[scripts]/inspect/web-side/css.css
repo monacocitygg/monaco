@@ -1,0 +1,534 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700;900&display=swap');
+
+::-webkit-scrollbar { width: 0; }
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button { -webkit-appearance: none; }
+
+:root {
+	font-size: 16px;
+	--primary-color: #5F00E6;
+	--bg-dark: rgba(15, 15, 15, 0.95);
+	--bg-slot: rgba(30, 30, 30, 0.4);
+	--border-color: rgba(255, 255, 255, 0.1);
+	--text-color: #fff;
+	--text-muted: #aaa;
+}
+
+@media screen and (max-width: 800px), screen and (max-height: 600px){ :root { font-size: 0.35rem; } }
+@media screen and (min-width: 800px) and (min-height: 600px){ :root { font-size: 0.475rem; } }
+@media screen and (min-width: 1000px) and (min-height: 700px){ :root { font-size: 0.6rem; } }
+@media screen and (min-width: 1100px) and (min-height: 700px){ :root { font-size: 0.65rem; } }
+@media screen and (min-width: 1300px) and (min-height: 700px) { :root { font-size: 0.75rem; } }
+@media screen and (min-width: 1400px) and (min-height: 700px){ :root { font-size: 0.8rem; } }
+@media screen and (min-width: 1600px) and (min-height: 800px){ :root { font-size: 0.85rem; } }
+@media screen and (min-width: 1750px) and (min-height: 900px){ :root { font-size: 0.95rem; } }
+@media screen and (min-width: 1850px) and (min-height: 1000px){ :root { font-size: 1.05rem; } }
+
+body {
+	margin: 0;
+	padding: 0;
+	color: var(--text-color);
+	font-family: "Montserrat", sans-serif;
+	-webkit-font-smoothing: antialiased;
+	text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+	overflow: hidden;
+}
+
+* {
+	user-select: none;
+	box-sizing: border-box;
+}
+
+.inventory {
+	width: 100vw;
+	height: 100vh;
+	display: none;
+	position: fixed;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	background: radial-gradient(circle, rgba(20,20,20,0.8) 0%, rgba(0,0,0,0.95) 100%);
+}
+
+.innerInventory {
+	display: flex;
+	width: auto;
+	justify-content: center;
+	align-items: flex-start;
+	gap: 2rem;
+}
+
+.column {
+	display: flex;
+	flex-direction: column;
+}
+
+.left-col {
+	width: auto;
+}
+
+.right-col {
+	width: auto;
+}
+
+.middle-col {
+	width: auto;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	padding-top: 5rem;
+}
+
+/* Header Styling */
+.header {
+	margin-bottom: 1.5rem;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	gap: 1rem;
+	padding-left: 0.5rem;
+}
+
+.header-icon {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.hexagon {
+	width: 3.5rem;
+	height: 3.5rem;
+	background: var(--primary-color);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	position: relative;
+	clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+	box-shadow: 0 0 10px var(--primary-color);
+}
+
+.header-info {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	gap: 0.3rem;
+	min-width: 15rem;
+}
+
+.top-info {
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+}
+
+.player-name {
+	font-size: 1.3rem;
+	font-weight: 800;
+	color: #fff;
+	text-transform: uppercase;
+}
+
+.player-id {
+	background: var(--primary-color);
+	color: #fff;
+	padding: 0.1rem 0.5rem;
+	border-radius: 4px;
+	font-weight: 900;
+	font-size: 0.8rem;
+}
+
+.bottom-info {
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+}
+
+#weightBarLeft, #weightBarRight {
+	width: 100%;
+	height: 6px;
+	background: rgba(255, 255, 255, 0.1);
+	border-radius: 3px;
+	overflow: hidden;
+	border: 1px solid rgba(255,255,255,0.05);
+}
+
+#weightContent {
+	height: 100%;
+	background: var(--primary-color);
+	width: 0%;
+	transition: width 0.5s ease;
+	box-shadow: 0 0 10px var(--primary-color);
+}
+
+#weightTextLeft, #weightTextRight {
+	font-size: 0.7rem;
+	color: #fff;
+	font-weight: 700;
+	text-align: right;
+	margin-bottom: 0.2rem;
+}
+
+/* Grid Styling */
+.inventory-grid-container {
+	display: flex;
+	flex-direction: row;
+	gap: 1.5rem;
+}
+
+.invHotbar {
+	display: flex;
+	flex-direction: column;
+	gap: 0.8rem;
+	width: 6.5rem;
+	counter-reset: hotbar-counter;
+}
+
+.invLeft {
+	display: grid;
+	grid-template-columns: repeat(4, 6.5rem);
+	grid-auto-rows: 6.5rem;
+	gap: 0.8rem;
+	height: 36rem;
+	overflow-y: auto;
+	overflow-x: hidden;
+	padding-right: 0.5rem;
+	position: relative;
+}
+
+.invRight {
+	display: grid;
+	grid-template-columns: repeat(4, 6.5rem);
+	grid-auto-rows: 6.5rem;
+	gap: 0.8rem;
+	height: 36rem;
+	overflow-y: auto;
+	overflow-x: hidden;
+	padding-right: 0.5rem;
+	position: relative;
+}
+
+.item {
+	width: 6.5rem;
+	height: 6.5rem;
+	background: var(--bg-slot);
+	border: 1px solid var(--border-color);
+	border-radius: 8px;
+	display: flex;
+	flex-direction: column;
+	position: relative;
+	transition: all 0.2s;
+}
+
+.item:hover {
+	border-color: rgba(255, 255, 255, 0.5);
+	background: rgba(40, 40, 40, 0.6);
+}
+
+.populated {
+	background: var(--bg-slot);
+}
+
+.populated:hover {
+	border-color: var(--primary-color);
+	box-shadow: inset 0 0 15px rgba(95, 0, 230, 0.1);
+}
+
+/* Hotbar Numbers */
+.invHotbar .item:nth-child(-n+4)::after {
+	counter-increment: hotbar-counter;
+	content: counter(hotbar-counter);
+	position: absolute;
+	bottom: -0.6rem;
+	left: 50%;
+	transform: translateX(-50%);
+	width: 1.2rem;
+	height: 1.2rem;
+	background: var(--primary-color);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 0.8rem;
+	font-weight: 900;
+	color: #fff;
+	z-index: 10;
+	box-shadow: 0 0 5px rgba(0,0,0,0.5);
+	border: 2px solid #1a1a1a;
+	border-radius: 50%;
+}
+
+.invHotbar .item:nth-child(5)::before {
+	content: '';
+	background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 448 512' fill='white' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M112 16c17.7 0 32 14.3 32 32v32H112 96 64V48c0-17.7 14.3-32 32-32h16zm48 64h32H384c17.7 0 32 14.3 32 32V464c0 17.7-14.3 32-32 32H64c-17.7 0-32-14.3-32-32V112c0-17.7 14.3-32 32-32H112 160zM128 208c0-8.8 7.2-16 16-16h96c8.8 0 16 7.2 16 16v64c0 8.8-7.2 16-16 16H144c-8.8 0-16-7.2-16-16V208z'/%3E%3C/svg%3E");
+	background-size: contain;
+	background-repeat: no-repeat;
+	background-position: center;
+	width: 3rem;
+	height: 3rem;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	opacity: 0.2;
+	z-index: 1;
+	pointer-events: none;
+}
+
+.invHotbar .item:nth-child(5) {
+	margin-top: 1rem;
+}
+
+/* Actions Styling */
+.actions {
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+	align-items: center;
+}
+
+.action-btn {
+	width: 4rem;
+	height: 4rem;
+	background: transparent;
+	border: 1px solid var(--border-color);
+	border-radius: 8px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	color: #fff;
+	font-size: 1.5rem;
+	cursor: pointer;
+	transition: all 0.2s;
+	padding: 0;
+}
+
+.action-btn:hover {
+	background: var(--primary-color);
+	border-color: var(--primary-color);
+	box-shadow: 0 0 15px var(--primary-color);
+}
+
+.qtd-btn {
+	border: none;
+	background: transparent;
+	width: auto;
+	height: auto;
+}
+
+.qtd-btn input {
+	background: transparent;
+	border: 1px solid var(--border-color);
+	color: #fff;
+	padding: 0.5rem;
+	width: 4rem;
+	text-align: center;
+	border-radius: 8px;
+	font-size: 1rem;
+	font-weight: bold;
+}
+
+.qtd-btn input:focus {
+	border-color: var(--primary-color);
+	outline: none;
+}
+
+/* Item Content */
+.item-image {
+	width: 60%;
+	height: 60%;
+	align-self: center;
+	margin-top: 0;
+	background-size: contain;
+	background-position: center;
+	background-repeat: no-repeat;
+	z-index: 2;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+}
+
+.nameItem {
+	position: absolute;
+	top: 0.5rem;
+	left: 0.5rem;
+	width: calc(100% - 1rem);
+	text-align: left;
+	font-size: 0.65rem;
+	font-weight: 700;
+	color: #fff;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	padding: 0;
+	text-transform: capitalize;
+	z-index: 3;
+	text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+}
+
+.itemAmount {
+	position: absolute;
+	bottom: 0.8rem;
+	left: 0.5rem;
+	font-size: 0.6rem;
+	color: #ccc;
+	font-weight: 500;
+	z-index: 3;
+	text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+}
+
+.itemWeight { display: none; }
+
+.durability {
+	display: block !important;
+	position: absolute;
+	bottom: 0.4rem;
+	right: 0.4rem;
+	width: 0.8rem;
+	height: 0.8rem;
+	border-radius: 50%;
+	z-index: 5;
+	box-shadow: 0 0 5px rgba(0,0,0,0.5);
+}
+
+/* Tooltip */
+.ui-tooltip {
+	position: absolute;
+	z-index: 9999;
+	background: rgba(15, 15, 15, 0.95);
+	border: 1px solid var(--border-color);
+	border-radius: 6px;
+	padding: 10px;
+	color: #fff;
+	box-shadow: 0 0 15px rgba(0,0,0,0.5);
+	pointer-events: none;
+}
+
+item {
+	font-weight: 800;
+	font-size: 1rem;
+	color: #fff;
+	text-transform: uppercase;
+}
+
+description {
+	font-size: 0.8rem;
+	color: #ccc;
+	display: block;
+	margin-top: 5px;
+	max-width: 200px;
+}
+
+legenda {
+	display: block;
+	margin-top: 8px;
+	font-size: 0.75rem;
+	color: #888;
+	border-top: 1px solid rgba(255,255,255,0.1);
+	padding-top: 5px;
+}
+
+r { color: var(--primary-color); font-weight: bold; }
+s { color: #555; margin: 0 5px; }
+
+/* VIP Tooltip Styling */
+.vip-tooltip {
+	position: absolute;
+	top: 21.9rem;
+	left: 0;
+	width: calc(100% - 0.5rem);
+	height: 35.7rem;
+	background: rgba(18, 18, 18, 0.4);
+	border: 1px solid rgba(255, 255, 255, 0.1);
+	border-radius: 8px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: flex-start;
+	padding-top: 4rem;
+	text-align: center;
+	z-index: 10;
+	box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+	pointer-events: auto;
+}
+
+.vip-tooltip .tooltip-icon {
+	width: 3rem;
+	height: 3rem;
+	background: rgba(252, 88, 88, 0.2);
+	border-radius: 8px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	margin: 0 auto 1rem auto;
+}
+
+.vip-tooltip .tooltip-icon i {
+	font-size: 1.5rem;
+	color: #fc5858;
+}
+
+.vip-tooltip .tooltip-title {
+	font-size: 1.2rem;
+	font-weight: 800;
+	color: #fff;
+	margin-bottom: 0.5rem;
+}
+
+.vip-tooltip .tooltip-desc {
+	font-size: 0.9rem;
+	color: #aaa;
+	line-height: 1.4;
+}
+
+/* Per-slot overlay for blocked inventory items (Serendibite/Painite logic) */
+/* Left inventory (my inventory) */
+.invLeft:not(.has-vip):not(.has-serendibite):not(.has-painite) .item:nth-child(n+12)::before,
+.invLeft.has-serendibite:not(.has-vip):not(.has-painite) .item:nth-child(n+17)::before {
+	content: '';
+	background: rgba(0,0,0,0.45);
+	border-radius: 8px;
+	position: absolute;
+	inset: 0.25rem;
+	z-index: 1;
+	pointer-events: none;
+}
+.invLeft.has-painite:not(.has-vip) .item:nth-child(n+21)::before {
+	content: '';
+	background: rgba(0,0,0,0.45);
+	border-radius: 8px;
+	position: absolute;
+	inset: 0.25rem;
+	z-index: 1;
+	pointer-events: none;
+}
+
+/* Right inventory (target inventory) */
+.invRight:not(.has-vip):not(.has-serendibite):not(.has-painite) .item:nth-child(n+12)::before,
+.invRight.has-serendibite:not(.has-vip):not(.has-painite) .item:nth-child(n+17)::before {
+	content: '';
+	background: rgba(0,0,0,0.45);
+	border-radius: 8px;
+	position: absolute;
+	inset: 0.25rem;
+	z-index: 1;
+	pointer-events: none;
+}
+.invRight.has-painite:not(.has-vip) .item:nth-child(n+21)::before {
+	content: '';
+	background: rgba(0,0,0,0.45);
+	border-radius: 8px;
+	position: absolute;
+	inset: 0.25rem;
+	z-index: 1;
+	pointer-events: none;
+}
+
+/* Adjust overlay start and height when Serendibite/Painite liberate slots on left */
+.invLeft.has-serendibite .vip-tooltip {
+	top: 29.2rem;
+	height: 28.4rem;
+}
+.invLeft.has-painite .vip-tooltip {
+	top: 36.5rem;
+	height: 21.1rem;
+}
