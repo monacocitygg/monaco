@@ -29,6 +29,20 @@ Config.Animations = {
         prop  = nil,
     },
     {
+        id    = "radio_clip",
+        label = "Rádio Padrão",
+        icon  = "mdi-radio-handheld",
+        dict  = "radioanimation",
+        anim  = "radio_clip",
+        animParams = { blendIn = 8.0, blendOut = 8.0, duration = -1, flag = 49, playbackRate = 1.0 },
+        prop  = {
+            model    = "w_ex_pe",
+            bone     = 60309,
+            offset   = { x = 0.06, y = 0.05, z = 0.00 },
+            rotation = { x = -15.0, y = 360.0, z = -10.0 },
+        },
+    },
+    {
         id    = "radio_enter",
         label = "Rádio Enter",
         icon  = "mdi-radio",
