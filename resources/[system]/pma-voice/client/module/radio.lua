@@ -98,41 +98,7 @@ RegisterCommand("+radiotalk", function()
             radioPressed = true
             playMicClicks(true)
 
-            local animData = exports["radio"]:getSelectedAnimData()
-
-            if animData and animData.dict then
-                local ap = animData.animParams or {}
-                local blendIn = ap.blendIn or 8.0
-                local blendOut = ap.blendOut or 8.0
-                local duration = ap.duration or -1
-                local flag = ap.flag or 49
-                local rate = ap.playbackRate or 1
-
-                if LoadAnim(animData.dict) then
-                    TaskPlayAnim(Ped, animData.dict, animData.anim, blendIn, blendOut, duration, flag, rate, false, false, false)
-                end
-
-                if animData.prop then
-                    local propHash = GetHashKey(animData.prop.model)
-                    RequestModel(propHash)
-                    while not HasModelLoaded(propHash) do
-                        Wait(1)
-                    end
-                    radioObject = CreateObject(propHash, 1.0, 1.0, 1.0, true, true, false)
-                    AttachEntityToEntity(radioObject, Ped, GetPedBoneIndex(Ped, animData.prop.bone),
-                        animData.prop.offset.x, animData.prop.offset.y, animData.prop.offset.z,
-                        animData.prop.rotation.x, animData.prop.rotation.y, animData.prop.rotation.z,
-                        true, false, false, false, 2, true)
-                end
-            else
-                local coords = GetOffsetFromEntityInWorldCoords(Ped, 0.0, 0.0, -5.0)
-                radioObject = CreateObject(GetHashKey('prop_cs_hand_radio'), coords.x, coords.y, coords.z, false, false, false)
-                SetEntityCollision(radioObject, false, false)
-                AttachEntityToEntity(radioObject, Ped, GetPedBoneIndex(Ped, 60309), 0.08, 0.05, 0.003, -50.0, 160.0, 0.0, true, true, false, true, 1, true)
-                if LoadAnim("radioanimation") then
-                    TaskPlayAnim(Ped, "radioanimation", "radio_clip", 8.0, 8.0, -1, 49, 1, 0, 0, 0)
-                end
-            end
+            TriggerEvent("radio:playTalkAnim")
 
             CreateThread(function()
                 TriggerEvent("pma-voice:radioActive", true)
@@ -167,24 +133,7 @@ RegisterCommand("-radiotalk", function()
         TriggerEvent("pma-voice:radioActive", false)
         playMicClicks(false)
 
-        local animData = exports["radio"]:getSelectedAnimData()
-
-        if animData and animData.dict then
-            StopAnimTask(Ped, animData.dict, animData.anim, 8.0)
-        else
-            StopAnimTask(Ped, "radioanimation", "radio_clip", 8.0)
-        end
-
-        if DoesEntityExist(radioObject) then
-            DeleteObject(radioObject)
-            radioObject = nil
-        else
-            local Coords = GetEntityCoords(Ped)
-            local RadioObject = GetClosestObjectOfType(Coords.x, Coords.y, Coords.z, 10.0, GetHashKey("prop_cs_hand_radio"))
-            if RadioObject ~= 0 then
-                DeleteObject(RadioObject)
-            end
-        end
+        TriggerEvent("radio:stopTalkAnim")
 
         TriggerServerEvent("pma-voice:setTalkingOnRadio", false)
     end
