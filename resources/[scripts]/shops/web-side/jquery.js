@@ -15,6 +15,15 @@ $(document).ready(function() {
                 $(".shop-title").html(selectShop || "Loja de departamento");
                 const isIllegal = (selectShop || "").toLowerCase() === "ilegal";
                 $("#app").toggleClass("illegal-shop", isIllegal);
+
+                if (selectType === "Sell") {
+                    $(".sub-title").text("Venda seus itens");
+                    $("#checkout-btn").text("Vender");
+                } else {
+                    $(".sub-title").text("Compre seus itens");
+                    $("#checkout-btn").text("Comprar");
+                }
+
                 requestShop();
                 break;
 

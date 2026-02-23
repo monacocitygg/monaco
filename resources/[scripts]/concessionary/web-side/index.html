@@ -1,13 +1,137 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <title>Bahamas Network</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <script type="module" crossorigin src="./assets/index.52ad2b2e.js"></script>
-    <link rel="stylesheet" href="./assets/index.4d8f2526.css">
-  </head>
-  <body>
-    <div id="app"></div>
-  </body>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Concessionária</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="nui://game/ui/jquery.js" type="text/javascript"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div id="app">
+        <div class="header">
+            <div class="logo-area">
+                <i class="fa-solid fa-car-side logo-icon"></i>
+                <h1>CONCESSIONÁRIA</h1>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <div class="left-panel">
+                <div class="stat-box">
+                    <div class="stat-header">
+                        <i class="fa-solid fa-circle-info"></i>
+                        <h3>Estatísticas do veículo</h3>
+                    </div>
+                    
+                    <div class="stat-item">
+                        <div class="stat-label">
+                            <span>Máxima velocidade</span>
+                            <span class="stat-value" id="val-speed">0 KM/H</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="fill" id="stat-speed"></div>
+                            <div class="ticks">
+                                <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="stat-item">
+                        <div class="stat-label">
+                            <span>Aceleração</span>
+                            <span class="stat-value" id="val-accel">0%</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="fill" id="stat-accel"></div>
+                            <div class="ticks">
+                                <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="stat-item">
+                        <div class="stat-label">
+                            <span>Frenagem</span>
+                            <span class="stat-value" id="val-brake">0%</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="fill" id="stat-brake"></div>
+                            <div class="ticks">
+                                <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="stat-item">
+                        <div class="stat-label">
+                            <span>Aderência</span>
+                            <span class="stat-value" id="val-traction">0%</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="fill" id="stat-traction"></div>
+                            <div class="ticks">
+                                <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="center-panel">
+                <!-- 3D View is behind -->
+                <div class="vehicle-controls">
+                    <div class="rotate-hint">
+                        <i class="fa-solid fa-arrows-rotate"></i> Arraste para girar
+                    </div>
+                </div>
+            </div>
+
+            <div class="right-panel">
+                <div class="vehicle-info-card">
+                    <div class="info-row">
+                        <span class="label">Valor do veículo</span>
+                        <span class="price" id="vehicle-price">R$ 0</span>
+                    </div>
+                    <div class="buttons-row">
+                        <button class="btn-buy" id="btn-buy">
+                            <span class="btn-line-1">ADQUIRIR</span>
+                            <span class="btn-line-2">VEÍCULO</span>
+                        </button>
+                        <button class="btn-test" id="btn-test">
+                            <div class="test-icon">
+                                <i class="fa-solid fa-gauge-high"></i>
+                            </div>
+                            <div class="test-text">
+                                <span class="btn-line-1">TESTAR</span>
+                                <span class="btn-line-2">VEÍCULO</span>
+                            </div>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="bottom-panel">
+            <div class="categories-wrapper">
+                <button class="nav-arrow left" id="cat-prev"><i class="fa-solid fa-chevron-left"></i></button>
+                <div class="categories-list" id="categories-list">
+                    <!-- Categories injected here -->
+                </div>
+                <button class="nav-arrow right" id="cat-next"><i class="fa-solid fa-chevron-right"></i></button>
+            </div>
+
+            <div class="vehicles-carousel-wrapper">
+                <button class="nav-arrow left" id="veh-prev"><i class="fa-solid fa-chevron-left"></i></button>
+                <div class="vehicles-list" id="vehicles-list">
+                    <!-- Vehicles injected here -->
+                </div>
+                <button class="nav-arrow right" id="veh-next"><i class="fa-solid fa-chevron-right"></i></button>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
 </html>

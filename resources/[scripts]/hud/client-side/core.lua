@@ -416,3 +416,64 @@ end)
 exports("Reposed",function()
 	return Reposed > 0 and true or false
 end)
+
+local Quadrado = true
+local Default = 1920 / 1080
+local OffsetX,OffsetY = 0,0
+local ResolutionX,ResolutionY = GetActiveScreenResolution()
+local AspectRatio = ResolutionX / ResolutionY
+local AspectDiff = Default - AspectRatio
+
+-----------------------------------------------------------------------------------------------------------------------------------------
+-- LOADTEXTURE
+-----------------------------------------------------------------------------------------------------------------------------------------
+function LoadTexture(Dict)
+	if not HasStreamedTextureDictLoaded(Dict) then
+		RequestStreamedTextureDict(Dict,true)
+		while not HasStreamedTextureDictLoaded(Dict) do
+			Wait(1)
+		end
+	end
+
+	return true
+end
+-----------------------------------------------------------------------------------------------------------------------------------------
+-- THREADSTART
+-----------------------------------------------------------------------------------------------------------------------------------------
+CreateThread(function()
+    if Quadrado then
+        if LoadTexture("circleminimap") then
+            AddReplaceTexture("platform:/textures/graphics", "radarmasksm", "circleminimap", "radarmasksm")
+
+            SetMinimapComponentPosition("minimap", "L", "B", 0.005, -0.025, 0.215, 0.185)
+            SetMinimapComponentPosition("minimap_mask", "L", "B", 0.02, 0.39, 0.1135, 0.5)
+            SetMinimapComponentPosition("minimap_blur", "L", "B", -0.02, -0.01, 0.305, 0.185)
+
+            SetBigmapActive(true, false)
+
+            repeat
+                Wait(100)
+                SetMinimapClipType(1)
+                SetBigmapActive(false, false)
+            until not IsBigmapActive()
+
+            while Quadrado do
+                Wait(100)
+                local Ped = PlayerPedId()
+                local Vehicle = GetVehiclePedIsIn(Ped, false)
+                
+                if Vehicle ~= 0 then
+                    local Velocidade = GetEntitySpeed(Vehicle) * 3.6
+                    
+                    if Velocidade < 70 then
+                        SetRadarZoom(1100)
+                    else
+                        SetRadarZoom(1100)
+                    end
+                else
+                    SetRadarZoom(1100)
+                end
+            end
+        end
+    end
+end)

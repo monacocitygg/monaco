@@ -3,6 +3,7 @@
 -----------------------------------------------------------------------------------------------------------------------------------------
 local Walk = nil
 local Object = nil
+local ObjectReq = 0
 local Point = false
 local Crouch = false
 local Button = GetGameTimer()
@@ -96,6 +97,10 @@ end)
 -----------------------------------------------------------------------------------------------------------------------------------------
 function tvRP.createObjects(Dict,Anim,Prop,Flag,Hands,Height,Pos1,Pos2,Pos3,Pos4,Pos5)
 	local Ped = PlayerPedId()
+
+	ObjectReq = ObjectReq + 1
+	local MyReq = ObjectReq
+
 	if DoesEntityExist(Object) then
 		TriggerServerEvent("DeleteObject",ObjToNet(Object))
 		Object = nil
@@ -115,8 +120,25 @@ function tvRP.createObjects(Dict,Anim,Prop,Flag,Hands,Height,Pos1,Pos2,Pos3,Pos4
 	if not IsPedInAnyVehicle(Ped) then
 		local Coords = GetEntityCoords(Ped)
 		local Progression,Network = vRPS.CreateObject(Prop,Coords["x"],Coords["y"],Coords["z"])
+
+		if MyReq ~= ObjectReq then
+			if Progression then
+				TriggerServerEvent("DeleteObject",Network)
+			end
+			return
+		end
+
 		if Progression then
-			Object = LoadNetwork(Network)
+			local LoadedObject = LoadNetwork(Network)
+
+			if MyReq ~= ObjectReq then
+				if DoesEntityExist(LoadedObject) then
+					TriggerServerEvent("DeleteObject",ObjToNet(LoadedObject))
+				end
+				return
+			end
+
+			Object = LoadedObject
 			if Object then
 				if Height then
 					AttachEntityToEntity(Object,Ped,GetPedBoneIndex(Ped,Hands),Height,Pos1,Pos2,Pos3,Pos4,Pos5,true,true,false,true,1,true)
@@ -136,6 +158,7 @@ end
 -----------------------------------------------------------------------------------------------------------------------------------------
 function tvRP.removeObjects(Mode)
 	local Ped = PlayerPedId()
+	ObjectReq = ObjectReq + 1
 
 	if IsPedUsingScenario(Ped,"PROP_HUMAN_SEAT_CHAIR_UPRIGHT") then
 		TriggerEvent("target:UpChair")

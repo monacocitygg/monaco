@@ -394,8 +394,8 @@ body {
 */
 
 /* Per-slot overlay for blocked inventory items */
-/* Baseline (no VIP, no Serendibite, no Painite): block from child >= 12 (slots > 17) */
-.invLeft:not(.has-vip):not(.has-serendibite):not(.has-painite) .item:nth-child(n+12)::before,
+/* Baseline (no VIP, no Serendibite, no Painite): block from child >= 13 (slots > 17) */
+.invLeft:not(.has-vip):not(.has-serendibite):not(.has-painite) .item:nth-child(n+13)::before,
 /* With Serendibite: block from child >= 17 (slots > 21) */
 .invLeft.has-serendibite:not(.has-vip):not(.has-painite) .item:nth-child(n+17)::before {
 	content: '';

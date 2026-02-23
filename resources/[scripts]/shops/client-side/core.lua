@@ -90,12 +90,7 @@ local List = {
 	{ 29.15,-1770.14,29.6,"Verdinha",true }, 
 	{ -1249.89,-1448.57,4.36,"Verdinha",true }, 
 	{ -1221.32,-1488.56,4.36,"Verdinha",true }, 
-	{ -1142.0,-2784.38,21.37,"Digital",true }, 
-	{ -1138.11,-2781.17,21.37,"Digital",true }, 
-	{ -1136.25,-2777.94,21.37,"Digital",true }, 
-	{ -1209.19,-1503.16,4.36,"Digital",true }, 
-	{ -1231.23,-1440.83,4.36,"Digital",true }, 
-	{ 46.2,-1749.33,29.64,"Digital",true }, 
+	{ -657.16,-857.69,24.5,"Digital",true }, 
 	{ 1133.44,-1563.94,35.38,"Farmacia",false }, 
 	{ 1693.2,3760.13,34.69,"Ammunation",false },
 	{ 252.61,-50.12,69.94,"Ammunation",false },
@@ -121,7 +116,7 @@ local List = {
 	{ 82.98,-1553.55,29.59,"Recycle",false }, 
 	{ 287.77,2843.9,44.7,"Recycle",false },
 	{ -413.97,6171.58,31.48,"Recycle",false },
-	{ -2038.33,-495.77,12.11,"Mecanica",false}, -- mecanica
+	-- { -2038.33,-495.77,12.11,"Mecanica",false}, -- mecanica
 	{ -947.94,-2040.35,9.4,"Police",false }, --1 BPM 
 	{ 364.62,-1604.05,25.44,"Police",false },-- DIB
 	{ 851.2,-1313.31,26.49,"Police",false },-- CORE ,181.42

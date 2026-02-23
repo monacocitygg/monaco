@@ -277,3 +277,75 @@ Citizen.CreateThread(function()
     end
 end)
 
+
+local savedVehicleColor = nil
+
+RegisterCommand("savecor", function()
+    local ped = PlayerPedId()
+    if not IsPedInAnyVehicle(ped) then
+        TriggerEvent('chatMessage', "COR", {255, 100, 100}, "Você precisa estar dentro de um veículo!")
+        return
+    end
+
+    local vehicle = GetVehiclePedIsUsing(ped)
+
+    -- Cor primária e secundária (índice de cor padrão)
+    local primaryColor, secondaryColor = GetVehicleColours(vehicle)
+
+    -- Cor custom (RGB) primária e secundária
+    local pr, pg, pb = GetVehicleCustomPrimaryColour(vehicle)
+    local sr, sg, sb = GetVehicleCustomSecondaryColour(vehicle)
+
+    -- Verifica se a cor custom está ativa (cor índice 12 = custom)
+    local isPrimaryCustom = (primaryColor == 12)
+    local isSecondaryCustom = (secondaryColor == 12)
+
+    -- Cor de pérola e aro
+    local pearlescentColor, wheelColor = GetVehicleExtraColours(vehicle)
+
+    savedVehicleColor = {
+        primaryColor      = primaryColor,
+        secondaryColor    = secondaryColor,
+        isPrimaryCustom   = isPrimaryCustom,
+        isSecondaryCustom = isSecondaryCustom,
+        primaryRGB        = { r = pr, g = pg, b = pb },
+        secondaryRGB      = { r = sr, g = sg, b = sb },
+        pearlescentColor  = pearlescentColor,
+        wheelColor        = wheelColor,
+    }
+
+    TriggerEvent('chatMessage', "COR", {100, 255, 100}, "Cor do veículo salva com sucesso! Use /appcor para aplicar.")
+end, false)
+
+RegisterCommand("appcor", function()
+    if not savedVehicleColor then
+        TriggerEvent('chatMessage', "COR", {255, 100, 100}, "Nenhuma cor salva! Use /savecor primeiro.")
+        return
+    end
+
+    local ped = PlayerPedId()
+    if not IsPedInAnyVehicle(ped) then
+        TriggerEvent('chatMessage', "COR", {255, 100, 100}, "Você precisa estar dentro de um veículo!")
+        return
+    end
+
+    local vehicle = GetVehiclePedIsUsing(ped)
+    local cor = savedVehicleColor
+
+    -- Aplica cor primária
+    if cor.isPrimaryCustom then
+        SetVehicleCustomPrimaryColour(vehicle, cor.primaryRGB.r, cor.primaryRGB.g, cor.primaryRGB.b)
+    else
+        SetVehicleColours(vehicle, cor.primaryColor, cor.secondaryColor)
+    end
+
+    -- Aplica cor secundária
+    if cor.isSecondaryCustom then
+        SetVehicleCustomSecondaryColour(vehicle, cor.secondaryRGB.r, cor.secondaryRGB.g, cor.secondaryRGB.b)
+    end
+
+    -- Aplica cor de pérola e aro
+    SetVehicleExtraColours(vehicle, cor.pearlescentColor, cor.wheelColor)
+
+    TriggerEvent('chatMessage', "COR", {100, 255, 100}, "Cor aplicada ao veículo com sucesso!")
+end, false)

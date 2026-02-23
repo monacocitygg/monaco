@@ -86,6 +86,7 @@ local wheeltype = {
 
 Citizen.CreateThread(function()
 	local bennys = false
+	local hover = false
 	SetNuiFocus(false,false)
 	while true do 
 		local idle = 500
@@ -98,7 +99,16 @@ Citizen.CreateThread(function()
 			local playercoords = GetEntityCoords(PlayerPedId())
 			local distance = #(playercoords - bennys)
 			if distance < 2 then
-				drawTxt("PRESSIONE  ~r~E~w~  PARA ACESSAR A ~y~MECÂNICA",4,0.5,0.93,0.50,255,255,255,180)
+				local ok, sx, sy = World3dToScreen2d(bennys[1],bennys[2],bennys[3] + 1.0)
+				if ok then
+					SendNUIMessage({ action = "showHover", x = sx, y = sy, title = "MECÂNICA", subtitle = "ACESSAR MODIFICAÇÕES" })
+					hover = true
+				else
+					if hover then
+						SendNUIMessage({ action = "hideHover" })
+						hover = false
+					end
+				end
 				if IsControlJustPressed(0,38) and func.checkPermission() then
 					vehicle = getNearestVehicle(7)
 					--if vehicle then
@@ -112,14 +122,28 @@ Citizen.CreateThread(function()
 						myveh = getAllVehicleMods(vehicle)
 						gameplaycam = GetRenderingCam()
 						cam = CreateCam("DEFAULT_SCRIPTED_CAMERA",true,2)
-						SendNUIMessage({ action = "vehicle", vehicle = getVehicleMods(vehicle), damage = damage, logo = config.logo })
+						SendNUIMessage({ action = "vehicle", vehicle = getVehicleMods(vehicle), damage = damage, logo = config.logo, prices = config.prices, mods = mod })
 						showNui()
 						isVehicleTooFar(vehicle)
 					end
 				end
+			else
+				if hover then
+					SendNUIMessage({ action = "hideHover" })
+					hover = false
+				end
 			end
 			if distance > 10 then
+				if hover then
+					SendNUIMessage({ action = "hideHover" })
+					hover = false
+				end
 				bennys = false
+			end
+		else
+			if hover then
+				SendNUIMessage({ action = "hideHover" })
+				hover = false
 			end
 		end
 		Citizen.Wait(idle)
@@ -162,24 +186,72 @@ RegisterNUICallback("cam",function(data)
 end)
 
 RegisterNUICallback("pagar",function(data)
-	if cart["total"] and func.checkPayment(cart["total"]) then
-		SetNuiFocus(false,false)
-		SendNUIMessage({ action = "applying" })
-		if not IsPedInAnyVehicle(PlayerPedId()) then
-			vRP.playAnim(false,{{"mini@repair","fixing_a_player"}},true)
-		end
-		TriggerEvent("progress",10000,"aplicando modificações")
-		Wait(10000)
-		TriggerEvent("Notify","verde","Modificações aplicadas com <b>sucesso</b>.",7000)
-		vRP.stopAnim(false)
-		myveh = getAllVehicleMods(vehicle)
-		local vehname = GetDisplayNameFromVehicleModel(GetEntityModel(vehicle)):lower()
-		local vehplate = GetVehicleNumberPlateText(vehicle)
+    local allowed, isMechanic = func.checkPermission()
+	if cart["total"] then
+        if isMechanic then
+            if func.checkPayment(cart["total"]) then
+                SetNuiFocus(false,false)
+                SendNUIMessage({ action = "applying" })
+                if not IsPedInAnyVehicle(PlayerPedId()) then
+                    vRP.playAnim(false,{{"mini@repair","fixing_a_player"}},true)
+                end
+                TriggerEvent("progress",3000,"aplicando modificações")
+                Wait(3000)
+                TriggerEvent("Notify","verde","Modificações aplicadas com <b>sucesso</b>.",7000)
+                vRP.stopAnim(false)
+                myveh = getAllVehicleMods(vehicle)
+                local vehname = GetDisplayNameFromVehicleModel(GetEntityModel(vehicle)):lower()
+                local vehplate = GetVehicleNumberPlateText(vehicle)
 
-		igVehicle,igNetwork,vehplate,vehname,igClass = vRP.VehicleList(5)
-		func.saveVehicle(vehname,vehplate,myveh)
-		fclient.closeNui()
+                igVehicle,igNetwork,vehplate,vehname,igClass = vRP.VehicleList(5)
+                func.saveVehicle(vehname,vehplate,myveh)
+                fclient.closeNui()
+            end
+        else
+            local orderMods = getAllVehicleMods(vehicle)
+            local vehname = GetDisplayNameFromVehicleModel(GetEntityModel(vehicle)):lower()
+            local vehplate = GetVehicleNumberPlateText(vehicle)
+            if func.createOrder(orderMods, cart["total"], VehToNet(vehicle), vehname, vehplate) then
+                fclient.closeNui()
+            end
+        end
 	end
+end)
+
+RegisterCommand("tabletmec", function()
+    local allowed, isMechanic = func.checkPermission()
+    if isMechanic then
+        local orders = func.getOrders()
+        SetNuiFocus(true, true)
+        SendNUIMessage({ action = "openTablet", orders = orders })
+    else
+        TriggerEvent("Notify", "vermelho", "Apenas mecânicos podem usar isso.", 5000)
+    end
+end)
+
+RegisterNUICallback("closeTablet", function()
+    SetNuiFocus(false, false)
+end)
+
+RegisterNUICallback("applyOrder", function(data)
+    local veh = getNearestVehicle(7)
+    if veh then
+        local plate = GetVehicleNumberPlateText(veh)
+        if plate == data.plate then
+            local success, msg = func.applyOrder(data.orderId, VehToNet(veh))
+            if success then
+                TriggerEvent("Notify", "verde", msg, 5000)
+                SetNuiFocus(false, false)
+                SendNUIMessage({ action = "closeTablet" })
+            else
+                TriggerEvent("Notify", "vermelho", msg, 5000)
+            end
+        else
+            TriggerEvent("Notify", "vermelho", "Placa do veículo não corresponde à ordem ("..data.plate..")", 5000)
+        end
+    else
+        TriggerEvent("Notify", "vermelho", "Nenhum veículo próximo.", 5000)
+    end
 end)
 
 RegisterNUICallback("callbacks",function(data)
@@ -558,7 +630,7 @@ function getAllVehicleMods(veh)
 	end
 	myveh.wheeltype = GetVehicleWheelType(veh)
 	myveh.bulletProofTyres = GetVehicleTyresCanBurst(veh)
-	myveh.damage = (1000 - GetVehicleBodyHealth(vehicle))/100
+	myveh.bodyHealth = GetVehicleBodyHealth(veh)
 	return myveh
 end
 
@@ -625,8 +697,10 @@ function setVehicleMods(veh,myveh,tunnerChip)
 			SetVehicleNeonLightEnabled(veh,i,false)
 		end
 	end
-	if myveh.damage > 0 then
-		SetVehicleBodyHealth(veh,myveh.damage)
+	if myveh.bodyHealth then
+		SetVehicleBodyHealth(veh,myveh.bodyHealth)
+	elseif myveh.damage and myveh.damage > 0 then
+		SetVehicleBodyHealth(veh,1000.0 - (myveh.damage * 100.0))
 	end
 
 end
@@ -999,6 +1073,7 @@ end
 function showNui()
 	SetNuiFocus(true,true)
 	SendNUIMessage({ action = "showMenu" })
+	TriggerEvent("hud:Active",false)
 	nui = true
 end
 
@@ -1011,6 +1086,7 @@ function fclient.closeNui()
 	ResetCam()
 	SetNuiFocus(false,false)
 	SendNUIMessage({ action = "hideMenu" })
+	TriggerEvent("hud:Active",true)
 	camControl("close")
 	setVehicleMods(vehicle,myveh)
 	FreezeEntityPosition(vehicle,false)

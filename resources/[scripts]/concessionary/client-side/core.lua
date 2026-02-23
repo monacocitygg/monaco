@@ -44,6 +44,7 @@ AddEventHandler("tablet:Open",function()
 		SetNuiFocus(true,true)
 		SetCursorLocation(0.5,0.5)
 		TriggerEvent("dynamic:closeSystem")
+		TriggerEvent("hud:Active",false)
 		SendNUIMessage({ name = "Open", payload = VehicleGlobal() })
 	end
 end)
@@ -53,6 +54,7 @@ end)
 RegisterNUICallback("Close",function(Data,Callback)
 	SetNuiFocus(false,false)
 	SetCursorLocation(0.5,0.5)
+	TriggerEvent("hud:Active",true)
 
 	if DoesEntityExist(Mount) then
 		DeleteEntity(Mount)
@@ -163,4 +165,33 @@ RegisterNUICallback("Drive",function(Data,Callback)
 	end
 
 	Callback("Ok")
+end)
+-----------------------------------------------------------------------------------------------------------------------------------------
+-- HOVER
+-----------------------------------------------------------------------------------------------------------------------------------------
+CreateThread(function()
+	TriggerEvent("hoverfy:Insert",{
+		{ -56.88,-1097.06,26.42,2.0,"E","Concessionária","Comprar veículos" }
+	})
+end)
+-----------------------------------------------------------------------------------------------------------------------------------------
+-- OPEN
+-----------------------------------------------------------------------------------------------------------------------------------------
+CreateThread(function()
+	while true do
+		local Time = 999
+		local Ped = PlayerPedId()
+		local Coords = GetEntityCoords(Ped)
+		local Distance = #(Coords - vector3(-56.88,-1097.06,26.42))
+
+		if Distance <= 2.0 then
+			Time = 1
+
+			if IsControlJustPressed(1,38) then
+				TriggerEvent("tablet:Open")
+			end
+		end
+
+		Wait(Time)
+	end
 end)

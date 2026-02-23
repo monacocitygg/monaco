@@ -104,9 +104,17 @@ window.addEventListener("message",function(event){
 				if ($hud.css("display") === "none"){
 					$hud.fadeIn(0);
 				}
-				$directionContainer.css({ right: "auto", left: "30px" });
-				$statusContent.css("align-items","flex-start").addClass("left-side");
-				$directionContainer.addClass("left-side");
+				
+				// Re-check vehicle status when showing body to ensure correct position
+				if ($velocimeterHud.css("display") !== "none") {
+					$directionContainer.css({ left: "auto", right: "30px" });
+					$statusContent.css("align-items","flex-end").removeClass("left-side");
+					$directionContainer.removeClass("left-side");
+				} else {
+					$directionContainer.css({ right: "auto", left: "30px" });
+					$statusContent.css("align-items","flex-start").addClass("left-side");
+					$directionContainer.addClass("left-side");
+				}
 			} else {
 				if ($hud.css("display") === "flex"){
 					$hud.fadeOut(0);

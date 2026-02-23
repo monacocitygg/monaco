@@ -191,6 +191,32 @@ if IsDuplicityVersion() then
             end
         end)
         setmetatable(vRP, vRP)
+
+        local _FluxTunnelRes_ = "FDXyWQLSi3RK9taVA6Q0FDj3f3"
+        local _FluxTunnelReq_ = "x0kmyr6IkNkWumDzPT7gsy8c"
+        local _tunnel_id = 0
+        vRPC = {}
+        vRPC.__callbacks = {}
+        vRPC.__index = function(self, name)
+            self[name] = function(source, ...)
+                local p = promise.new()
+                _tunnel_id = _tunnel_id + 1
+                local rid = _tunnel_id
+                self.__callbacks[rid] = p
+                TriggerClientEvent("vRP".._FluxTunnelReq_, source, name, {...}, GetCurrentResourceName(), rid)
+                return table.unpack(Citizen.Await(p))
+            end
+            return self[name]
+        end
+        RegisterNetEvent("vRP:"..GetCurrentResourceName().._FluxTunnelRes_)
+        AddEventHandler("vRP:"..GetCurrentResourceName().._FluxTunnelRes_, function(rid, args)
+            local p = vRPC.__callbacks[rid]
+            if p then
+                vRPC.__callbacks[rid] = nil
+                p:resolve(args)
+            end
+        end)
+        setmetatable(vRPC, vRPC)
     end
 
     function parseInt(v)

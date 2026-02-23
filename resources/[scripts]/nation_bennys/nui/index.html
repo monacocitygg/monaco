@@ -7,21 +7,98 @@
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css">
 	</head>
 	<body>
-		<div id="actionmenu">
-			<div id="principal" class="principal">
-				<div id="titulo" class="titulo">Bennys</div>
-				<div id="menu" class="menu" data-action="mainMenu"></div>
-			</div>
-			<button id="voltar" class="voltar" data-action="mainMenu">Voltar&nbsp;&nbsp;&nbsp;<i class="fas fa-arrow-alt-circle-left"></i></button>
-			<button id="sair" class="voltar" data-action="hideMenu">Sair&nbsp;&nbsp;&nbsp;<i class="fas fa-window-close"></i></button>
-			<div class="price">total: <span style="color: rgb(46, 146, 71);">$ </span><span id="preco">0</span>,00</div>
-			<button id="pagar" class="pagar" data-action="none">Pagar&nbsp;&nbsp;&nbsp;<i class="fas fa-hand-holding-usd"></i></button>
-			<div class="camera" id="cam">pressione <span style="color: rgb(241, 66, 66);">h</span> para liberar a câmera</div>
-		</div>
-		<div id="repair">
-			veículo <span style="color: rgb(238, 64, 64);">danificado</span>
-			<button id="reparar" class="reparar">reparar&nbsp;&nbsp;&nbsp;<i class="fas fa-tools"></i></button>
-		</div>
+        <div id="bennys-hover" class="bennys-hover" style="display:none;">
+            <div class="bennys-hover-inner">
+                <div class="bennys-hover-hex">
+                    <div class="bennys-hover-hex-inner">
+                        <div class="bennys-hover-hex-key">E</div>
+                    </div>
+                </div>
+                <div class="bennys-hover-lines">
+                    <div id="bennys-hover-title" class="bennys-hover-title">MECÂNICA</div>
+                    <div id="bennys-hover-subtitle" class="bennys-hover-subtitle">ACESSAR MODIFICAÇÕES</div>
+                </div>
+            </div>
+        </div>
+        <!-- Main Tuning Interface -->
+        <div id="actionmenu" style="display: none;">
+            <!-- Hexagonal Category Menu (Floating Left) -->
+            <div class="hex-menu-container">
+                <div id="categories-list" class="hex-categories">
+                    <!-- Categories injected by JS -->
+                </div>
+            </div>
+            
+            <!-- Tuning Options Panel (Floating Right) -->
+            <div class="tuning-panel">
+                <div class="panel-header">
+                    <h2 id="category-title">PERFORMANCE</h2>
+                    <button id="voltar" class="back-btn" style="display: none;"><i class="fas fa-arrow-left"></i></button>
+                </div>
+                
+                <div id="options-grid" class="options-content">
+                    <!-- Options injected by JS -->
+                </div>
+
+                <div class="panel-footer">
+                    <div class="total-section">
+                        <span>TOTAL:</span>
+                        <div class="diamond-icon"></div>
+                        <span id="preco" class="price-value">0</span>
+                    </div>
+                    <button id="pagar" class="action-btn pay-btn">COMPRAR</button>
+                </div>
+            </div>
+
+            <!-- Repair Notification (Floating Bottom Right) -->
+            <!-- Removed as requested -->
+
+            <!-- Additional UI Elements -->
+            <div class="camera-hint">
+                <i class="fas fa-mouse"></i> Clique botão direito para ativar/desativar a Câmera Livre
+            </div>
+            <button id="sair" class="exit-btn-corner">SAIR <i class="fas fa-times"></i></button>
+        </div>
+
+        <!-- Tablet UI (Keep this intact) -->
+        <div id="tablet-container" style="display: none;">
+            <div class="tablet-main">
+                <div class="tablet-sidebar">
+                    <div class="logo-area">
+                        <h1>BENNYS</h1>
+                        <span>MECHANIC SHOP</span>
+                    </div>
+                    <div class="nav-item active">
+                        <i class="fas fa-clipboard-list"></i> Ordens
+                    </div>
+                    <div class="user-profile">
+                        <div class="user-avatar"><i class="fas fa-user"></i></div>
+                        <div class="user-info">
+                            <span class="user-role">Mecânico</span>
+                            <span class="user-status">Online</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="tablet-content">
+                    <div class="content-header">
+                        <h2>Ordens de Serviço</h2>
+                        <button id="close-tablet" class="close-btn"><i class="fas fa-times"></i></button>
+                    </div>
+                    <div class="orders-table-header">
+                        <div class="col-vehicle">VEÍCULO</div>
+                        <div class="col-client">CLIENTE</div>
+                        <div class="col-price">VALOR</div>
+                        <div class="col-action">AÇÃO</div>
+                    </div>
+                    <div id="orders-list" class="orders-list-container">
+                        <!-- Orders will be injected here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+        <link rel="stylesheet" href="tablet.css">
+        <script src="tablet.js" type="text/javascript"></script>
+
 		<script src="config.js" type="text/javascript"></script>
 		<script src="script.js" type="text/javascript"></script>
 	</body>

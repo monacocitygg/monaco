@@ -121,6 +121,7 @@ local shops = {
 			["postit"] = 20,
 			["sandwich"] = 30, 
 			["cola"] = 30, 
+			["rope"] = 650,
 			["notepad"] = 10, 
 			["hamburger"] = 200,
 			["emptybottle"] = 30,
@@ -156,14 +157,9 @@ local shops = {
 		["mode"] = "Buy",
 		["type"] = "Cash",
 		["List"] = {
-			["cellphone"] = 575,
-			["radio"] = 550,
-			["rope"] = 450,
-			["camera"] = 275,
-			["card01"] = 5000,
-			["card02"] = 2000,
-			["vape"] = 1250,
-			["scanner"] = 6750
+			["cellphone"] = 675,
+			["radio"] = 650,
+			["scanner"] = 3250
 		}
 	}, 
 	

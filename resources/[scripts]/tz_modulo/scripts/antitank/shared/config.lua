@@ -2,14 +2,14 @@ Config = Config or {}
 
 Config.Antitank = {
     Enabled = true,
-    Debug = true,
+    Debug = false,
 
-    -- tempo em ms pra checar se o player morreu depois do hs
-    CheckDelay = 500,
-
-    -- bones da cabeca pro check de headshot
-    HeadBones = {
+    -- bones letais (cabeca + pescoco) -> tiro aqui = morte instantanea
+    LethalBones = {
         [31086] = true, -- SKEL_Head
         [65068] = true, -- IK_Head
     },
+
+    -- mensagem ao kickar player com godmode
+    DropMessage = '[ANTI-TANK] Removido por uso de god mode.',
 }

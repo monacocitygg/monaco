@@ -1,73 +1,147 @@
 local lastHit = {}
-local pendingCheck = {}
 
--- cooldown em ms pra nao ficar enviando evento toda hora pro mesmo player
+-- cooldown em ms
 local COOLDOWN = 2000
+local wasShooting = false
 
--- checa se o bone atingido eh da cabeca
-local function isHeadBone(bone)
-    return Config.Antitank.HeadBones[bone] == true
+print('[ANTI-TANK] Script carregado! Config: ' .. tostring(Config ~= nil) .. ' | Antitank: ' .. tostring(Config and Config.Antitank ~= nil))
+
+-- checa se o bone eh da cabeca ou pescoco
+local function isLethalBone(bone)
+    return Config.Antitank.LethalBones[bone] == true
 end
 
--- quando o player local causa dano em alguem
+-- funcao que processa o headshot detectado
+local function processHeadshot(victimServerId, weaponHash)
+    local attackerServerId = GetPlayerServerId(PlayerId())
+    if victimServerId <= 0 then return end
+
+    local now = GetGameTimer()
+
+    -- cooldown pra nao spammar
+    if lastHit[victimServerId] and (now - lastHit[victimServerId]) < COOLDOWN then
+        return
+    end
+
+    lastHit[victimServerId] = now
+
+    if Config.Antitank.Debug then
+        print(('[ANTI-TANK] HS/Pescoco -> vitima: %d | atacante: %d'):format(victimServerId, attackerServerId))
+    end
+
+    TriggerServerEvent('antitank:headshot', victimServerId, attackerServerId, weaponHash)
+end
+
+-- METODO 1: CEventNetworkEntityDamage (funciona contra players normais)
 AddEventHandler('gameEventTriggered', function(name, args)
     if not Config.Antitank.Enabled then return end
     if name ~= 'CEventNetworkEntityDamage' then return end
 
     local victim = args[1]
     local attacker = args[2]
-    local isDead = args[4] == 1
     local weaponHash = args[7]
-    local boneHit = args[10]
 
-    -- so processa se o atacante eh o player local
     if attacker ~= PlayerPedId() then return end
-
-    -- ignora se a vitima nao eh um ped de player
     if not IsPedAPlayer(victim) then return end
 
-    -- ignora se ja ta morto
-    if isDead or IsEntityDead(victim) then return end
-
-    -- checa se bateu na cabeca
-    if not isHeadBone(boneHit) then return end
-
-    local victimServerId = GetPlayerServerId(NetworkGetPlayerIndexFromPed(victim))
-    local attackerServerId = GetPlayerServerId(PlayerId())
-
-    if victimServerId <= 0 then return end
-
-    local now = GetGameTimer()
-
-    -- ignora se ja tem um check pendente pra essa vitima
-    if pendingCheck[victimServerId] then return end
-
-    -- ignora se ainda ta no cooldown (evita spam de evento)
-    if lastHit[victimServerId] and (now - lastHit[victimServerId]) < COOLDOWN then
-        return
-    end
-
-    lastHit[victimServerId] = now
-    pendingCheck[victimServerId] = true
+    local boneHitSuccess, boneHit = GetPedLastDamageBone(victim)
+    if not boneHitSuccess then return end
 
     if Config.Antitank.Debug then
-        print(('[ANTI-TANK] HS detectado -> vitima: %d | atacante: %d | weapon: %s | bone: %d'):format(
-            victimServerId, attackerServerId, weaponHash, boneHit
-        ))
+        print(('[ANTI-TANK] [Evento] bone: %s | letal: %s'):format(tostring(boneHit), tostring(isLethalBone(boneHit))))
     end
 
-    -- espera o delay e checa se o cara sobreviveu
-    Citizen.SetTimeout(Config.Antitank.CheckDelay, function()
-        pendingCheck[victimServerId] = nil
+    if not isLethalBone(boneHit) then return end
 
-        local victimPed = GetPlayerPed(GetPlayerFromServerId(victimServerId))
+    local victimServerId = GetPlayerServerId(NetworkGetPlayerIndexFromPed(victim))
+    processHeadshot(victimServerId, weaponHash)
+end)
 
-        if victimPed and DoesEntityExist(victimPed) and not IsEntityDead(victimPed) then
-            if Config.Antitank.Debug then
-                print(('[ANTI-TANK] Player %d sobreviveu ao HS, enviando pro server'):format(victimServerId))
+-- METODO 2: Raycast a cada tiro (funciona contra godmode que bloqueia o evento de dano)
+CreateThread(function()
+    while true do
+        Wait(0)
+        if not Config.Antitank.Enabled then goto continue end
+
+        local ped = PlayerPedId()
+        local isShooting = IsPedShooting(ped)
+
+        if isShooting and not wasShooting then
+            local weaponHash = GetSelectedPedWeapon(ped)
+
+            -- pega posicao do cano da arma e direcao do tiro
+            local camCoords = GetGameplayCamCoord()
+            local camRot = GetGameplayCamRot(2)
+
+            -- converte rotacao pra direcao
+            local rX = camRot.x * math.pi / 180.0
+            local rZ = camRot.z * math.pi / 180.0
+            local dirX = -math.sin(rZ) * math.abs(math.cos(rX))
+            local dirY = math.cos(rZ) * math.abs(math.cos(rX))
+            local dirZ = math.sin(rX)
+
+            local range = 200.0
+            local endCoords = vector3(
+                camCoords.x + dirX * range,
+                camCoords.y + dirY * range,
+                camCoords.z + dirZ * range
+            )
+
+            -- raycast do tipo 12 = peds
+            local ray = StartShapeTestRay(camCoords.x, camCoords.y, camCoords.z, endCoords.x, endCoords.y, endCoords.z, 12, ped, 0)
+            local _, hit, hitCoords, _, hitEntity = GetShapeTestResult(ray)
+
+            if hit == 1 and hitEntity and DoesEntityExist(hitEntity) and IsEntityAPed(hitEntity) and IsPedAPlayer(hitEntity) then
+                -- checa o bone mais proximo do ponto de impacto
+                local boneHead = GetPedBoneCoords(hitEntity, 31086, 0.0, 0.0, 0.0)
+
+                local distHead = #(hitCoords - boneHead)
+
+                local threshold = 0.15 -- distancia maxima pro bone contar como hit
+
+                if distHead < threshold then
+                    local victimServerId = GetPlayerServerId(NetworkGetPlayerIndexFromPed(hitEntity))
+
+                    if Config.Antitank.Debug then
+                        print(('[ANTI-TANK] [Raycast] HS detectado | vitima: %d | distHead: %.2f'):format(
+                            victimServerId, distHead
+                        ))
+                    end
+
+                    processHeadshot(victimServerId, weaponHash)
+                end
             end
-
-            TriggerServerEvent('antitank:headshotSurvived', victimServerId, attackerServerId, weaponHash)
         end
+
+        wasShooting = isShooting
+        ::continue::
+    end
+end)
+
+-- evento recebido pela vitima: server avisa que levou HS, client espera e checa se tankou
+RegisterNetEvent('antitank:checkKill', function()
+    if Config.Antitank.Debug then
+        print('[ANTI-TANK] checkKill recebido, aguardando 1s...')
+    end
+
+    CreateThread(function()
+        Wait(1000)
+        local ped = PlayerPedId()
+        local hp = GetEntityHealth(ped)
+        if hp <= 101 then
+            if Config.Antitank.Debug then
+                print(('[ANTI-TANK] Jogador morreu normalmente (HP: %d), ignorando.'):format(hp))
+            end
+            return
+        end
+
+        -- ainda vivo apos 1s = tankou
+        if Config.Antitank.Debug then
+            print(('[ANTI-TANK] Jogador tankou (HP: %d)! Forcando morte...'):format(hp))
+        end
+        SetPlayerInvincible(PlayerId(), false)
+        SetEntityInvincible(ped, false)
+        SetEntityCanBeDamaged(ped, true)
+        SetEntityHealth(ped, 0)
     end)
 end)

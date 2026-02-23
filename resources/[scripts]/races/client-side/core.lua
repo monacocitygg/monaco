@@ -9,141 +9,117 @@ vSERVER = Tunnel.getInterface("races")
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- VARIABLES
 -----------------------------------------------------------------------------------------------------------------------------------------
-local Saved = 0
-local Objects = {}
 local Race = 1
-local Markers = {}
+local Saved = 0
+local Blips = {}
+local Points = 0
+local Objects = {}
+local Progress = 0
 local Checkpoint = 1
-local Rankings = false
-local ExplodeTimers = false
-local ExplodeCooldown = GetGameTimer()
+local Actived = false
+local Ranking = false
+local TyreExplodes = 0
+-----------------------------------------------------------------------------------------------------------------------------------------
+-- LOCALPLAYER
+-----------------------------------------------------------------------------------------------------------------------------------------
+LocalPlayer["state"]["Race"] = false
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- THREADRACES
 -----------------------------------------------------------------------------------------------------------------------------------------
 CreateThread(function()
-	Wait(1000)
-
 	for _,Info in pairs(Races) do
-		local Blip = AddBlipForCoord(Info["Init"]["x"],Info["Init"]["y"],Info["Init"]["z"])
-		SetBlipSprite(Blip,38)
-		SetBlipDisplay(Blip,4)
-		SetBlipAsShortRange(Blip,true)
-		SetBlipColour(Blip,4)
-		SetBlipScale(Blip,0.6)
-		BeginTextCommandSetBlipName("STRING")
-		AddTextComponentString("Circuito")
-		EndTextCommandSetBlipName(Blip)
+		local Inits = AddBlipForRadius(Info["Init"]["x"],Info["Init"]["y"],Info["Init"]["z"],10.0)
+		SetBlipAlpha(Inits,200)
+		SetBlipColour(Inits,59)
 	end
 
 	while true do
 		local TimeDistance = 999
-		if not LocalPlayer["state"]["TestDrive"] then
+		if not LocalPlayer["state"]["Race"] then
 			local Ped = PlayerPedId()
 			local Coords = GetEntityCoords(Ped)
-			local Vehicle = GetPlayersLastVehicle()
 
-			if LocalPlayer["state"]["Races"] then
-				TimeDistance = 1
-				local Points = GetGameTimer() - Saved
+			if Actived then
+				TimeDistance = 100
+				Points = GetGameTimer() - Saved
+				SendNUIMessage({ Action = "Progress", Points = Points, Timer = Progress - GetGameTimer() })
 
-				if ExplodeTimers and GetGameTimer() >= ExplodeCooldown then
-					ExplodeTimers = ExplodeTimers - 1
-					ExplodeCooldown = GetGameTimer() + 1000
+				if GetGameTimer() >= Progress or not IsPedInAnyVehicle(Ped) then
+					Leave()
 				end
 
-				SendNUIMessage({ name = "Progress", payload = { Points,ExplodeTimers } })
-
-				if not IsPedInAnyVehicle(Ped) or GetPedInVehicleSeat(Vehicle,-1) ~= Ped or (ExplodeTimers and ExplodeTimers <= 0) then
-					StopCircuit()
-				end
-
-				local Distance = #(Coords - Races[Race]["Coords"][Checkpoint])
-				if Distance <= 500 then
-					TimeDistance = 1
-
+				local Distance = #(Coords - vec3(Races[Race]["Coords"][Checkpoint][1][1],Races[Race]["Coords"][Checkpoint][1][2],Races[Race]["Coords"][Checkpoint][1][3]))
+				if Distance <= 5 then
 					if Checkpoint >= #Races[Race]["Coords"] then
-						DrawMarker(22,Races[Race]["Coords"][Checkpoint]["x"],Races[Race]["Coords"][Checkpoint]["y"],Races[Race]["Coords"][Checkpoint]["z"] + 3.0,0.0,0.0,0.0,0.0,180.0,GetEntityHeading(Ped) - 90,7.5,7.5,5.0,245,10,70,100,0,0,0,1)
+						SendNUIMessage({ Action = "Display", Status = false })
+						vSERVER.Finish(Race,Points)
+						CleanObjects()
+						CleanBlips()
+
+						Race = 1
+						Saved = 0
+						Points = 0
+						Checkpoint = 1
+						Actived = false
 					else
-						DrawMarker(22,Races[Race]["Coords"][Checkpoint]["x"],Races[Race]["Coords"][Checkpoint]["y"],Races[Race]["Coords"][Checkpoint]["z"] + 3.0,0.0,0.0,0.0,0.0,180.0,0.0,7.5,7.5,5.0,245,10,70,100,0,0,0,1)
-					end
-
-					DrawMarker(1,Races[Race]["Coords"][Checkpoint]["x"],Races[Race]["Coords"][Checkpoint]["y"],Races[Race]["Coords"][Checkpoint]["z"] - 3.0,0.0,0.0,0.0,0.0,0.0,0.0,15.0,15.0,10.0,255,255,255,50,0,0,0,0)
-
-					if Distance <= 15 then
-						if Checkpoint >= #Races[Race]["Coords"] then
-							SendNUIMessage({ name = "Display", payload = { false } })
-							vSERVER.Finish(Race,Points)
-
-							CleanCircuit()
-
-							Saved = 0
-							Checkpoint = 1
-							ExplodeTimers = false
-							LocalPlayer["state"]:set("Races",false,false)
-							SendNUIMessage({ name = "Ranking", payload = { true,vSERVER.Ranking(Race) } })
-							Race = 1
-
-							SetTimeout(5000,function()
-								SendNUIMessage({ name = "Ranking", payload = { false } })
-							end)
-						else
-							if DoesBlipExist(Markers[Checkpoint]) then
-								RemoveBlip(Markers[Checkpoint])
-								Markers[Checkpoint] = nil
-							end
-
-							Checkpoint = Checkpoint + 1
-							SetBlipRoute(Markers[Checkpoint],true)
-							SendNUIMessage({ name = "Checkpoint" })
+						if DoesBlipExist(Blips[Checkpoint]) then
+							RemoveBlip(Blips[Checkpoint])
+							Blips[Checkpoint] = nil
 						end
+
+						SendNUIMessage({ Action = "Checkpoint" })
+						SetBlipRoute(Blips[Checkpoint + 1],true)
+						Checkpoint = Checkpoint + 1
+						MakeObjects()
 					end
 				end
 			else
-				if IsPedInAnyVehicle(Ped) and not IsPedOnAnyBike(Ped) and not IsPedInAnyHeli(Ped) and not IsPedInAnyBoat(Ped) and not IsPedInAnyPlane(Ped) then
-					for Number,v in pairs(Races) do
-						local Distance = #(Coords - v["Init"])
-						if Distance <= 25 and GetPedInVehicleSeat(Vehicle,-1) == Ped then
-							DrawMarker(23,v["Init"]["x"],v["Init"]["y"],v["Init"]["z"] - 0.35,0.0,0.0,0.0,0.0,0.0,0.0,10.0,10.0,10.0,245,10,70,100,0,0,0,0)
+				for Number,v in pairs(Races) do
+					local Distance = #(Coords - v["Init"])
+					if Distance <= 25 then
+						local Vehicle = GetVehiclePedIsUsing(Ped)
+						if GetPedInVehicleSeat(Vehicle,-1) == Ped then
+							DrawMarker(5,v["Init"]["x"],v["Init"]["y"],v["Init"]["z"] - 0.4,0.0,0.0,5.0,0.0,0.0,0.0,10.0,10.0,10.0,162,124,219,100,0,0,0,0)
 							TimeDistance = 1
 
 							if Distance <= 5 then
 								if IsControlJustPressed(1,47) then
-									if not Rankings then
-										Rankings = true
-										SendNUIMessage({ name = "Ranking", payload = { true,vSERVER.Ranking(Number) } })
+									Ranking = not Ranking
+
+									if Ranking then
+										SendNUIMessage({ Action = "Ranking", Ranking = vSERVER.Ranking(Number) })
 									else
-										Rankings = false
-										SendNUIMessage({ name = "Ranking", payload = { false } })
+										SendNUIMessage({ Action = "Ranking", Ranking = false })
 									end
 								end
 
 								if IsControlJustPressed(1,38) then
-									ExplodeTimers = vSERVER.Start(Number)
-									SendNUIMessage({ name = "Display", payload = { true,#Races[Number]["Coords"],ExplodeTimers } })
+									if vSERVER.Start(Number) then
+										if Ranking then
+											SendNUIMessage({ Action = "Ranking", Ranking = false })
+											Ranking = false
+										end
 
-									if ExplodeTimers then
-										ExplodeCooldown = GetGameTimer() + 1000
+										SendNUIMessage({ Action = "Display", Status = true, Max = #Races[Number]["Coords"] })
+										Progress = GetGameTimer() + (v["Timer"] * 1000)
+										Saved = GetGameTimer()
+										Checkpoint = 1
+										Race = Number
+										Points = 0
+
+										MakeBlips()
+										MakeObjects()
+
+										Actived = true
 									end
-
-									Saved = GetGameTimer()
-									Race = Number
-									Checkpoint = 1
-
-									LocalPlayer["state"]:set("Races",true,false)
-									InitCircuit()
 								end
 							else
-								if Rankings then
-									Rankings = false
-									SendNUIMessage({ name = "Ranking", payload = { false } })
+								if Ranking then
+									SendNUIMessage({ Action = "Ranking", Ranking = false })
+									Ranking = false
 								end
 							end
 						end
-					end
-				else
-					if Rankings then
-						Rankings = false
-						SendNUIMessage({ name = "Ranking", payload = { false } })
 					end
 				end
 			end
@@ -153,68 +129,131 @@ CreateThread(function()
 	end
 end)
 -----------------------------------------------------------------------------------------------------------------------------------------
--- INITCIRCUIT
+-- MAKEBLIPS
 -----------------------------------------------------------------------------------------------------------------------------------------
-function InitCircuit()
-	LoadModel("prop_beachflag_01")
-	LoadModel("prop_offroad_tyres02")
-
+function MakeBlips()
 	for Number = 1,#Races[Race]["Coords"] do
-		Markers[Number] = AddBlipForCoord(Races[Race]["Coords"][Number]["x"],Races[Race]["Coords"][Number]["y"],Races[Race]["Coords"][Number]["z"])
-		SetBlipSprite(Markers[Number],1)
-		SetBlipColour(Markers[Number],6)
-		SetBlipScale(Markers[Number],0.85)
-		SetBlipRoute(Markers[Checkpoint],true)
-		SetBlipAsShortRange(Markers[Number],true)
-
-		local Prop = "prop_offroad_tyres02"
-		if Number == #Races[Race]["Coords"] then
-			Prop = "prop_beachflag_01"
-		end
+		Blips[Number] = AddBlipForCoord(Races[Race]["Coords"][Number][1][1],Races[Race]["Coords"][Number][1][2],Races[Race]["Coords"][Number][1][3])
+		SetBlipSprite(Blips[Number],1)
+		SetBlipColour(Blips[Number],60)
+		SetBlipScale(Blips[Number],0.85)
+		SetBlipRoute(Blips[Checkpoint],true)
+		ShowNumberOnBlip(Blips[Number],Number)
+		SetBlipAsShortRange(Blips[Number],true)
 	end
 end
 -----------------------------------------------------------------------------------------------------------------------------------------
--- CLEANCIRCUIT
+-- MAKEOBJECTS
 -----------------------------------------------------------------------------------------------------------------------------------------
-function CleanCircuit()
-	for _,v in pairs(Markers) do
-		if DoesBlipExist(v) then
-			RemoveBlip(v)
+function MakeObjects()
+	for Number,Object in pairs(Objects) do
+		if DoesEntityExist(Object) then
+			DeleteEntity(Object)
+			Objects[Number] = nil
 		end
 	end
 
-	for _,v in pairs(Objects) do
-		if DoesEntityExist(v) then
-			DeleteEntity(v)
+	if LoadModel("prop_offroad_tyres02") then
+		Objects[1] = CreateObjectNoOffset("prop_offroad_tyres02",Races[Race]["Coords"][Checkpoint][2][1],Races[Race]["Coords"][Checkpoint][2][2],Races[Race]["Coords"][Checkpoint][2][3],false,false,false)
+		Objects[2] = CreateObjectNoOffset("prop_offroad_tyres02",Races[Race]["Coords"][Checkpoint][3][1],Races[Race]["Coords"][Checkpoint][3][2],Races[Race]["Coords"][Checkpoint][3][3],false,false,false)
+
+		PlaceObjectOnGroundProperly(Objects[1])
+		PlaceObjectOnGroundProperly(Objects[2])
+
+		SetEntityCollision(Objects[1],false,false)
+		SetEntityCollision(Objects[2],false,false)
+
+		SetEntityLodDist(Objects[1],0xFFFF)
+		SetEntityLodDist(Objects[2],0xFFFF)
+
+		SetModelAsNoLongerNeeded("prop_offroad_tyres02")
+	end
+end
+-----------------------------------------------------------------------------------------------------------------------------------------
+-- CLEANBLIPS
+-----------------------------------------------------------------------------------------------------------------------------------------
+function CleanBlips()
+	for Number,Bliped in pairs(Blips) do
+		if DoesBlipExist(Bliped) then
+			RemoveBlip(Bliped)
+			Blips[Number] = nil
 		end
 	end
 
-	Markers = {}
+	Blips = {}
+end
+-----------------------------------------------------------------------------------------------------------------------------------------
+-- CLEANOBJECTS
+-----------------------------------------------------------------------------------------------------------------------------------------
+function CleanObjects()
+	for Number,Object in pairs(Objects) do
+		if DoesEntityExist(Object) then
+			DeleteEntity(Object)
+			Objects[Number] = nil
+		end
+	end
+
 	Objects = {}
 end
 -----------------------------------------------------------------------------------------------------------------------------------------
--- STOPCIRCUIT
+-- LEAVE
 -----------------------------------------------------------------------------------------------------------------------------------------
-function StopCircuit()
-	SendNUIMessage({ name = "Display", payload = { false } })
-	LocalPlayer["state"]:set("Races",false,false)
+function Leave()
+	SendNUIMessage({ Action = "Display", Status = false })
 	vSERVER.Cancel()
-	CleanCircuit()
+	Actived = false
 
-	if ExplodeTimers then
-		ExplodeTimers = false
-
-		SetTimeout(3000,function()
-			local Vehicle = GetPlayersLastVehicle()
-
-			if Vehicle == 0 then
-				local Ped = PlayerPedId()
-				local Coords = GetEntityCoords(Ped)
-
-				AddExplosion(Coords,2,0.5,false,false,false)
-			else
-				NetworkExplodeVehicle(Vehicle,true,false,true)
-			end
-		end)
-	end
+	CleanObjects()
+	CleanBlips()
 end
+-----------------------------------------------------------------------------------------------------------------------------------------
+-- THREADTYREEXPLODES
+-----------------------------------------------------------------------------------------------------------------------------------------
+CreateThread(function()
+	while true do
+		local TimeDistance = 999
+		if not Actived then
+			local Ped = PlayerPedId()
+			if IsPedInAnyVehicle(Ped) and not IsPedOnAnyBike(Ped) then
+				TimeDistance = 1
+
+				DisableControlAction(0,345,true)
+
+				local Vehicle = GetVehiclePedIsUsing(Ped)
+				if GetPedInVehicleSeat(Vehicle,-1) == Ped then
+					local Speed = GetEntitySpeed(Vehicle) * 3.6
+					if Speed ~= TyreExplodes then
+						if (TyreExplodes - Speed) >= 125 then
+							local Tyre = math.random(4)
+							if Tyre == 1 then
+								if GetTyreHealth(Vehicle,0) == 1000.0 then
+									SetVehicleTyreBurst(Vehicle,0,true,1000.0)
+								end
+							elseif Tyre == 2 then
+								if GetTyreHealth(Vehicle,1) == 1000.0 then
+									SetVehicleTyreBurst(Vehicle,1,true,1000.0)
+								end
+							elseif Tyre == 3 then
+								if GetTyreHealth(Vehicle,4) == 1000.0 then
+									SetVehicleTyreBurst(Vehicle,4,true,1000.0)
+								end
+							elseif Tyre == 4 then
+								if GetTyreHealth(Vehicle,5) == 1000.0 then
+									SetVehicleTyreBurst(Vehicle,5,true,1000.0)
+								end
+							end
+						end
+
+						TyreExplodes = Speed
+					end
+				end
+			else
+				if TyreExplodes ~= 0 then
+					TyreExplodes = 0
+				end
+			end
+		end
+
+		Wait(TimeDistance)
+	end
+end)

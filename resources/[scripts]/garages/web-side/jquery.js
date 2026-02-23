@@ -46,7 +46,7 @@ const updateGarages = () => {
 						</div>
 					</div>
 					<div class="item-right">
-						<img src="./vehicles/${item.Model}.png" alt="${item.name}" onerror="this.onerror=null;this.src='./vehicles/default.png';">
+						<img src="http://45.149.153.98/vehiclesimgs/${item.Model}.png" alt="${item.name}" onerror="this.onerror=null;this.src='./vehicles/default.png';">
 					</div>
 				</div>
 			`)).join("")}
