@@ -2,6 +2,9 @@
 local killConfirmActive = false
 local killConfirmStart = 0
 
+-- guarda os peds que o jogador local deu dano recentemente
+-- usado pra checar se morreram mesmo quando isFatal falha
+local damagedPlayers = {}
 
 -- desenha um ponto (retangulo pequeno) na tela
 -- px, py = posicao normalizada (0.0 a 1.0), w = largura do ponto
@@ -38,8 +41,20 @@ local function drawKillCross(alpha)
     end
 end
 
--- detecta quando o jogador local mata outro player
--- usa o evento nativo CEventNetworkEntityDamage com flag de morte
+-- notifica o kill pro server
+local function reportKill(victimServerId)
+    if victimServerId <= 0 then return end
+
+    if Config.KillConfirm.Debug then
+        print(('[KILL-CONFIRM] Kill detectado -> vitima server id: %d'):format(victimServerId))
+    end
+
+    TriggerServerEvent('killconfirm:reportKill', victimServerId)
+end
+
+-- detecta dano e morte entre players
+-- usa CEventNetworkEntityDamage pra pegar tanto kills instantaneos (isFatal)
+-- quanto danos que resultam em morte logo depois (fallback)
 AddEventHandler('gameEventTriggered', function(name, args)
     if not Config.KillConfirm.Enabled then return end
     if name ~= 'CEventNetworkEntityDamage' then return end
@@ -48,20 +63,49 @@ AddEventHandler('gameEventTriggered', function(name, args)
     local attacker = args[2]
     local isFatal = args[6]
 
-    -- so interessa se foi o jogador local que causou e se foi fatal
     if attacker ~= PlayerPedId() then return end
-    if isFatal ~= 1 then return end
+    if not DoesEntityExist(victim) then return end
+    if not IsEntityAPed(victim) then return end
     if not IsPedAPlayer(victim) then return end
 
     local victimServerId = GetPlayerServerId(NetworkGetPlayerIndexFromPed(victim))
     if victimServerId <= 0 then return end
 
-    if Config.KillConfirm.Debug then
-        print(('[KILL-CONFIRM] Kill detectado -> vitima server id: %d'):format(victimServerId))
+    -- se o evento ja diz que foi fatal, reporta direto
+    if isFatal == 1 then
+        reportKill(victimServerId)
+        damagedPlayers[victimServerId] = nil
+        return
     end
 
-    -- avisa o server pra validar o kill
-    TriggerServerEvent('killconfirm:reportKill', victimServerId)
+    -- se nao foi fatal, registra que esse player levou dano do jogador local
+    -- a thread de verificacao vai checar se ele morreu
+    damagedPlayers[victimServerId] = {
+        ped = victim,
+        time = GetGameTimer()
+    }
+end)
+
+-- thread que verifica se players que levaram dano acabaram morrendo
+-- resolve o caso onde isFatal nao dispara corretamente
+CreateThread(function()
+    while true do
+        Wait(100)
+        if not Config.KillConfirm.Enabled then goto skip end
+
+        local now = GetGameTimer()
+        for serverId, data in pairs(damagedPlayers) do
+            -- descarta entradas com mais de 2 segundos (dano antigo demais)
+            if (now - data.time) > 2000 then
+                damagedPlayers[serverId] = nil
+            elseif DoesEntityExist(data.ped) and IsEntityDead(data.ped) then
+                reportKill(serverId)
+                damagedPlayers[serverId] = nil
+            end
+        end
+
+        ::skip::
+    end
 end)
 
 -- recebe a confirmacao do server de que o kill foi valido
