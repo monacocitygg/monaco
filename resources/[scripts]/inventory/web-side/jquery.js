@@ -450,11 +450,13 @@ const updateDrag = () => {
 	});
 	$(".populated").tooltip({
 		items: ".populated",
+		tooltipClass: "ui-tooltip",
 		position: { my: "center top+10", at: "center bottom", collision: "flipfit" },
 		show: { duration: 10 },
 		hide: { duration: 10 },
 		open: function(event, ui){
 			$(this).removeAttr("title");
+			ui.tooltip.css({ "opacity": "1" });
 		},
 		close: function(event, ui){
 			$(this).removeAttr("title");
