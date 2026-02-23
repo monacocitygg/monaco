@@ -8,7 +8,7 @@ Config.KillConfirm = {
     DisplayTime = 1200,
 
     -- tamanho do X na tela (escala relativa a resolucao)
-    CrossSize = 0.012,
+    CrossSize = 0.005,
 
     -- espessura das linhas do X
     LineWidth = 0.2,
