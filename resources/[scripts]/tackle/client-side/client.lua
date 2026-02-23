@@ -15,6 +15,9 @@ end
 
 
 local function Tackle()
+    ply = PlayerPedId()
+    plyVeh = GetVehiclePedIsIn(ply, false)
+    plyInWorld = not IsPlayerSwitchInProgress() and not IsPedDeadOrDying(ply, true)
     while plyVeh == 0 and plyInWorld do
         if IsControlPressed(0, 38) and (IsPedRunning(ply) or IsPedSprinting(ply)) and not IsPedSwimming(ply) then
             local forwardPed = GetForwardPed()
@@ -37,8 +40,21 @@ local function Tackle()
 end
 
 
+Citizen.CreateThread(function()
+    while true do
+        Wait(500)
+        ply = PlayerPedId()
+        plyVeh = GetVehiclePedIsIn(ply, false)
+        plyInWorld = not IsPlayerSwitchInProgress() and not IsPedDeadOrDying(ply, true)
+        if plyVeh == 0 and plyInWorld then
+            Tackle()
+        end
+    end
+end)
+
 RegisterNetEvent("tackle:Player")
 AddEventHandler("tackle:Player", function()
-    SetPedToRagdoll(ply, 5000, 5000, 0, false, false, false)
+    local myPed = PlayerPedId()
+    SetPedToRagdoll(myPed, 5000, 5000, 0, false, false, false)
     TriggerEvent("inventory:Cancel")
 end)
