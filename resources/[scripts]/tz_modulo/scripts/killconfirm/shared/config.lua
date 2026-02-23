@@ -11,7 +11,7 @@ Config.KillConfirm = {
     CrossSize = 0.004,
 
     -- espessura das linhas do X
-    LineWidth = 2.2,
+    LineWidth = 2.4,
 
     -- cor do X (RGBA 0-255)
     Color = { r = 255, g = 60, b = 60, a = 220 },
