@@ -4,6 +4,20 @@ vRP = Proxy.getInterface("vRP")
 func = Tunnel.getInterface("nation_bennys")
 fclient = {}
 Tunnel.bindInterface("nation_bennys", fclient)
+
+CreateThread(function()
+	Wait(5000)
+	pcall(function()
+		func.migrateGarageMods()
+	end)
+end)
+
+local DEBUG_BENNYS = true
+local function dbg(msg)
+	if DEBUG_BENNYS then
+		print("[nation_bennys] "..tostring(msg))
+	end
+end
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- VARIÁVEIS
 -----------------------------------------------------------------------------------------------------------------------------------------
@@ -98,7 +112,7 @@ Citizen.CreateThread(function()
 			--DrawMarker(36, bennys,0,0,0,0,0,0,1.0,3.0,1.0,255, 102, 0,200,0,0,0,1)
 			local playercoords = GetEntityCoords(PlayerPedId())
 			local distance = #(playercoords - bennys)
-			if distance < 2 then
+			if distance < 7.5 then
 				local ok, sx, sy = World3dToScreen2d(bennys[1],bennys[2],bennys[3] + 1.0)
 				if ok then
 					SendNUIMessage({ action = "showHover", x = sx, y = sy, title = "MECÂNICA", subtitle = "ACESSAR MODIFICAÇÕES" })
@@ -133,7 +147,7 @@ Citizen.CreateThread(function()
 					hover = false
 				end
 			end
-			if distance > 10 then
+			if distance > 25 then
 				if hover then
 					SendNUIMessage({ action = "hideHover" })
 					hover = false
@@ -204,6 +218,14 @@ RegisterNUICallback("pagar",function(data)
                 local vehplate = GetVehicleNumberPlateText(vehicle)
 
                 igVehicle,igNetwork,vehplate,vehname,igClass = vRP.VehicleList(5)
+				local m = myveh and myveh.mods or {}
+				dbg("saveVehicle "..vehname.." plate="..vehplate)
+				dbg("colors="..json.encode(myveh and myveh.color or {}))
+				dbg("extracolors="..json.encode(myveh and myveh.extracolor or {}))
+				dbg("customPcolor="..json.encode(myveh and myveh.customPcolor or {}))
+				dbg("customScolor="..json.encode(myveh and myveh.customScolor or {}))
+				dbg("engine="..tostring(m[11] and m[11].mod).." brakes="..tostring(m[12] and m[12].mod).." transmission="..tostring(m[13] and m[13].mod).." turbo="..tostring(m[18] and m[18].mod))
+				dbg("wheeltype="..tostring(myveh and myveh.wheeltype).." xenon="..tostring(myveh and myveh.xenoncolor).." neon="..tostring(myveh and myveh.neon))
                 func.saveVehicle(vehname,vehplate,myveh)
                 fclient.closeNui()
             end
@@ -294,6 +316,7 @@ RegisterNUICallback("callbacks",function(data)
 			local type = split(data.type,"-")[1]
 			local level = parseInt(split(data.type, "-")[2]) - 1
 			SetVehicleMod(vehicle,mod[type],level)
+			dbg("perf "..tostring(type).." level="..tostring(level).." applied="..tostring(GetVehicleMod(vehicle,mod[type])))
 			updateCart(myveh, mod[type], level)
 		elseif string.find(data.type, "neon") then
 			local type = split(data.type, "-")[2]
@@ -592,8 +615,22 @@ function getAllVehicleMods(veh)
 	myveh.vehicle = veh
 	myveh.model = GetDisplayNameFromVehicleModel(GetEntityModel(veh)):lower()
 	myveh.color =  table.pack(GetVehicleColours(veh))
-	myveh.customPcolor = table.pack(GetVehicleCustomPrimaryColour(veh))
-	myveh.customScolor = table.pack(GetVehicleCustomSecondaryColour(veh))
+	local customP = table.pack(GetVehicleCustomPrimaryColour(veh))
+	local customS = table.pack(GetVehicleCustomSecondaryColour(veh))
+	local hasCustomP = GetIsVehiclePrimaryColourCustom(veh)
+	local hasCustomS = GetIsVehicleSecondaryColourCustom(veh)
+	if hasCustomP or hasCustomS then
+		if not hasCustomP and hasCustomS then
+			customP = customS
+		elseif hasCustomP and not hasCustomS then
+			customS = customP
+		end
+		myveh.customPcolor = customP
+		myveh.customScolor = customS
+	else
+		myveh.customPcolor = nil
+		myveh.customScolor = nil
+	end
 	myveh.extracolor = table.pack(GetVehicleExtraColours(veh))
 	myveh.neon = hasNeonKit(veh)
 	myveh.neoncolor = table.pack(GetVehicleNeonLightsColour(veh))
@@ -727,7 +764,7 @@ function getVehicleMods(veh)
 	SetVehicleMod(veh,mod["dianteira"], rodaatual)
 	for k in pairs(mod) do
 		if mods[k] == nil then
-			mods[k] = { GetNumVehicleMods(veh, mod[k])+1, GetVehicleMod(veh,mod[k]) }
+			mods[k] = { GetNumVehicleMods(veh, mod[k]), GetVehicleMod(veh,mod[k]) }
 		end
 	end
 	return mods
@@ -933,7 +970,7 @@ function getNearestBennys()
 	local playercoords = GetEntityCoords(PlayerPedId())
 	for i,j in ipairs(locais) do
 		local distance = #(playercoords - locais[i])
-		if distance < 3 then
+		if distance < 25 then
 			return locais[i]
 		end
 	end

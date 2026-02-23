@@ -644,6 +644,32 @@ $(document).ready(function(){
         if (vehicleData[key] && Array.isArray(vehicleData[key])) vehicleData[key][1] = v;
     }
 
+    window.updateMod = function(key, val) {
+        const v = parseInt(val);
+        const send = isNaN(v) ? 0 : v;
+        $.post('http://nation_bennys/callbacks', JSON.stringify({ type: `${key}-${send}` }));
+        if (vehicleData[key] && Array.isArray(vehicleData[key])) vehicleData[key][1] = v;
+    }
+
+    window.updateXenonColor = function(val) {
+        const v = parseInt(val);
+        const send = isNaN(v) ? 0 : v;
+        $.post('http://nation_bennys/callbacks', JSON.stringify({ type: `xenon-color-${send}` }));
+        vehicleData["xenoncolor"] = send;
+    }
+
+    window.pickColor = function(type, rgb) {
+        if (type === "primaria") {
+            $.post("http://nation_bennys/callbacks", JSON.stringify({ type: "cor-primaria", color: rgb }));
+        } else if (type === "secundaria") {
+            $.post("http://nation_bennys/callbacks", JSON.stringify({ type: "cor-secundaria", color: rgb }));
+        } else if (type === "neon") {
+            $.post("http://nation_bennys/callbacks", JSON.stringify({ type: "neon-colors", color: rgb }));
+        } else if (type === "smoke") {
+            $.post("http://nation_bennys/callbacks", JSON.stringify({ type: "smoke-colors", color: rgb }));
+        }
+    }
+
     window.toggleMod = function(key, active) {
         $.post('http://nation_bennys/callbacks', JSON.stringify({
             type: key + "-" + (active ? 1 : 0) // 1 for on, 0 for off? or toggle logic
