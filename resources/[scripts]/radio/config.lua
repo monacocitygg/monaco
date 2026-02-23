@@ -29,7 +29,7 @@ Config.Animations = {
         animParams = { blendIn = 8.0, blendOut = 8.0, duration = -1, flag = 49, playbackRate = 1.0 },
         prop  = {
             model    = "prop_cs_hand_radio",
-            bone     = 28422,
+            bone     = 18905,
             offset   = { x = 0.0750, y = 0.0230, z = -0.0230 },
             rotation = { x = -90.0, y = 0.0, z = -59.9999 },
         },
