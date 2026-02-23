@@ -8,10 +8,10 @@ Config.KillConfirm = {
     DisplayTime = 1200,
 
     -- tamanho do X na tela (escala relativa a resolucao)
-    CrossSize = 0.004,
+    CrossSize = 0.005,
 
     -- espessura das linhas do X
-    LineWidth = 1.5,
+    LineWidth = 1.9,
 
     -- cor do X (RGBA 0-255)
     Color = { r = 255, g = 60, b = 60, a = 220 },

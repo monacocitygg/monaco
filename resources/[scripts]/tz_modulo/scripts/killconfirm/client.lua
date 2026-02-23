@@ -159,6 +159,9 @@ CreateThread(function()
                     end
                 end
 
+                -- esconde o X nativo do GTA (reticulo) pra nao duplicar
+                HideHudComponentThisFrame(14)
+
                 drawKillCross(alpha)
             end
 
