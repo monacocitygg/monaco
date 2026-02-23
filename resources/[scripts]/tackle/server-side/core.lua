@@ -7,8 +7,8 @@ vRP = Proxy.getInterface("vRP")
 -- TACKLE:UPDATE
 -----------------------------------------------------------------------------------------------------------------------------------------
 RegisterServerEvent("tackle:Update")
-AddEventHandler("tackle:Update",function(source,ForwardVectorX,ForwardVectorY,ForwardVectorZ,Tackler)
+AddEventHandler("tackle:Update",function(source,Coords)
 	if vRP.Passport(source) then
-		TriggerClientEvent("tackle:Player",source,ForwardVectorX,ForwardVectorY,ForwardVectorZ,Tackler)
+		TriggerClientEvent("tackle:Player",source,Coords)
 	end
 end)
