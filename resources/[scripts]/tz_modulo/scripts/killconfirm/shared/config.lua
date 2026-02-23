@@ -2,7 +2,7 @@ Config = Config or {}
 
 Config.KillConfirm = {
     Enabled = true,
-    Debug = true,
+    Debug = false,
 
     -- tempo em ms que o X fica visivel na tela apos matar alguem
     DisplayTime = 1200,
