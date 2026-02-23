@@ -81,7 +81,7 @@ local function PlayRadioAnim(animId)
 		AttachEntityToEntity(Object, Ped, BoneIndex,
 			animData.prop.offset.x, animData.prop.offset.y, animData.prop.offset.z,
 			animData.prop.rotation.x, animData.prop.rotation.y, animData.prop.rotation.z,
-			true, false, false, false, 2, true)
+			true, true, false, true, 1, true)
 	else
 		TaskPlayAnim(Ped, animData.dict, animData.anim, blendIn, blendOut, duration, flag, playbackRate, false, false, false)
 	end
@@ -149,7 +149,7 @@ AddEventHandler("radio:playTalkAnim", function()
 		AttachEntityToEntity(TalkObject, Ped, GetPedBoneIndex(Ped, animData.prop.bone),
 			animData.prop.offset.x, animData.prop.offset.y, animData.prop.offset.z,
 			animData.prop.rotation.x, animData.prop.rotation.y, animData.prop.rotation.z,
-			true, false, false, false, 2, true)
+			true, true, false, true, 1, true)
 	end
 end)
 
