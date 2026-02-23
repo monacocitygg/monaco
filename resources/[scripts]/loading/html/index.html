@@ -18,65 +18,6 @@
 <body x-data="Main" x-init="listen">
     <video id="buziosv"></video>
     <div class="container">
-        <!-- <img src="img/logo.png" alt="" class="logo"> -->
-        <div class="nav">
-            <template x-for="button in buttons">
-                <div class="button" :class="button.selected ? 'selected':''" x-text="button.label" @click="button.selected = selectBtn(button.selected)">Home</div>
-            </template>
-        </div>
-        <div class="home" x-show="buttons[0].selected" x-transition:enter.duration.500ms>
-            <div class="label">MONACO</div>
-            <div class="desc">MELHOR CIDADE DE RP DO FIVEM</div>
-            <div class="discord-container">
-                <div class="discord-bg">
-                    <img src="img/buzios.png" alt="">
-                </div>
-                <div class="label">Discord</div>
-                <div class="member-count" x-text="memberCount + ' Membros Online'"></div>
-                <a class="btn" :href="DiscordInviteLink" target="_blank" @click="window.invokeNative('openUrl', DiscordInviteLink);">ENTRAR<img src="img/arrow.svg" alt="" x-transition></a>
-            </div>
-        </div>
-        <!-- <div class="home" x-show="buttons[0].selected" x-transition:enter.duration.500ms>
-            <div class="discord-container2">
-                <div class="discord-bg2">
-                    <img src="img/vapo.png" alt="">
-                </div>
-                <div class="label2">VAPO PVP</div>
-                <div class="member-count2" x-text="memberCount + ' Membros Online'"></div>
-                <a class="btn2" :href="DiscordInviteLink2" target="_blank" @click="window.invokeNative('openUrl', DiscordInviteLink2);">ENTRAR<img src="img/arrow.svg" alt="" x-transition></a>
-            </div>
-        </div>
-        <div class="home" x-show="buttons[0].selected" x-transition:enter.duration.500ms>
-            <div class="discord-container3">
-                <div class="discord-bg3">
-                    <img src="img/akame.png" alt="">
-                </div>
-                <div class="label3">AKAME CITY</div>
-                <div class="member-count3" x-text="memberCount + ' Membros Online'"></div>
-                <a class="btn3" :href="DiscordInviteLink3" target="_blank" @click="window.invokeNative('openUrl', DiscordInviteLink3);">ENTRAR<img src="img/arrow.svg" alt="" x-transition></a>
-            </div>
-        </div> -->
-        <div class="team" x-show="buttons[1].selected" x-transition:enter.duration.500ms>
-            <div class="label2">Time</div>
-            <br>
-            <!-- <div class="desc" style="left: 0; top: 7.5vw;">Nossa Staff é composta por</div> -->
-            <div class="news-container">
-                <!-- <template x-for="member in team"> -->
-                    <div class="news">
-                        <div class="label">LZ</div>
-                        <div class="news-desc">CEO e Gerente de Negócios.</div>
-                    </div>
-                    <div class="news">
-                        <div class="label">END</div>
-                        <div class="news-desc">CEO e Head Manager.</div>
-                    </div>
-                    <div class="news">
-                        <div class="label">RhX</div>
-                        <div class="news-desc">CEO e Desenvolvedor.</div>
-                    </div>
-                <!-- </template> -->
-            </div>
-        </div>
     </div>
 
 
