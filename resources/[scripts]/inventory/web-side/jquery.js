@@ -442,11 +442,23 @@ const updateDrag = () => {
 			$(".amount").val("");
 		}
 	});
+	$(".populated").each(function(){
+		if ($(this).data("ui-tooltip")) {
+			$(this).tooltip("destroy");
+		}
+		$(this).removeAttr("title");
+	});
 	$(".populated").tooltip({
 		items: ".populated",
 		position: { my: "center top+10", at: "center bottom", collision: "flipfit" },
 		show: { duration: 10 },
 		hide: { duration: 10 },
+		open: function(event, ui){
+			$(this).removeAttr("title");
+		},
+		close: function(event, ui){
+			$(this).removeAttr("title");
+		},
 		content: function(){
 			var element = $(this);
 			var max = element.attr("data-max");
