@@ -443,7 +443,11 @@ const updateDrag = () => {
 		}
 	});
 	$(".populated").tooltip({
-		create: function(event,ui){
+		items: ".populated",
+		position: { my: "center top+10", at: "center bottom", collision: "flipfit" },
+		show: { duration: 10 },
+		hide: { duration: 10 },
+		content: function(){
 			var element = $(this);
 			var max = element.attr("data-max");
 			var name = element.attr("data-name-key");
@@ -468,12 +472,7 @@ const updateDrag = () => {
 				contents = `<item>${name} - ${Passport}</item>${description !== "false" ? "<br><description>"+description+"</description>":""}<br><legenda>Nome: <r>${idName}</r><br>Tipo Sangüineo: <r>${idBlood}</r><br>Rolepass: <r>${idRolepass}</r><br>Validade: <r>${idVality}</r><br>Premium: <r>${idPremium}</r></legenda>`;
 			}
 
-			$(this).tooltip({
-				content: contents,
-				position: { my: "center top+10", at: "center bottom", collision: "flipfit" },
-				show: { duration: 10 },
-				hide: { duration: 10 }
-			});
+			return contents;
 		}
 	});
 }
