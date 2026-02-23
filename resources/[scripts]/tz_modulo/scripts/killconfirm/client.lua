@@ -2,18 +2,16 @@
 local killConfirmActive = false
 local killConfirmStart = 0
 
--- guarda os peds que o jogador local deu dano recentemente
--- usado pra checar se morreram mesmo quando isFatal falha
-local damagedPlayers = {}
+-- tabela de players que o jogador local acertou recentemente
+-- key = server id da vitima, value = { ped, time, dead }
+local hitTargets = {}
 
 -- desenha um ponto (retangulo pequeno) na tela
--- px, py = posicao normalizada (0.0 a 1.0), w = largura do ponto
 local function drawPoint(px, py, w, r, g, b, a)
     DrawRect(px, py, w, w, r, g, b, a)
 end
 
 -- renderiza o X no centro da tela usando pontos ao longo das diagonais
--- alpha controla a transparencia geral (0.0 a 1.0) pro efeito de fade
 local function drawKillCross(alpha)
     local cfg = Config.KillConfirm
     local size = cfg.CrossSize
@@ -24,7 +22,6 @@ local function drawKillCross(alpha)
     local cx, cy = 0.5, 0.5
     local steps = 24
 
-    -- diagonal \ (canto superior esquerdo -> canto inferior direito)
     for i = 0, steps do
         local t = i / steps
         local px = cx - size + (size * 2) * t
@@ -32,7 +29,6 @@ local function drawKillCross(alpha)
         drawPoint(px, py, thickness, r, g, b, a)
     end
 
-    -- diagonal / (canto superior direito -> canto inferior esquerdo)
     for i = 0, steps do
         local t = i / steps
         local px = cx + size - (size * 2) * t
@@ -41,20 +37,78 @@ local function drawKillCross(alpha)
     end
 end
 
--- notifica o kill pro server
-local function reportKill(victimServerId)
-    if victimServerId <= 0 then return end
+-- ativa o marcador de kill na tela
+local function showKillMarker()
+    killConfirmActive = true
+    killConfirmStart = GetGameTimer()
 
     if Config.KillConfirm.Debug then
-        print(('[KILL-CONFIRM] Kill detectado -> vitima server id: %d'):format(victimServerId))
+        print('[KILL-CONFIRM] Marcador ativado.')
     end
-
-    TriggerServerEvent('killconfirm:reportKill', victimServerId)
 end
 
--- detecta dano e morte entre players
--- usa CEventNetworkEntityDamage pra pegar tanto kills instantaneos (isFatal)
--- quanto danos que resultam em morte logo depois (fallback)
+-- thread principal: detecta tiros, rastreia vitimas e checa morte
+-- nao depende de gameEventTriggered que eh inconsistente no client do atacante
+CreateThread(function()
+    local wasShooting = false
+
+    while true do
+        Wait(0)
+        if not Config.KillConfirm.Enabled then goto continue end
+
+        local myPed = PlayerPedId()
+        local shooting = IsPedShooting(myPed)
+
+        -- quando o jogador dispara, detecta quem ta na mira e registra
+        if shooting and not wasShooting then
+            -- tenta pegar o ped que ta sendo mirado
+            local found, targetEntity = GetEntityPlayerIsFreeAimingAt(PlayerId())
+
+            if found and DoesEntityExist(targetEntity) and IsEntityAPed(targetEntity) and IsPedAPlayer(targetEntity) then
+                local serverId = GetPlayerServerId(NetworkGetPlayerIndexFromPed(targetEntity))
+
+                if serverId > 0 then
+                    hitTargets[serverId] = {
+                        ped = targetEntity,
+                        time = GetGameTimer(),
+                        dead = false
+                    }
+
+                    if Config.KillConfirm.Debug then
+                        print(('[KILL-CONFIRM] Tiro registrado -> alvo server id: %d'):format(serverId))
+                    end
+                end
+            end
+        end
+
+        wasShooting = shooting
+
+        -- verifica se algum alvo que levou tiro morreu
+        local now = GetGameTimer()
+        for serverId, data in pairs(hitTargets) do
+            if data.dead then
+                -- ja processado, remove
+                hitTargets[serverId] = nil
+            elseif (now - data.time) > 5000 then
+                -- dano antigo demais, descarta
+                hitTargets[serverId] = nil
+            elseif DoesEntityExist(data.ped) and IsEntityDead(data.ped) then
+                -- vitima morreu, confirma o kill
+                data.dead = true
+                showKillMarker()
+
+                if Config.KillConfirm.Debug then
+                    print(('[KILL-CONFIRM] Kill confirmado -> vitima server id: %d'):format(serverId))
+                end
+            end
+        end
+
+        ::continue::
+    end
+end)
+
+-- fallback: gameEventTriggered pra pegar kills que o metodo acima pode perder
+-- (ex: vitima fora do free aim mas ainda levou dano por spread/explosao)
 AddEventHandler('gameEventTriggered', function(name, args)
     if not Config.KillConfirm.Enabled then return end
     if name ~= 'CEventNetworkEntityDamage' then return end
@@ -64,6 +118,7 @@ AddEventHandler('gameEventTriggered', function(name, args)
     local isFatal = args[6]
 
     if attacker ~= PlayerPedId() then return end
+    if isFatal ~= 1 then return end
     if not DoesEntityExist(victim) then return end
     if not IsEntityAPed(victim) then return end
     if not IsPedAPlayer(victim) then return end
@@ -71,53 +126,17 @@ AddEventHandler('gameEventTriggered', function(name, args)
     local victimServerId = GetPlayerServerId(NetworkGetPlayerIndexFromPed(victim))
     if victimServerId <= 0 then return end
 
-    -- se o evento ja diz que foi fatal, reporta direto
-    if isFatal == 1 then
-        reportKill(victimServerId)
-        damagedPlayers[victimServerId] = nil
+    -- so mostra se ja nao foi detectado pelo metodo principal
+    if hitTargets[victimServerId] and hitTargets[victimServerId].dead then
         return
     end
 
-    -- se nao foi fatal, registra que esse player levou dano do jogador local
-    -- a thread de verificacao vai checar se ele morreu
-    damagedPlayers[victimServerId] = {
-        ped = victim,
-        time = GetGameTimer()
-    }
-end)
-
--- thread que verifica se players que levaram dano acabaram morrendo
--- resolve o caso onde isFatal nao dispara corretamente
-CreateThread(function()
-    while true do
-        Wait(100)
-        if not Config.KillConfirm.Enabled then goto skip end
-
-        local now = GetGameTimer()
-        for serverId, data in pairs(damagedPlayers) do
-            -- descarta entradas com mais de 2 segundos (dano antigo demais)
-            if (now - data.time) > 2000 then
-                damagedPlayers[serverId] = nil
-            elseif DoesEntityExist(data.ped) and IsEntityDead(data.ped) then
-                reportKill(serverId)
-                damagedPlayers[serverId] = nil
-            end
-        end
-
-        ::skip::
-    end
-end)
-
--- recebe a confirmacao do server de que o kill foi valido
-RegisterNetEvent('killconfirm:show', function()
-    if not Config.KillConfirm.Enabled then return end
-
-    killConfirmActive = true
-    killConfirmStart = GetGameTimer()
-
     if Config.KillConfirm.Debug then
-        print('[KILL-CONFIRM] Marcador ativado.')
+        print(('[KILL-CONFIRM] Kill via evento -> vitima server id: %d'):format(victimServerId))
     end
+
+    hitTargets[victimServerId] = nil
+    showKillMarker()
 end)
 
 -- thread de renderizacao do X na tela
@@ -133,7 +152,6 @@ CreateThread(function()
             else
                 local alpha = 1.0
 
-                -- fade out gradual nos ultimos 40% da duracao
                 if cfg.FadeOut then
                     local fadeStart = duration * 0.6
                     if elapsed > fadeStart then
