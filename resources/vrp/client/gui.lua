@@ -312,43 +312,64 @@ end)
 local Button = 0
 local Walk = nil
 
--- RegisterCommand("Crouch", function()
---     DisableControlAction(0, 36, true)
+----------------------------------------------------------------------------------------------------------------------------------------
+-- CROUCH
+-----------------------------------------------------------------------------------------------------------------------------------------
 
---     local Ped = PlayerPedId()
---     if LocalPlayer["state"]["Active"] and GetGameTimer() >= Button and not IsPauseMenuActive() and not LocalPlayer["state"]["Buttons"] and not LocalPlayer["state"]["Commands"] and not LocalPlayer["state"]["Handcuff"] and not IsPedInAnyVehicle(Ped) and not LocalPlayer["state"]["usingPhone"] and not LocalPlayer["state"]["Phone"] and GetEntityHealth(Ped) > 100 and not LocalPlayer["state"]["Cancel"] then
---         Button = GetGameTimer() + 100
+local CROUCH_BLEND = 0.18
 
---         if Crouch then
---             Crouch = false
---             ResetPedStrafeClipset(Ped)
---             ResetPedMovementClipset(Ped, 0.25)
---         else
---             if LoadMovement("move_ped_crouched") and LoadMovement("move_ped_crouched_strafing") then
---                 SetPedStrafeClipset(Ped, "move_ped_crouched_strafing")
---                 SetPedMovementClipset(Ped, "move_ped_crouched", 0.25)
---                 Crouch = true
+-- Thread que bloqueia disparo apenas enquanto agachado (evita delay no comando)
+CreateThread(function()
+    while true do
+        if Crouch then
+            local ped = PlayerPedId()
+            if DoesEntityExist(ped) and not IsEntityDead(ped) then
+                DisablePlayerFiring(ped, true)
+            end
+            Wait(0)
+        else
+            Wait(150)
+        end
+    end
+end)
 
---                 while Crouch do
---                     DisablePlayerFiring(Ped, true)
---                     Wait(0)
---                 end
---             end
---         end
---     end
--- end, false)
+RegisterCommand("+Crouch", function()
+    DisableControlAction(0, 36, true)
 
--- CreateThread(function()
---     while true do
---         Wait(5)
---         local ped = PlayerPedId()
---         if DoesEntityExist(ped) and not IsEntityDead(ped) then
---             if not IsPauseMenuActive() then
---                 DisableControlAction(0, 36, true)
---             end
---         end
---     end
--- end)
+    local Ped = PlayerPedId()
+    if LocalPlayer["state"]["Active"] and not IsPauseMenuActive() and not LocalPlayer["state"]["Buttons"] and not LocalPlayer["state"]["Commands"] and not LocalPlayer["state"]["Handcuff"] and not IsPedInAnyVehicle(Ped) and not LocalPlayer["state"]["usingPhone"] and not LocalPlayer["state"]["Phone"] and GetEntityHealth(Ped) > 100 and not LocalPlayer["state"]["Cancel"] then
+        if Crouch then
+            Crouch = false
+            ResetPedStrafeClipset(Ped)
+            ResetPedMovementClipset(Ped, CROUCH_BLEND)
+
+            if Walk and LoadMovement(Walk) then
+                SetPedMovementClipset(Ped, Walk, CROUCH_BLEND)
+            end
+        else
+            if LoadMovement("move_ped_crouched") and LoadMovement("move_ped_crouched_strafing") then
+                SetPedStrafeClipset(Ped, "move_ped_crouched_strafing")
+                SetPedMovementClipset(Ped, "move_ped_crouched", CROUCH_BLEND)
+                SetPedUsingActionMode(Ped, false, -1, "DEFAULT")
+                Crouch = true
+            end
+        end
+    end
+end, false)
+
+RegisterCommand("-Crouch", function() end, false)
+
+CreateThread(function()
+    while true do
+        Wait(5)
+        local ped = PlayerPedId()
+        if DoesEntityExist(ped) and not IsEntityDead(ped) then
+            if not IsPauseMenuActive() then
+                DisableControlAction(0, 36, true)
+            end
+        end
+    end
+end)
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- BINDS
 -----------------------------------------------------------------------------------------------------------------------------------------
@@ -434,7 +455,7 @@ end)
 RegisterKeyMapping("Cancel","Cancelar todas as ações.","keyboard","F6")
 RegisterKeyMapping("HandsUp","Levantar as mãos.","keyboard","X")
 RegisterKeyMapping("Point","Apontar os dedos.","keyboard","B")
-RegisterKeyMapping("Crouch","Agachar.","keyboard","LCONTROL")
+RegisterKeyMapping("+Crouch", "Agachar", "keyboard", "LCONTROL")
 RegisterKeyMapping("Engine","Ligar o veículo.","keyboard","Z")
 RegisterKeyMapping("Binds 1","Interação do botão 1.","keyboard","1")
 RegisterKeyMapping("Binds 2","Interação do botão 2.","keyboard","2")
