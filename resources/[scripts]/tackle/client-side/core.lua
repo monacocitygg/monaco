@@ -6,7 +6,7 @@ CreateThread(function()
 		local TimeDistance = 100
 		if LocalPlayer["state"]["Route"] < 900000 then
 			local Ped = PlayerPedId()
-			if not IsPedInAnyVehicle(Ped) and IsPedJumping(Ped) then
+			if not IsPedInAnyVehicle(Ped) and not IsPedRagdoll(Ped) then
 				TimeDistance = 1
 
 				if IsControlJustReleased(1,51) then

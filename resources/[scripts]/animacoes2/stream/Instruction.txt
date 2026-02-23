@@ -1,0 +1,26 @@
+..:Santa Claus Sled:..
+Model from: https://3dwarehouse.sketchup.com/model.html?id=b205ce1803e2f39de486c9925da39607
+Converted to Grand Theft auto V,by: KAFAROS 
+
+                                                      Merry Christmas 
+
+
+-------------------------------------------------- 
+<>Installation: 
+1. Open: OpenIV. 
+2. Turn: Edit Mode. 
+3. Navigate to: GTA5\update\x64\dlcpacks\mpheist\dlc.rpf\x64\levels\gta5\vehicles\mpheistvehicles.rpf\ 
+4. If you want, you can make backup copy original file: hydra.yft,    hydra.ytd,   hydra_hi.yft,
+5. Replace: hydra.yft,    hydra.ytd,   hydra_hi.yft,  
+--------------------------------------------------
+
+If you want more vehicles 
+(normal vehicles and crazy vehicles)-Please donate my PayPal :) 
+Zmodeler costs $4.50/month 
+Tell me if you Donate-I add you on my list: "Thanks List" :) 
+And I send a GIFT for person who give me donation :D 
+
+by KAFAROS
+
+
+

@@ -1,0 +1,5 @@
+    ["5upernova1"] = { dict = "pandora@fckitupv1-1" , anim = "pandora" , andar = false , loop = true },
+    ["5upernova2"] = { dict = "pandora@fckitupv1-2" , anim = "pandora" , andar = false , loop = true },
+    ["5upernova3"] = { dict = "pandora@fckitupv1-3" , anim = "pandora" , andar = false , loop = true },
+    ["5upernova4"] = { dict = "pandora@fckitupv1-4" , anim = "pandora" , andar = false , loop = true },
+    ["5upernova5"] = { dict = "pandora@fckitupv1-5" , anim = "pandora" , andar = false , loop = true },

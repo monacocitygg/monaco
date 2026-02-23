@@ -162,7 +162,7 @@ Groups = {
 		},
 		["Hierarchy"] = { "Chefe","Sub-Chefe","Gerente","Conselheiro","Membro" },
 		["Service"] = {},
-		["Type"] = "Work"
+		["Type"] = "Ilegal"
 	},
 	["Vagos"] = {
 		["Parent"] = {
@@ -170,7 +170,7 @@ Groups = {
 		},
 		["Hierarchy"] = { "Chefe","Sub-Chefe","Gerente","Conselheiro","Membro" },
 		["Service"] = {},
-		["Type"] = "Work"
+		["Type"] = "Ilegal"
 	},
 	["Famillies"] = {
 		["Parent"] = {
@@ -178,7 +178,7 @@ Groups = {
 		},
 		["Hierarchy"] = { "Chefe","Sub-Chefe","Gerente","Conselheiro","Membro" },
 		["Service"] = {},
-		["Type"] = "Work"
+		["Type"] = "Ilegal"
 	},
 	["Marabuntas"] = {
 		["Parent"] = {
@@ -186,7 +186,7 @@ Groups = {
 		},
 		["Hierarchy"] = { "Chefe","Sub-Chefe","Gerente","Conselheiro","Membro" },
 		["Service"] = {},
-		["Type"] = "Work"
+		["Type"] = "Ilegal"
 	},
 	["Lester"] = {
 		["Parent"] = {
@@ -194,7 +194,7 @@ Groups = {
 		},
 		["Hierarchy"] = { "Chefe","Sub-Chefe","Gerente","Conselheiro","Membro" },
 		["Service"] = {},
-		["Type"] = "Work"
+		["Type"] = "Ilegal"
 	},
 	["Arcade"] = {
 		["Parent"] = {
@@ -202,7 +202,7 @@ Groups = {
 		},
 		["Hierarchy"] = { "Chefe","Sub-Chefe","Gerente","Conselheiro","Membro" },
 		["Service"] = {},
-		["Type"] = "Work"
+		["Type"] = "Ilegal"
 	},
 	["Madrazzo"] = {
 		["Parent"] = {
@@ -210,7 +210,7 @@ Groups = {
 		},
 		["Hierarchy"] = { "Chefe","Sub-Chefe","Gerente","Conselheiro","Membro" },
 		["Service"] = {},
-		["Type"] = "Work"
+		["Type"] = "Ilegal"
 	},
 	["Playboy"] = {
 		["Parent"] = {
@@ -218,7 +218,7 @@ Groups = {
 		},
 		["Hierarchy"] = { "Chefe","Sub-Chefe","Gerente","Conselheiro","Membro" },
 		["Service"] = {},
-		["Type"] = "Work"
+		["Type"] = "Ilegal"
 	},
 	["Vineyard"] = {
 		["Parent"] = {
@@ -234,7 +234,7 @@ Groups = {
 		},
 		["Hierarchy"] = { "Chefe","Sub-Chefe","Gerente","Conselheiro","Membro" },
 		["Service"] = {},
-		["Type"] = "Work"
+		["Type"] = "Ilegal"
 	},
 	["Gueto02"] = {
 		["Parent"] = {
@@ -242,7 +242,7 @@ Groups = {
 		},
 		["Hierarchy"] = { "Chefe","Sub-Chefe","Gerente","Conselheiro","Membro" },
 		["Service"] = {},
-		["Type"] = "Work"
+		["Type"] = "Ilegal"
 	},
 	["Gueto03"] = {
 		["Parent"] = {
@@ -250,7 +250,7 @@ Groups = {
 		},
 		["Hierarchy"] = { "Chefe","Sub-Chefe","Gerente","Conselheiro","Membro" },
 		["Service"] = {},
-		["Type"] = "Work"
+		["Type"] = "Ilegal"
 	},
 	["Gueto04"] = {
 		["Parent"] = {
@@ -258,7 +258,7 @@ Groups = {
 		},
 		["Hierarchy"] = { "Chefe","Sub-Chefe","Gerente","Conselheiro","Membro" },
 		["Service"] = {},
-		["Type"] = "Work"
+		["Type"] = "Ilegal"
 	},
 	["Vanilla"] = {
 		["Parent"] = {
@@ -317,7 +317,7 @@ Groups = {
 		},
 		["Hierarchy"] = { "Chefe","Sub-Chefe","Gerente","Conselheiro","Membro" },
 		["Service"] = {},
-		["Type"] = "Work"
+		["Type"] = "Ilegal"
 	},
 	--farol 
 	["Favela02"] = {
@@ -326,7 +326,7 @@ Groups = {
 		},
 		["Hierarchy"] = { "Chefe","Sub-Chefe","Gerente","Conselheiro","Membro" },
 		["Service"] = {},
-		["Type"] = "Work"
+		["Type"] = "Ilegal"
 	},
 	["Favela03"] = {
 		["Parent"] = {
@@ -334,7 +334,7 @@ Groups = {
 		},
 		["Hierarchy"] = { "Chefe","Sub-Chefe","Gerente","Conselheiro","Membro" },
 		["Service"] = {},
-		["Type"] = "Work"
+		["Type"] = "Ilegal"
 	},
 	["Favela04"] = {
 		["Parent"] = {
@@ -342,7 +342,7 @@ Groups = {
 		},
 		["Hierarchy"] = { "Chefe","Sub-Chefe","Gerente","Conselheiro","Membro" },
 		["Service"] = {},
-		["Type"] = "Work"
+		["Type"] = "Ilegal"
 	},
 	
 	["Muni01"] = {
@@ -351,7 +351,7 @@ Groups = {
 		},
 		["Hierarchy"] = { "Chefe","Sub-Chefe","Gerente","Conselheiro","Membro" },
 		["Service"] = {},
-		["Type"] = "Work"
+		["Type"] = "Ilegal"
 	},
 	["Lavagem01"] = {
 		["Parent"] = {
@@ -359,7 +359,7 @@ Groups = {
 		},
 		["Hierarchy"] = { "Chefe","Sub-Chefe","Gerente","Conselheiro","Membro" },
 		["Service"] = {},
-		["Type"] = "Work"
+		["Type"] = "Ilegal"
 	},
 	
 ---------------------- vips
@@ -434,6 +434,14 @@ Groups = {
 			["BeanMachine"] = true
 		},
 		["Hierarchy"] = { "Chefe" },
+		["Service"] = {}
+	},
+	["Dancinhas"] = {
+		["Parent"] = {
+			["Dancinhas"] = true
+		},
+		["Hierarchy"] = { "Dançarino" },
+		["Salary"] = {},
 		["Service"] = {}
 	}
 }

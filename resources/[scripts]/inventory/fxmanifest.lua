@@ -17,6 +17,7 @@ client_scripts {
 server_scripts {
 	"@vrp/config/Vehicle.lua",
 	"@vrp/config/Item.lua",
+	"@vrp/config/Groups.lua",
 	"@vrp/lib/Utils.lua",
 	"server-side/skinsconfig.lua",
 	"server-side/*"

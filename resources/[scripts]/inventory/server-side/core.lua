@@ -1296,6 +1296,17 @@ function itemAmmo(Weapon)
 	return nil
 end
 -----------------------------------------------------------------------------------------------------------------------------------------
+-- HASILEGALGROUP
+-----------------------------------------------------------------------------------------------------------------------------------------
+function hasIlegalGroup(Passport)
+	for groupName, groupData in pairs(Groups) do
+		if groupData["Type"] == "Ilegal" and vRP.HasGroup(Passport, groupName) then
+			return true
+		end
+	end
+	return false
+end
+-----------------------------------------------------------------------------------------------------------------------------------------
 -- USEITEM
 -----------------------------------------------------------------------------------------------------------------------------------------
 function Creative.UseItem(Slot,Amount)
@@ -1331,6 +1342,14 @@ function Creative.UseItem(Slot,Amount)
 			if string.find(Full,"-police") and not vRP.HasService(Passport,"Police") then
 				TriggerClientEvent("Notify",source,"negado","Item exclusivo da polícia.",5000)
 				return
+			end
+			-- Bloqueio de fuzil: só quem tem group com Type "Ilegal" ou Polícia pode equipar rifles
+			local wAmmoType = itemAmmo(Item)
+			if wAmmoType == "WEAPON_RIFLE_AMMO" and not string.find(Full,"-police") then
+				if not hasIlegalGroup(Passport) and not vRP.HasService(Passport,"Police") then
+					TriggerClientEvent("Notify",source,"negado","Você não pode utilizar esta armamento.",5000)
+					return
+				end
 			end
 			if vCLIENT.CheckArms(source) then
 				TriggerClientEvent("Notify",source,"amarelo","Mão machucada.",5000)

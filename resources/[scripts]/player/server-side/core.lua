@@ -86,6 +86,14 @@ end)
 RegisterCommand("e",function(source,Message)
 	local Passport = vRP.Passport(source)
 	if Passport and vRP.GetHealth(source) > 100 then
+		-- Verificar se a dança é paga e se o player tem o grupo "Dancinhas"
+		if Message[1] and PaidDances[Message[1]] then
+			if not vRP.HasGroup(Passport,"Dancinhas") then
+				TriggerClientEvent("Notify",source,"negado","Você precisa do grupo <b>Dancinhas</b> para usar esta animação.",5000)
+				return
+			end
+		end
+
 		if Message[2] == "friend" then
 			local ClosestPed = vRPC.ClosestPed(source,2)
 			if ClosestPed then

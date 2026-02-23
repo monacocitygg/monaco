@@ -225,22 +225,32 @@ CreateThread(function()
 end)
 
 -----------------------------------------------------------------------------------------------------------------------------------------
--- CAPUZ
+-- CAPUZ (TOGGLE HOOD)
 -----------------------------------------------------------------------------------------------------------------------------------------
-local showHood = false  
-RegisterNetEvent("hud:Hood")
-AddEventHandler("hud:Hood",function()
-    showHood = not showHood
+local HoodActive = false
+RegisterNetEvent("hud:toggleHood")
+AddEventHandler("hud:toggleHood",function()
+    HoodActive = not HoodActive
 
-    if showHood then
-        DoScreenFadeIn(0)
-        SetPedComponentVariation(PlayerPedId(),1,0,0,1)
-    else
-        SetPedComponentVariation(PlayerPedId(),1,69,0,1)
+    if HoodActive then
         DoScreenFadeOut(0)
+        TriggerEvent("inventory:Close")
+    else
+        DoScreenFadeIn(0)
     end
 
-    SendNUIMessage({ hood = showHood })
+    SendNUIMessage({ hood = HoodActive })
+end)
+-----------------------------------------------------------------------------------------------------------------------------------------
+-- HUD:REMOVEHOOD (ao morrer/respawnar)
+-----------------------------------------------------------------------------------------------------------------------------------------
+RegisterNetEvent("hud:RemoveHood")
+AddEventHandler("hud:RemoveHood",function()
+    if HoodActive then
+        HoodActive = false
+        DoScreenFadeIn(0)
+        SendNUIMessage({ hood = false })
+    end
 end)
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- HUD:VOIP

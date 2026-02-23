@@ -13,5 +13,6 @@ client_scripts {
 server_scripts {
 	"@vrp/config/Item.lua",
 	"@vrp/lib/Utils.lua",
+	"config.lua",
 	"server-side/*"
 }
