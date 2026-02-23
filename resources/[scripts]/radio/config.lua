@@ -30,8 +30,8 @@ Config.Animations = {
         prop  = {
             model    = "prop_cs_hand_radio",
             bone     = 18905,
-            offset   = { x = 0.0750, y = 0.0230, z = -0.0230 },
-            rotation = { x = -90.0, y = 0.0, z = -59.9999 },
+            offset   = { x = -0.0750, y = 0.0230, z = 0.0230 },
+            rotation = { x = 90.0, y = 0.0, z = 59.9999 },
         },
     },
     {
