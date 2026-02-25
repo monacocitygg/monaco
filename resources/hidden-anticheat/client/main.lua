@@ -1,9 +1,7 @@
 local Config = Config or {}
 
-local PlayerPed = PlayerPedId()
-
 local function GetCameraDirection()
-    local heading = GetGameplayCamRelativeHeading() + GetEntityHeading(PlayerPed)
+    local heading = GetGameplayCamRelativeHeading() + GetEntityHeading(PlayerPedId())
     local pitch = GetGameplayCamRelativePitch()
     
     local x = -math.sin(heading * math.pi / 180.0)
@@ -67,7 +65,7 @@ AddEventHandler('gameEventTriggered', function(name, args)
         
         if attacker == PlayerPedId() and IsEntityAPed(victim) and IsPedAPlayer(victim) then
             local victimPos = GetEntityCoords(victim)
-            local myPos = GetEntityCoords(PlayerPed)
+            local myPos = GetEntityCoords(PlayerPedId())
             local dist = #(victimPos - myPos)
             local now = GetGameTimer()
             local lockMs = (Config.Combat and Config.Combat.DetectionLockMs) or 200
@@ -98,7 +96,7 @@ AddEventHandler('gameEventTriggered', function(name, args)
                                 HitAngles = {}
                             end
                             local threshold = (Config.Combat and Config.Combat.SilentAimHeadDist) or 0.8
-                            if IsPedSprinting(PlayerPed) or IsPedRunning(PlayerPed) then
+                            if IsPedSprinting(PlayerPedId()) or IsPedRunning(PlayerPedId()) then
                                 threshold = threshold + 0.2
                             end
                             if not IsPlayerFreeAiming(PlayerId()) then
@@ -185,8 +183,8 @@ end)
 local MouseSamples = {}
 Citizen.CreateThread(function()
     while true do
-        Citizen.Wait(0)
-        if IsPedShooting(PlayerPed) then
+        Citizen.Wait(1)
+        if IsPedShooting(PlayerPedId()) then
             local aiming, aimedEnt = GetEntityPlayerIsFreeAimingAt(PlayerId())
             if aiming and DoesEntityExist(aimedEnt) and IsEntityAPed(aimedEnt) and IsPedAPlayer(aimedEnt) then
                 local dx = GetGameplayCamRelativeHeading()
@@ -222,9 +220,9 @@ local LastAimTime = 0
 
 Citizen.CreateThread(function()
     while true do
-        Citizen.Wait(0)
+        Citizen.Wait(1)
         
-        if IsPedShooting(PlayerPed) then
+        if IsPedShooting(PlayerPedId()) then
             local currentCamDir = GetCameraDirection()
             local now = GetGameTimer()
             local timeDiff = now - LastAimTime
