@@ -237,6 +237,10 @@ RegisterCommand("Cancel",function()
 	local Ped = PlayerPedId()
 	if LocalPlayer["state"]["Active"] and GetGameTimer() >= Button and not IsPauseMenuActive() and not LocalPlayer["state"]["Handcuff"] and not LocalPlayer["state"]["usingPhone"] and GetEntityHealth(Ped) > 100 and not LocalPlayer["state"]["Cancel"] and not IsPedReloading(Ped) then
 		Button = GetGameTimer() + 1000
+
+		if GetResourceState("lsEmotes") == "started" and exports["lsEmotes"] and exports["lsEmotes"]["EmoteCancel"] then
+            exports["lsEmotes"]["EmoteCancel"]()
+        end
 		TriggerEvent("inventory:Cancel")
 	end
 end)

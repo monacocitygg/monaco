@@ -518,16 +518,24 @@ end)
 -- SHAKESHOTTING
 -----------------------------------------------------------------------------------------------------------------------------------------
 CreateThread(function()
+	local wasShaking = false
 	while true do
 		local TimeDistance = 999
 		local Ped = PlayerPedId()
 		if IsPedInAnyVehicle(Ped) and IsPedArmed(Ped,6) then
-			TimeDistance = 1
+			TimeDistance = 5
 
 			local Vehicle = GetVehiclePedIsUsing(Ped)
 			if IsPedShooting(Ped) and (GetVehicleClass(Vehicle) ~= 15 and GetVehicleClass(Vehicle) ~= 16) then
-				ShakeGameplayCam("SMALL_EXPLOSION_SHAKE",0.3)
+				ShakeGameplayCam("SMALL_EXPLOSION_SHAKE",0.2)
+				wasShaking = true
+			elseif wasShaking then
+				StopGameplayCamShaking(true)
+				wasShaking = false
 			end
+		elseif wasShaking then
+			StopGameplayCamShaking(true)
+			wasShaking = false
 		end
 
 		Wait(TimeDistance)
