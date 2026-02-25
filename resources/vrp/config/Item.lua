@@ -84,10 +84,10 @@ local List = {
 		["Economy"] = 5750,
 		["Max"] = 1
 	},
-	["racingtablet"] = {
+	["tabletmec"] = {
 		["Index"] = "racingtablet",
-		["Name"] = "Tablet - Racing",
-		["Description"] = "Utilizado para acessar a interface das Corridas.",
+		["Name"] = "Tablet - Mecanica",
+		["Description"] = "Utilizado para acessar ordens da mecanica.",
 		["Type"] = "Usável",
 		["Durability"] = 7,
 		["Weight"] = 0.5,

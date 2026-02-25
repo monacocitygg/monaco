@@ -10,3 +10,5 @@
 resources/\[skins\].rar
 resources/resources.rar
 *.rar
+/txData
+artifacts.rar

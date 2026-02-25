@@ -70,6 +70,14 @@ CREATE TABLE IF NOT EXISTS `characters` (
   KEY `id` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+
+CREATE TABLE skins (
+    identifier VARCHAR(100) PRIMARY KEY,
+    skins LONGTEXT NOT NULL, -- Armazena JSON como string
+    boxes LONGTEXT NOT NULL, -- Armazena JSON como string
+    tokentrade INT(11) NOT NULL DEFAULT 0 
+);
+
 -- Dumping data for table hypexnetwork.characters: ~0 rows (approximately)
 
 -- Dumping structure for table hypexnetwork.chests

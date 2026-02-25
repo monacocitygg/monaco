@@ -99,46 +99,49 @@ local wheeltype = {
 -----------------------------------------------------------------------------------------------------------------------------------------
 
 Citizen.CreateThread(function()
-	local bennys = false
 	local hover = false
 	SetNuiFocus(false,false)
 	while true do 
 		local idle = 500
-		if not bennys then
-			bennys = getNearestBennys()
-		elseif not nui then
-			idle = 5
-			DrawMarker(27, bennys[1],bennys[2],bennys[3]-0.97 ,0,0,0,0,0,0,3.0,3.0,1.0,255, 102, 0,200,0,0,0,1)
-			--DrawMarker(36, bennys,0,0,0,0,0,0,1.0,3.0,1.0,255, 102, 0,200,0,0,0,1)
-			local playercoords = GetEntityCoords(PlayerPedId())
-			local distance = #(playercoords - bennys)
-			if distance < 7.5 then
-				local ok, sx, sy = World3dToScreen2d(bennys[1],bennys[2],bennys[3] + 1.0)
-				if ok then
-					SendNUIMessage({ action = "showHover", x = sx, y = sy, title = "MECÂNICA", subtitle = "ACESSAR MODIFICAÇÕES" })
-					hover = true
+		if not nui then
+			local bennys, distance = getNearestBennys(25)
+			if bennys then
+				idle = 5
+				DrawMarker(27, bennys[1],bennys[2],bennys[3]-0.97 ,0,0,0,0,0,0,3.0,3.0,1.0,255, 102, 0,200,0,0,0,1)
+				--DrawMarker(36, bennys,0,0,0,0,0,0,1.0,3.0,1.0,255, 102, 0,200,0,0,0,1)
+				if distance < 7.5 then
+					local ok, sx, sy = World3dToScreen2d(bennys[1],bennys[2],bennys[3] + 1.0)
+					if ok then
+						SendNUIMessage({ action = "showHover", x = sx, y = sy, title = "MECÂNICA", subtitle = "ACESSAR MODIFICAÇÕES" })
+						hover = true
+					else
+						if hover then
+							SendNUIMessage({ action = "hideHover" })
+							hover = false
+						end
+					end
+					if IsControlJustPressed(0,38) and func.checkPermission() then
+						vehicle = getNearestVehicle(7)
+						--if vehicle then
+						if vehicle and func.checkVehicle(VehToNet(vehicle)) then
+							damage = (1000 - GetVehicleBodyHealth(vehicle))/100
+							if config.no_repair then
+								damage = 0
+							end
+							SetVehicleModKit(vehicle,0)
+							FreezeEntityPosition(vehicle,true)
+							myveh = getAllVehicleMods(vehicle)
+							gameplaycam = GetRenderingCam()
+							cam = CreateCam("DEFAULT_SCRIPTED_CAMERA",true,2)
+							SendNUIMessage({ action = "vehicle", vehicle = getVehicleMods(vehicle), damage = damage, logo = config.logo, prices = config.prices, mods = mod })
+							showNui()
+							isVehicleTooFar(vehicle)
+						end
+					end
 				else
 					if hover then
 						SendNUIMessage({ action = "hideHover" })
 						hover = false
-					end
-				end
-				if IsControlJustPressed(0,38) and func.checkPermission() then
-					vehicle = getNearestVehicle(7)
-					--if vehicle then
-					if vehicle and func.checkVehicle(VehToNet(vehicle)) then
-						damage = (1000 - GetVehicleBodyHealth(vehicle))/100
-						if config.no_repair then
-							damage = 0
-						end
-						SetVehicleModKit(vehicle,0)
-						FreezeEntityPosition(vehicle,true)
-						myveh = getAllVehicleMods(vehicle)
-						gameplaycam = GetRenderingCam()
-						cam = CreateCam("DEFAULT_SCRIPTED_CAMERA",true,2)
-						SendNUIMessage({ action = "vehicle", vehicle = getVehicleMods(vehicle), damage = damage, logo = config.logo, prices = config.prices, mods = mod })
-						showNui()
-						isVehicleTooFar(vehicle)
 					end
 				end
 			else
@@ -147,18 +150,9 @@ Citizen.CreateThread(function()
 					hover = false
 				end
 			end
-			if distance > 25 then
-				if hover then
-					SendNUIMessage({ action = "hideHover" })
-					hover = false
-				end
-				bennys = false
-			end
-		else
-			if hover then
-				SendNUIMessage({ action = "hideHover" })
-				hover = false
-			end
+		elseif hover then
+			SendNUIMessage({ action = "hideHover" })
+			hover = false
 		end
 		Citizen.Wait(idle)
 	end
@@ -240,19 +234,30 @@ RegisterNUICallback("pagar",function(data)
 	end
 end)
 
-RegisterCommand("tabletmec", function()
+local function openTabletMec()
     local allowed, isMechanic = func.checkPermission()
     if isMechanic then
         local orders = func.getOrders()
         SetNuiFocus(true, true)
         SendNUIMessage({ action = "openTablet", orders = orders })
+        vRP.createObjects("amb@code_human_in_bus_passenger_idles@female@tablet@base","base","prop_cs_tablet",50,28422)
     else
         TriggerEvent("Notify", "vermelho", "Apenas mecânicos podem usar isso.", 5000)
     end
+end
+
+RegisterCommand("tabletmec", function()
+    openTabletMec()
+end)
+
+RegisterNetEvent("nation:openTablet")
+AddEventHandler("nation:openTablet", function()
+    openTabletMec()
 end)
 
 RegisterNUICallback("closeTablet", function()
     SetNuiFocus(false, false)
+    vRP.removeObjects()
 end)
 
 RegisterNUICallback("applyOrder", function(data)
@@ -264,6 +269,7 @@ RegisterNUICallback("applyOrder", function(data)
             if success then
                 TriggerEvent("Notify", "verde", msg, 5000)
                 SetNuiFocus(false, false)
+                vRP.removeObjects()
                 SendNUIMessage({ action = "closeTablet" })
             else
                 TriggerEvent("Notify", "vermelho", msg, 5000)
@@ -273,6 +279,19 @@ RegisterNUICallback("applyOrder", function(data)
         end
     else
         TriggerEvent("Notify", "vermelho", "Nenhum veículo próximo.", 5000)
+    end
+end)
+
+RegisterNUICallback("denyOrder", function(data)
+    local success, msg = func.denyOrder(data.orderId)
+    if success then
+        TriggerEvent("Notify", "verde", msg, 5000)
+        
+        -- Refresh orders list instead of closing
+        local orders = func.getOrders()
+        SendNUIMessage({ action = "openTablet", orders = orders })
+    else
+        TriggerEvent("Notify", "vermelho", msg, 5000)
     end
 end)
 
@@ -681,28 +700,32 @@ function setVehicleMods(veh,myveh,tunnerChip)
 		myveh.color = {255,255,255}
 	end
 
-	local bug = false
 	local primary = myveh.color[1]
 	local secondary = myveh.color[2]
-	local cprimary = myveh.customPcolor
-	if cprimary['1'] then
-		bug = true
+	local cprimary = normalizeColor(myveh.customPcolor)
+	local csecondary = normalizeColor(myveh.customScolor)
+	if cprimary and not csecondary then
+		csecondary = cprimary
+	elseif csecondary and not cprimary then
+		cprimary = csecondary
 	end
-	local csecondary = myveh.customScolor
-	local perolado = myveh.extracolor[1]
-	local wheelcolor = myveh.extracolor[2]
-	local neoncolor = myveh.neoncolor
-	local smokecolor = myveh.smokecolor
-	ClearVehicleCustomPrimaryColour(veh)
-	ClearVehicleCustomSecondaryColour(veh)
+	local perolado = myveh.extracolor and myveh.extracolor[1] or 0
+	local wheelcolor = myveh.extracolor and myveh.extracolor[2] or 0
+	local neoncolor = myveh.neoncolor or { 0, 0, 0 }
+	local smokecolor = myveh.smokecolor or { 0, 0, 0 }
 	SetVehicleWheelType(veh,myveh.wheeltype)
 	SetVehicleColours(veh,primary,secondary)
-	if bug then
-		SetVehicleCustomPrimaryColour(veh,cprimary['1'],cprimary['2'],cprimary['3'])
-		SetVehicleCustomSecondaryColour(veh,csecondary['1'],csecondary['2'],csecondary['3'])
-	else
+	if cprimary then
+		ClearVehicleCustomPrimaryColour(veh)
 		SetVehicleCustomPrimaryColour(veh,cprimary[1],cprimary[2],cprimary[3])
+	else
+		ClearVehicleCustomPrimaryColour(veh)
+	end
+	if csecondary then
+		ClearVehicleCustomSecondaryColour(veh)
 		SetVehicleCustomSecondaryColour(veh,csecondary[1],csecondary[2],csecondary[3])
+	else
+		ClearVehicleCustomSecondaryColour(veh)
 	end
 	SetVehicleExtraColours(veh,perolado,wheelcolor)
 	SetVehicleNeonLightsColour(veh,neoncolor[1],neoncolor[2],neoncolor[3])
@@ -810,15 +833,37 @@ function vehicleCustomColor(type,veh,color)
 	local r,g,b = parseInt(color[1]),parseInt(color[2]),parseInt(color[3])
 	if type == "cor-primaria" then
 		SetVehicleCustomPrimaryColour(veh,r,g,b)
+		myveh.customPcolor = { r, g, b }
+		if not myveh.customScolor then
+			myveh.customScolor = { r, g, b }
+		end
 		updateCart(myveh, type, {r,g,b})
 	elseif type == "cor-secundaria" then
 		SetVehicleCustomSecondaryColour(veh,r,g,b)
+		myveh.customScolor = { r, g, b }
+		if not myveh.customPcolor then
+			myveh.customPcolor = { r, g, b }
+		end
 		updateCart(myveh, type, {r,g,b})
 	end
 end
 
+function normalizeColor(c)
+	if type(c) ~= "table" then return nil end
+	local r = tonumber(c[1] or c["1"])
+	local g = tonumber(c[2] or c["2"])
+	local b = tonumber(c[3] or c["3"])
+	if r == nil or g == nil or b == nil then return nil end
+	return { r, g, b }
+end
+
 function sameColor(c1,c2)
-	if c1[1] ~= c2[1] or c1[2] ~= c2[2] or c1[3] ~= c2[3] then
+	local n1 = normalizeColor(c1)
+	local n2 = normalizeColor(c2)
+	if not n1 or not n2 then
+		return false
+	end
+	if n1[1] ~= n2[1] or n1[2] ~= n2[2] or n1[3] ~= n2[3] then
 		return false
 	end
 	return true
@@ -965,16 +1010,19 @@ function isVehicleTooFar(veh)
 
 end
 
-function getNearestBennys()
+function getNearestBennys(maxDistance)
 	local locais = config.locais
 	local playercoords = GetEntityCoords(PlayerPedId())
+	local closest = false
+	local closestDistance = maxDistance or 25
 	for i,j in ipairs(locais) do
 		local distance = #(playercoords - locais[i])
-		if distance < 25 then
-			return locais[i]
+		if distance <= closestDistance then
+			closestDistance = distance
+			closest = locais[i]
 		end
 	end
-	return false
+	return closest, closestDistance
 end
 
 
@@ -1160,11 +1208,16 @@ AddEventHandler('nation:applymods_sync',function(custom,vnet)
 	if NetworkDoesEntityExistWithNetworkId(vnet) then
 		local veh = NetToVeh(vnet)
 		if DoesEntityExist(veh) then
-			setVehicleMods(veh,json.decode(custom))
+            if type(custom) == "string" then
+                custom = json.decode(custom)
+            end
+			setVehicleMods(veh,custom)
 			SetVehicleDirtLevel(veh,0.0)
 		end
 	end
 end)
+
+
 
 RegisterNetEvent('nation:applytunnerchip')
 AddEventHandler('nation:applytunnerchip',function(tunner_customs,vnet)

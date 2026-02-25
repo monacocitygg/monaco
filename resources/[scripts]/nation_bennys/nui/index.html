@@ -60,40 +60,50 @@
             <button id="sair" class="exit-btn-corner">SAIR <i class="fas fa-times"></i></button>
         </div>
 
-        <!-- Tablet UI (Keep this intact) -->
+        <!-- Tablet UI (Refined) -->
         <div id="tablet-container" style="display: none;">
-            <div class="tablet-main">
-                <div class="tablet-sidebar">
-                    <div class="logo-area">
-                        <h1>BENNYS</h1>
-                        <span>MECHANIC SHOP</span>
+            <div class="tablet-device">
+                <div class="tablet-camera"></div>
+                <div class="tablet-screen">
+                    <div class="tablet-sidebar">
+                        <div class="logo-area">
+                            <h1>BENNYS</h1>
+                            <span>MECHANIC SHOP</span>
+                        </div>
+                        <div class="nav-item active">
+                            <i class="fas fa-clipboard-list"></i> Ordens
+                        </div>
+                        <div class="user-profile">
+                            <div class="user-avatar"><i class="fas fa-user"></i></div>
+                            <div class="user-info">
+                                <span class="user-role">Mecânico</span>
+                                <span class="user-status">Online</span>
+                            </div>
+                        </div>
                     </div>
-                    <div class="nav-item active">
-                        <i class="fas fa-clipboard-list"></i> Ordens
-                    </div>
-                    <div class="user-profile">
-                        <div class="user-avatar"><i class="fas fa-user"></i></div>
-                        <div class="user-info">
-                            <span class="user-role">Mecânico</span>
-                            <span class="user-status">Online</span>
+                    <div class="tablet-content">
+                        <div class="content-header">
+                            <div class="header-title">
+                                <i class="fas fa-clipboard-check"></i>
+                                <h2>Ordens de Serviço</h2>
+                            </div>
+                            <button id="close-tablet" class="close-btn">
+                                <i class="fas fa-arrow-left"></i> Voltar
+                            </button>
+                        </div>
+                        <div class="orders-table-header">
+                            <div class="col-pos"><i class="fas fa-hashtag"></i> ID</div>
+                            <div class="col-vehicle"><i class="fas fa-car"></i> VEÍCULO</div>
+                            <div class="col-client"><i class="fas fa-user"></i> CLIENTE</div>
+                            <div class="col-price"><i class="fas fa-dollar-sign"></i> VALOR</div>
+                            <div class="col-action">AÇÃO</div>
+                        </div>
+                        <div id="orders-list" class="orders-list-container">
+                            <!-- Orders will be injected here -->
                         </div>
                     </div>
                 </div>
-                <div class="tablet-content">
-                    <div class="content-header">
-                        <h2>Ordens de Serviço</h2>
-                        <button id="close-tablet" class="close-btn"><i class="fas fa-times"></i></button>
-                    </div>
-                    <div class="orders-table-header">
-                        <div class="col-vehicle">VEÍCULO</div>
-                        <div class="col-client">CLIENTE</div>
-                        <div class="col-price">VALOR</div>
-                        <div class="col-action">AÇÃO</div>
-                    </div>
-                    <div id="orders-list" class="orders-list-container">
-                        <!-- Orders will be injected here -->
-                    </div>
-                </div>
+                <div class="tablet-home-indicator"></div>
             </div>
         </div>
         <link rel="stylesheet" href="tablet.css">

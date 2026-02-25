@@ -499,6 +499,27 @@ function VehicleMods(Vehicle,Customize)
 		SetVehicleXenonLightsColour(Vehicle,Customize["xenonColor"])
 		SetVehicleColours(Vehicle,Customize["colors"][1],Customize["colors"][2])
 		SetVehicleExtraColours(Vehicle,Customize["extracolors"][1],Customize["extracolors"][2])
+		if Customize["customPcolor"] then
+			local r = parseInt(Customize["customPcolor"][1] or Customize["customPcolor"]["1"])
+			local g = parseInt(Customize["customPcolor"][2] or Customize["customPcolor"]["2"])
+			local b = parseInt(Customize["customPcolor"][3] or Customize["customPcolor"]["3"])
+			if r ~= nil and g ~= nil and b ~= nil then
+				SetVehicleCustomPrimaryColour(Vehicle,r,g,b)
+			end
+		else
+			ClearVehicleCustomPrimaryColour(Vehicle)
+		end
+
+		if Customize["customScolor"] then
+			local r = parseInt(Customize["customScolor"][1] or Customize["customScolor"]["1"])
+			local g = parseInt(Customize["customScolor"][2] or Customize["customScolor"]["2"])
+			local b = parseInt(Customize["customScolor"][3] or Customize["customScolor"]["3"])
+			if r ~= nil and g ~= nil and b ~= nil then
+				SetVehicleCustomSecondaryColour(Vehicle,r,g,b)
+			end
+		else
+			ClearVehicleCustomSecondaryColour(Vehicle)
+		end
 		SetVehicleNeonLightsColour(Vehicle,Customize["lights"][1],Customize["lights"][2],Customize["lights"][3])
 		SetVehicleTyreSmokeColor(Vehicle,Customize["smokecolor"][1],Customize["smokecolor"][2],Customize["smokecolor"][3])
 

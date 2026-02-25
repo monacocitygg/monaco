@@ -38,29 +38,41 @@ function renderOrders(orders) {
         return;
     }
 
+    let counter = 1;
     $.each(orders, function(key, order) {
         if (!order) return;
         
+        // Shorten ID for display if needed, or use counter
+        let displayId = counter.toString().padStart(3, '0');
+        
         var html = `
             <div class="order-item">
+                <div class="order-id">
+                    <i class="fas fa-hashtag"></i> ${displayId}
+                </div>
                 <div class="vehicle-info">
                     <span class="vehicle-name">${order.vehicleName}</span>
                     <span class="vehicle-plate">${order.plate}</span>
                 </div>
                 <div class="client-name">
+                    <img src="https://ui-avatars.com/api/?name=${encodeURIComponent(order.name)}&background=random&color=fff&size=64" alt="">
                     ${order.name}
                 </div>
                 <div class="order-price">
                     $${order.price}
                 </div>
-                <div class="action-btn">
+                <div class="action-btn-container">
                     <button class="apply-btn" onclick="applyOrder('${order.id}', '${order.plate}')">
                         APLICAR
+                    </button>
+                    <button class="deny-btn" onclick="denyOrder('${order.id}')">
+                        RECUSAR
                     </button>
                 </div>
             </div>
         `;
         list.append(html);
+        counter++;
     });
 }
 
@@ -69,5 +81,11 @@ window.applyOrder = function(orderId, plate) {
     $.post('http://nation_bennys/applyOrder', JSON.stringify({
         orderId: orderId,
         plate: plate
+    }));
+}
+
+window.denyOrder = function(orderId) {
+    $.post('http://nation_bennys/denyOrder', JSON.stringify({
+        orderId: orderId
     }));
 }

@@ -60,238 +60,243 @@ Use = {
 		end
 	end,
 
-	["jackham"] = function(source,Passport,Amount,Slot,Full,Item,Split)
-		local Ped = GetPlayerPed(source)
-		local Coords = GetEntityCoords(Ped)
-		local mineCoords = { 2952.91,2791.51,41.03 }
-		local Coordinates = {}
-		local minutes = os.date("*t",  os.time()).min
-
-		for i = 1,2 do
-			local angle = (2 * math.pi * i / 2) + (minutes / 60 * math.pi / 5)
-			local x = mineCoords[1] + 7 * math.cos(angle)+3
-			local y = mineCoords[2] + 7 * math.sin(angle)+3
-			table.insert(Coordinates, {x = x, y = y, item = (i%2~=0) and "sapphireore" or "ironore", amount = (i%2~=0) and 4 or 8})
-		end
-
-		for i = 1,4  do
-			local angle = (2 * math.pi * i / 4) + (minutes / 60 * math.pi / 4 )
-			local x = mineCoords[1] + 14 * math.cos(angle)+3
-			local y = mineCoords[2] + 14 * math.sin(angle)+3
-			table.insert(Coordinates, {x = x, y = y, item = (i%2~=0) and "rubyore" or "diamondore", amount = (minutes%2~=0) and 8 or 10})
-		end
-
-		for i = 1,8 do
-			local angle = (2 * math.pi * i / 8) + (minutes / 60 * math.pi / 3)
-			local x = mineCoords[1] + 21 * math.cos(angle)+3
-			local y = mineCoords[2] + 21 * math.sin(angle)+3
-			table.insert(Coordinates, {x = x, y = y, item = (i%2~=0) and "goldore" or "copperore", amount = (i%2~=0) and 3 or 5})
-		end
-		
-		for i = 1, 12 do
-			local angle = (2 * math.pi * i / 12) + (minutes / 60 * math.pi / 2)
-			local x = mineCoords[1] + 28 * math.cos(angle)+1
-			local y = mineCoords[2] + 28 * math.sin(angle)+1
-			table.insert(Coordinates, {x = x, y = y, item = (i%2~=0) and "leadore" or "emeraldore", amount = (minutes%2~=0) and 5 or 7})
-		end
-
-		if #(Coords - vec3(mineCoords[1],mineCoords[2],mineCoords[3])) <= 30 then
-			if vRP.ConsultItem(Passport,"drillbit",1) then
-				Active[Passport] = os.time() + 4
-				Player(source)["state"]["Buttons"] = true
-				Player(source)["state"]["Cancel"] = true
-				TriggerClientEvent("inventory:Close", source)
-				TriggerClientEvent("Progress", source, "Perfurando", 4000)
-				vRPC.createObjects(source,"amb@world_human_const_drill@male@drill@base","base","prop_tool_jackham",15,28422)
-				repeat
-					if os.time() >= parseInt(Active[Passport]) then
-						Active[Passport] = nil
-
-						if math.random(100) <= 30 then
-							vRP.RemoveItem(Passport, "drillbit",1,true)
-						end
-
-						for _,Value in ipairs(Coordinates) do
-							if #(Coords - vec3(Value.x, Value.y, Coords.z)) <= 3 then
-								local Amount = math.random(Value.amount)
-								local Experience = vRP.GetExperience(Passport,"Minerman")
-								local Level = ClassCategory(Experience)
-								if Level == 2 or Level == 3 or Level == 5 then
-									Amount = Amount + 1
-								elseif Level == 6 or Level == 7 or Level == 8 then
-									Amount = Amount + 2
-								elseif Level == 9 or Level == 10 then
-									Amount = Amount + 3
-								end
-								vRP.PutExperience(Passport,"Minerman",1)
-								if (vRP.InventoryWeight(Passport) + itemWeight(Value.item) * Amount) <= vRP.GetWeight(Passport) then
-									vRP.GenerateItem(Passport,Value.item,Amount,true)
-								end
-							end
-						end
-
-						local Item = "stone"
-						local Amount = math.random(2)
-						for _,Value in pairs({
-							vec3(2952.07,2819.73,42.58),
-							vec3(2923.9,2809.09,43.35), 
-							vec3(2921.64,2793.9,40.61), 
-							vec3(2934.44,2779.35,39.07),
-							vec3(2949.26,2770.88,39.02),
-							vec3(2959.64,2775.72,39.92),
-							vec3(2972.0,2779.34,38.64), 
-							vec3(2976.44,2787.3,39.9), 	
-							vec3(2968.12,2796.86,40.94),
-							vec3(2952.52,2847.42,47.11),
-							vec3(2967.8,2840.11,45.41), 
-							vec3(2979.78,2821.56,44.74),
-							vec3(2991.88,2802.39,43.93),
-							vec3(3003.04,2780.11,43.41),
-							vec3(3001.14,2763.14,42.97),
-							vec3(2992.83,2756.31,42.82),
-							vec3(2968.98,2738.39,43.74),
-							vec3(2939.29,2751.12,43.39),
-							vec3(2967.54,2758.4,43.08), 
-							vec3(2989.76,2770.21,42.87),
-							vec3(2937.02,2799.51,41.01),
-							vec3(2954.26,2802.48,41.74),
-							vec3(2964.23,2786.72,39.75),
-							vec3(2947.96,2783.56,39.93),
-						}) do
-							if #(Coords - vec3(Value.x, Value.y, Value.z)) <= 3 then
-								Amount = math.random(16)
-							end
-						end
-						if (vRP.InventoryWeight(Passport) + itemWeight(Item) * Amount) <= vRP.GetWeight(Passport) then
-							vRP.GenerateItem(Passport,Item,Amount,true)
-						end
-
-						vRP.GenerateItem(Passport,"geode",1,true)
-
-						vRP.UpgradeStress(Passport,1)
-						vRPC.removeObjects(source)
-						Player(source)["state"]["Buttons"] = false
-						Player(source)["state"]["Cancel"] = false
-					end
-					Wait(100)
-				until not Active[Passport]
-			else
-				TriggerClientEvent("Notify",source,"amarelo","Precisa de <b>1x "..itemName("drillbit").."</b>.",5000)
-			end
-		end
+	["tabletmec"] = function(source,Passport,Amount,Slot,Full,Item,Split)
+		TriggerClientEvent("inventory:Close",source)
+		TriggerClientEvent("nation:openTablet",source)
 	end,
-	["pickaxe"] = function(source,Passport,Amount,Slot,Full,Item,Split)
-		local Ped = GetPlayerPed(source)
-		local Coords = GetEntityCoords(Ped)
-		local mineCoords = { 2952.91,2791.51,41.03 }
-		local Coordinates = {}
-		local minutes = os.date("*t",  os.time()).min
 
-		for i = 1,2 do
-			local angle = (2 * math.pi * i / 2) + (minutes / 60 * math.pi / 5)
-			local x = mineCoords[1] + 7 * math.cos(angle)+3
-			local y = mineCoords[2] + 7 * math.sin(angle)+3
-			table.insert(Coordinates, {x = x, y = y, item = (i%2~=0) and "sapphireore" or "ironore", amount = (i%2~=0) and 4 or 3})
-		end
+	-- ["jackham"] = function(source,Passport,Amount,Slot,Full,Item,Split)
+	-- 	local Ped = GetPlayerPed(source)
+	-- 	local Coords = GetEntityCoords(Ped)
+	-- 	local mineCoords = { 2952.91,2791.51,41.03 }
+	-- 	local Coordinates = {}
+	-- 	local minutes = os.date("*t",  os.time()).min
 
-		for i = 1,4  do
-			local angle = (2 * math.pi * i / 4) + (minutes / 60 * math.pi / 4 )
-			local x = mineCoords[1] + 14 * math.cos(angle)+3
-			local y = mineCoords[2] + 14 * math.sin(angle)+3
-			table.insert(Coordinates, {x = x, y = y, item = (i%2~=0) and "rubyore" or "diamondore", amount = (minutes%2~=0) and 3 or 2})
-		end
+	-- 	for i = 1,2 do
+	-- 		local angle = (2 * math.pi * i / 2) + (minutes / 60 * math.pi / 5)
+	-- 		local x = mineCoords[1] + 7 * math.cos(angle)+3
+	-- 		local y = mineCoords[2] + 7 * math.sin(angle)+3
+	-- 		table.insert(Coordinates, {x = x, y = y, item = (i%2~=0) and "sapphireore" or "ironore", amount = (i%2~=0) and 4 or 8})
+	-- 	end
 
-		for i = 1,8 do
-			local angle = (2 * math.pi * i / 8) + (minutes / 60 * math.pi / 3)
-			local x = mineCoords[1] + 21 * math.cos(angle)+3
-			local y = mineCoords[2] + 21 * math.sin(angle)+3
-			table.insert(Coordinates, {x = x, y = y, item = (i%2~=0) and "goldore" or "copperore", amount = (i%2~=0) and 5 or 3})
-		end
+	-- 	for i = 1,4  do
+	-- 		local angle = (2 * math.pi * i / 4) + (minutes / 60 * math.pi / 4 )
+	-- 		local x = mineCoords[1] + 14 * math.cos(angle)+3
+	-- 		local y = mineCoords[2] + 14 * math.sin(angle)+3
+	-- 		table.insert(Coordinates, {x = x, y = y, item = (i%2~=0) and "rubyore" or "diamondore", amount = (minutes%2~=0) and 8 or 10})
+	-- 	end
+
+	-- 	for i = 1,8 do
+	-- 		local angle = (2 * math.pi * i / 8) + (minutes / 60 * math.pi / 3)
+	-- 		local x = mineCoords[1] + 21 * math.cos(angle)+3
+	-- 		local y = mineCoords[2] + 21 * math.sin(angle)+3
+	-- 		table.insert(Coordinates, {x = x, y = y, item = (i%2~=0) and "goldore" or "copperore", amount = (i%2~=0) and 3 or 5})
+	-- 	end
 		
-		for i = 1, 12 do
-			local angle = (2 * math.pi * i / 12) + (minutes / 60 * math.pi / 2)
-			local x = mineCoords[1] + 28 * math.cos(angle)+1
-			local y = mineCoords[2] + 28 * math.sin(angle)+1
-			table.insert(Coordinates, {x = x, y = y, item = (i%2~=0) and "leadore" or "emeraldore", amount = (minutes%2~=0) and 1 or 2})
-		end
+	-- 	for i = 1, 12 do
+	-- 		local angle = (2 * math.pi * i / 12) + (minutes / 60 * math.pi / 2)
+	-- 		local x = mineCoords[1] + 28 * math.cos(angle)+1
+	-- 		local y = mineCoords[2] + 28 * math.sin(angle)+1
+	-- 		table.insert(Coordinates, {x = x, y = y, item = (i%2~=0) and "leadore" or "emeraldore", amount = (minutes%2~=0) and 5 or 7})
+	-- 	end
 
-		if #(Coords - vec3(mineCoords[1],mineCoords[2],mineCoords[3])) <= 30 then
-			Active[Passport] = os.time() + 15
-			Player(source)["state"]["Buttons"] = true
-			Player(source)["state"]["Cancel"] = true
-			TriggerClientEvent("inventory:Close", source)
-			TriggerClientEvent("Progress", source, "Minerando", 15000)
-			TriggerClientEvent("sounds:Private",source,"pickaxe",0.1)
-			vRPC.createObjects(source,"melee@large_wpn@streamed_core","ground_attack_on_spot","prop_tool_pickaxe",1,18905,0.10,-0.1,0.0,-92.0,260.0,5.0)
-			repeat
-				if os.time() >= parseInt(Active[Passport]) then
-					Active[Passport] = nil
-					for _,Value in ipairs(Coordinates) do
-						if #(Coords - vec3(Value.x, Value.y, Coords.z)) <= 3 then
-							local Amount = math.random(Value.amount)
-							local Experience = vRP.GetExperience(Passport,"Minerman")
-							local Level = ClassCategory(Experience)
-							if Level == 2 or Level == 3 or Level == 5 then
-								Amount = Amount + 1
-							elseif Level == 6 or Level == 7 or Level == 8 then
-								Amount = Amount + 2
-							elseif Level == 9 or Level == 10 then
-								Amount = Amount + 3
-							end
-							vRP.PutExperience(Passport,"Minerman",1)
-							if (vRP.InventoryWeight(Passport) + itemWeight(Value.item) * Amount) <= vRP.GetWeight(Passport) then
-								vRP.GenerateItem(Passport,Value.item,Amount,true)
-							end
-						end
-					end
+	-- 	if #(Coords - vec3(mineCoords[1],mineCoords[2],mineCoords[3])) <= 30 then
+	-- 		if vRP.ConsultItem(Passport,"drillbit",1) then
+	-- 			Active[Passport] = os.time() + 4
+	-- 			Player(source)["state"]["Buttons"] = true
+	-- 			Player(source)["state"]["Cancel"] = true
+	-- 			TriggerClientEvent("inventory:Close", source)
+	-- 			TriggerClientEvent("Progress", source, "Perfurando", 4000)
+	-- 			vRPC.createObjects(source,"amb@world_human_const_drill@male@drill@base","base","prop_tool_jackham",15,28422)
+	-- 			repeat
+	-- 				if os.time() >= parseInt(Active[Passport]) then
+	-- 					Active[Passport] = nil
 
-					local Item = "stone"
-					local Amount = math.random(2)
-					for _,Value in pairs({
-						vec3(2952.07,2819.73,42.58),
-						vec3(2923.9,2809.09,43.35), 
-						vec3(2921.64,2793.9,40.61), 
-						vec3(2934.44,2779.35,39.07),
-						vec3(2949.26,2770.88,39.02),
-						vec3(2959.64,2775.72,39.92),
-						vec3(2972.0,2779.34,38.64), 
-						vec3(2976.44,2787.3,39.9), 	
-						vec3(2968.12,2796.86,40.94),
-						vec3(2952.52,2847.42,47.11),
-						vec3(2967.8,2840.11,45.41), 
-						vec3(2979.78,2821.56,44.74),
-						vec3(2991.88,2802.39,43.93),
-						vec3(3003.04,2780.11,43.41),
-						vec3(3001.14,2763.14,42.97),
-						vec3(2992.83,2756.31,42.82),
-						vec3(2968.98,2738.39,43.74),
-						vec3(2939.29,2751.12,43.39),
-						vec3(2967.54,2758.4,43.08), 
-						vec3(2989.76,2770.21,42.87),
-						vec3(2937.02,2799.51,41.01),
-						vec3(2954.26,2802.48,41.74),
-						vec3(2964.23,2786.72,39.75),
-						vec3(2947.96,2783.56,39.93),
-					}) do
-						if #(Coords - vec3(Value.x, Value.y, Value.z)) <= 3 then
-							Amount = math.random(8)
-						end
-					end
-					if (vRP.InventoryWeight(Passport) + itemWeight(Item) * Amount) <= vRP.GetWeight(Passport) then
-						vRP.GenerateItem(Passport,Item,Amount,true)
-					end
+	-- 					if math.random(100) <= 30 then
+	-- 						vRP.RemoveItem(Passport, "drillbit",1,true)
+	-- 					end
 
-					vRP.GenerateItem(Passport,"geode",1,true)
+	-- 					for _,Value in ipairs(Coordinates) do
+	-- 						if #(Coords - vec3(Value.x, Value.y, Coords.z)) <= 3 then
+	-- 							local Amount = math.random(Value.amount)
+	-- 							local Experience = vRP.GetExperience(Passport,"Minerman")
+	-- 							local Level = ClassCategory(Experience)
+	-- 							if Level == 2 or Level == 3 or Level == 5 then
+	-- 								Amount = Amount + 1
+	-- 							elseif Level == 6 or Level == 7 or Level == 8 then
+	-- 								Amount = Amount + 2
+	-- 							elseif Level == 9 or Level == 10 then
+	-- 								Amount = Amount + 3
+	-- 							end
+	-- 							vRP.PutExperience(Passport,"Minerman",1)
+	-- 							if (vRP.InventoryWeight(Passport) + itemWeight(Value.item) * Amount) <= vRP.GetWeight(Passport) then
+	-- 								vRP.GenerateItem(Passport,Value.item,Amount,true)
+	-- 							end
+	-- 						end
+	-- 					end
 
-					vRP.UpgradeStress(Passport,1)
-					vRPC.removeObjects(source)
-					Player(source)["state"]["Buttons"] = false
-					Player(source)["state"]["Cancel"] = false
-				end
-				Wait(100)
-			until not Active[Passport]
-		end
-	end,
+	-- 					local Item = "stone"
+	-- 					local Amount = math.random(2)
+	-- 					for _,Value in pairs({
+	-- 						vec3(2952.07,2819.73,42.58),
+	-- 						vec3(2923.9,2809.09,43.35), 
+	-- 						vec3(2921.64,2793.9,40.61), 
+	-- 						vec3(2934.44,2779.35,39.07),
+	-- 						vec3(2949.26,2770.88,39.02),
+	-- 						vec3(2959.64,2775.72,39.92),
+	-- 						vec3(2972.0,2779.34,38.64), 
+	-- 						vec3(2976.44,2787.3,39.9), 	
+	-- 						vec3(2968.12,2796.86,40.94),
+	-- 						vec3(2952.52,2847.42,47.11),
+	-- 						vec3(2967.8,2840.11,45.41), 
+	-- 						vec3(2979.78,2821.56,44.74),
+	-- 						vec3(2991.88,2802.39,43.93),
+	-- 						vec3(3003.04,2780.11,43.41),
+	-- 						vec3(3001.14,2763.14,42.97),
+	-- 						vec3(2992.83,2756.31,42.82),
+	-- 						vec3(2968.98,2738.39,43.74),
+	-- 						vec3(2939.29,2751.12,43.39),
+	-- 						vec3(2967.54,2758.4,43.08), 
+	-- 						vec3(2989.76,2770.21,42.87),
+	-- 						vec3(2937.02,2799.51,41.01),
+	-- 						vec3(2954.26,2802.48,41.74),
+	-- 						vec3(2964.23,2786.72,39.75),
+	-- 						vec3(2947.96,2783.56,39.93),
+	-- 					}) do
+	-- 						if #(Coords - vec3(Value.x, Value.y, Value.z)) <= 3 then
+	-- 							Amount = math.random(16)
+	-- 						end
+	-- 					end
+	-- 					if (vRP.InventoryWeight(Passport) + itemWeight(Item) * Amount) <= vRP.GetWeight(Passport) then
+	-- 						vRP.GenerateItem(Passport,Item,Amount,true)
+	-- 					end
+
+	-- 					vRP.GenerateItem(Passport,"geode",1,true)
+
+	-- 					vRP.UpgradeStress(Passport,1)
+	-- 					vRPC.removeObjects(source)
+	-- 					Player(source)["state"]["Buttons"] = false
+	-- 					Player(source)["state"]["Cancel"] = false
+	-- 				end
+	-- 				Wait(100)
+	-- 			until not Active[Passport]
+	-- 		else
+	-- 			TriggerClientEvent("Notify",source,"amarelo","Precisa de <b>1x "..itemName("drillbit").."</b>.",5000)
+	-- 		end
+	-- 	end
+	-- end,
+	-- ["pickaxe"] = function(source,Passport,Amount,Slot,Full,Item,Split)
+	-- 	local Ped = GetPlayerPed(source)
+	-- 	local Coords = GetEntityCoords(Ped)
+	-- 	local mineCoords = { 2952.91,2791.51,41.03 }
+	-- 	local Coordinates = {}
+	-- 	local minutes = os.date("*t",  os.time()).min
+
+	-- 	for i = 1,2 do
+	-- 		local angle = (2 * math.pi * i / 2) + (minutes / 60 * math.pi / 5)
+	-- 		local x = mineCoords[1] + 7 * math.cos(angle)+3
+	-- 		local y = mineCoords[2] + 7 * math.sin(angle)+3
+	-- 		table.insert(Coordinates, {x = x, y = y, item = (i%2~=0) and "sapphireore" or "ironore", amount = (i%2~=0) and 4 or 3})
+	-- 	end
+
+	-- 	for i = 1,4  do
+	-- 		local angle = (2 * math.pi * i / 4) + (minutes / 60 * math.pi / 4 )
+	-- 		local x = mineCoords[1] + 14 * math.cos(angle)+3
+	-- 		local y = mineCoords[2] + 14 * math.sin(angle)+3
+	-- 		table.insert(Coordinates, {x = x, y = y, item = (i%2~=0) and "rubyore" or "diamondore", amount = (minutes%2~=0) and 3 or 2})
+	-- 	end
+
+	-- 	for i = 1,8 do
+	-- 		local angle = (2 * math.pi * i / 8) + (minutes / 60 * math.pi / 3)
+	-- 		local x = mineCoords[1] + 21 * math.cos(angle)+3
+	-- 		local y = mineCoords[2] + 21 * math.sin(angle)+3
+	-- 		table.insert(Coordinates, {x = x, y = y, item = (i%2~=0) and "goldore" or "copperore", amount = (i%2~=0) and 5 or 3})
+	-- 	end
+		
+	-- 	for i = 1, 12 do
+	-- 		local angle = (2 * math.pi * i / 12) + (minutes / 60 * math.pi / 2)
+	-- 		local x = mineCoords[1] + 28 * math.cos(angle)+1
+	-- 		local y = mineCoords[2] + 28 * math.sin(angle)+1
+	-- 		table.insert(Coordinates, {x = x, y = y, item = (i%2~=0) and "leadore" or "emeraldore", amount = (minutes%2~=0) and 1 or 2})
+	-- 	end
+
+	-- 	if #(Coords - vec3(mineCoords[1],mineCoords[2],mineCoords[3])) <= 30 then
+	-- 		Active[Passport] = os.time() + 15
+	-- 		Player(source)["state"]["Buttons"] = true
+	-- 		Player(source)["state"]["Cancel"] = true
+	-- 		TriggerClientEvent("inventory:Close", source)
+	-- 		TriggerClientEvent("Progress", source, "Minerando", 15000)
+	-- 		TriggerClientEvent("sounds:Private",source,"pickaxe",0.1)
+	-- 		vRPC.createObjects(source,"melee@large_wpn@streamed_core","ground_attack_on_spot","prop_tool_pickaxe",1,18905,0.10,-0.1,0.0,-92.0,260.0,5.0)
+	-- 		repeat
+	-- 			if os.time() >= parseInt(Active[Passport]) then
+	-- 				Active[Passport] = nil
+	-- 				for _,Value in ipairs(Coordinates) do
+	-- 					if #(Coords - vec3(Value.x, Value.y, Coords.z)) <= 3 then
+	-- 						local Amount = math.random(Value.amount)
+	-- 						local Experience = vRP.GetExperience(Passport,"Minerman")
+	-- 						local Level = ClassCategory(Experience)
+	-- 						if Level == 2 or Level == 3 or Level == 5 then
+	-- 							Amount = Amount + 1
+	-- 						elseif Level == 6 or Level == 7 or Level == 8 then
+	-- 							Amount = Amount + 2
+	-- 						elseif Level == 9 or Level == 10 then
+	-- 							Amount = Amount + 3
+	-- 						end
+	-- 						vRP.PutExperience(Passport,"Minerman",1)
+	-- 						if (vRP.InventoryWeight(Passport) + itemWeight(Value.item) * Amount) <= vRP.GetWeight(Passport) then
+	-- 							vRP.GenerateItem(Passport,Value.item,Amount,true)
+	-- 						end
+	-- 					end
+	-- 				end
+
+	-- 				local Item = "stone"
+	-- 				local Amount = math.random(2)
+	-- 				for _,Value in pairs({
+	-- 					vec3(2952.07,2819.73,42.58),
+	-- 					vec3(2923.9,2809.09,43.35), 
+	-- 					vec3(2921.64,2793.9,40.61), 
+	-- 					vec3(2934.44,2779.35,39.07),
+	-- 					vec3(2949.26,2770.88,39.02),
+	-- 					vec3(2959.64,2775.72,39.92),
+	-- 					vec3(2972.0,2779.34,38.64), 
+	-- 					vec3(2976.44,2787.3,39.9), 	
+	-- 					vec3(2968.12,2796.86,40.94),
+	-- 					vec3(2952.52,2847.42,47.11),
+	-- 					vec3(2967.8,2840.11,45.41), 
+	-- 					vec3(2979.78,2821.56,44.74),
+	-- 					vec3(2991.88,2802.39,43.93),
+	-- 					vec3(3003.04,2780.11,43.41),
+	-- 					vec3(3001.14,2763.14,42.97),
+	-- 					vec3(2992.83,2756.31,42.82),
+	-- 					vec3(2968.98,2738.39,43.74),
+	-- 					vec3(2939.29,2751.12,43.39),
+	-- 					vec3(2967.54,2758.4,43.08), 
+	-- 					vec3(2989.76,2770.21,42.87),
+	-- 					vec3(2937.02,2799.51,41.01),
+	-- 					vec3(2954.26,2802.48,41.74),
+	-- 					vec3(2964.23,2786.72,39.75),
+	-- 					vec3(2947.96,2783.56,39.93),
+	-- 				}) do
+	-- 					if #(Coords - vec3(Value.x, Value.y, Value.z)) <= 3 then
+	-- 						Amount = math.random(8)
+	-- 					end
+	-- 				end
+	-- 				if (vRP.InventoryWeight(Passport) + itemWeight(Item) * Amount) <= vRP.GetWeight(Passport) then
+	-- 					vRP.GenerateItem(Passport,Item,Amount,true)
+	-- 				end
+
+	-- 				vRP.GenerateItem(Passport,"geode",1,true)
+
+	-- 				vRP.UpgradeStress(Passport,1)
+	-- 				vRPC.removeObjects(source)
+	-- 				Player(source)["state"]["Buttons"] = false
+	-- 				Player(source)["state"]["Cancel"] = false
+	-- 			end
+	-- 			Wait(100)
+	-- 		until not Active[Passport]
+	-- 	end
+	-- end,
 
 	["creator"] = function(source,Passport,Amount,Slot,Full,Item,Split)
 		TriggerClientEvent("inventory:Close",source)

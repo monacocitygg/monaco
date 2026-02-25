@@ -11,6 +11,30 @@ local orders = {}
 local migratedGarageMods = {}
 local DEBUG_BENNYS = true
 
+-- PREPARE QUERIES
+vRP.Prepare("nation_bennys/create_orders_table",[[
+    CREATE TABLE IF NOT EXISTS bennys_orders (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        order_id VARCHAR(50),
+        user_id INT,
+        vehicle_name VARCHAR(50),
+        plate VARCHAR(50),
+        price INT,
+        mods LONGTEXT,
+        name VARCHAR(100),
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    )
+]])
+
+vRP.Prepare("nation_bennys/add_order","INSERT INTO bennys_orders(order_id,user_id,vehicle_name,plate,price,mods,name) VALUES(@order_id,@user_id,@vehicle_name,@plate,@price,@mods,@name)")
+vRP.Prepare("nation_bennys/get_orders","SELECT * FROM bennys_orders")
+vRP.Prepare("nation_bennys/get_order","SELECT * FROM bennys_orders WHERE order_id = @order_id")
+vRP.Prepare("nation_bennys/delete_order","DELETE FROM bennys_orders WHERE order_id = @order_id")
+
+CreateThread(function()
+    vRP.Query("nation_bennys/create_orders_table")
+end)
+
 local function dbg(msg)
 	if DEBUG_BENNYS then
 		print("[nation_bennys] "..tostring(msg))
@@ -36,7 +60,7 @@ local function rgb3(t)
     local g = n(t[2] or t["2"])
     local b_ = n(t[3] or t["3"])
     if r == nil or g == nil or b_ == nil then return nil end
-    return { r, g, b_ }
+    return { ["1"] = r, ["2"] = g, ["3"] = b_ }
 end
 
 local function toGaragesCustomize(vehicle_mods)
@@ -192,20 +216,30 @@ function API.createOrder(mods, price, vehicleNetId, name, plate)
     local user_id = vRP.Passport(source)
     local identity = vRP.Identity(user_id)
     local playerName = "Cliente"
-    if identity then playerName = identity.name .. " " .. identity.firstname end
+    if identity then playerName = identity["name"] .. " " .. identity["name2"] end
     
     local orderId = tostring(os.time()) .. math.random(100, 999)
-    orders[orderId] = {
-        id = orderId,
+    
+    print("DEBUG: Criando ordem - Price:", price) -- Debug price
+
+    vRP.Query("nation_bennys/add_order", {
+        order_id = orderId,
         user_id = user_id,
-        name = playerName,
-        vehicleName = name,
+        vehicle_name = name,
         plate = plate,
-        price = price,
-        mods = mods,
-        status = "pending"
-    }
+        price = parseInt(price), -- Force INT
+        mods = json.encode(mods),
+        name = playerName
+    })
+
     TriggerClientEvent("Notify", source, "sucesso", "Ordem enviada para a mecânica!", 5000)
+    
+    -- Notify mechanics
+    local mechanics = vRP.NumPermission("Mechanic")
+    for _, mechSource in pairs(mechanics) do
+        TriggerClientEvent("Notify", mechSource, "aviso", "Nova ordem de serviço recebida!", 5000)
+    end
+    
     return true
 end
 
@@ -213,7 +247,21 @@ function API.getOrders()
     local source = source
     local user_id = vRP.Passport(source)
     if vRP.hasPermission(user_id, "Mechanic") or vRP.hasPermission(user_id, "Admin") then
-        return orders
+        local result = vRP.Query("nation_bennys/get_orders")
+        local formattedOrders = {}
+        for _, row in ipairs(result) do
+            formattedOrders[row.order_id] = {
+                id = row.order_id,
+                user_id = row.user_id,
+                name = row.name,
+                vehicleName = row.vehicle_name,
+                plate = row.plate,
+                price = row.price,
+                mods = json.decode(row.mods),
+                status = "pending"
+            }
+        end
+        return formattedOrders
     end
     return {}
 end
@@ -226,22 +274,38 @@ function API.applyOrder(orderId, vehicleNetId)
         return false, "Sem permissão"
     end
 
-    local order = orders[orderId]
-    if not order then return false, "Ordem não encontrada" end
+    local result = vRP.Query("nation_bennys/get_order", { order_id = orderId })
+    if not result or #result == 0 then return false, "Ordem não encontrada" end
+    
+    local order = result[1]
+    order.mods = json.decode(order.mods)
 
     if vRP.tryFullPayment(order.user_id, order.price) then
         TriggerEvent("nation:syncApplyMods", order.mods, vehicleNetId)
-        vRP.Query("playerdata/SetData",{ Passport = order.user_id, dkey = "custom:"..order.vehicleName, dvalue = json.encode(order.mods) })
+        vRP.Query("playerdata/SetData",{ Passport = order.user_id, dkey = "custom:"..order.vehicle_name, dvalue = json.encode(order.mods) })
         local garageCustomize = toGaragesCustomize(order.mods)
         if not garageCustomize then garageCustomize = toGaragesCustomize({}) end
         if garageCustomize then
-            vRP.Query("entitydata/SetData",{ dkey = "Mods:"..order.user_id..":"..order.vehicleName, dvalue = json.encode(garageCustomize) })
+            vRP.Query("entitydata/SetData",{ dkey = "Mods:"..order.user_id..":"..order.vehicle_name, dvalue = json.encode(garageCustomize) })
         end
-        orders[orderId] = nil
+        
+        vRP.Query("nation_bennys/delete_order", { order_id = orderId })
         return true, "Ordem aplicada com sucesso"
     else
         return false, "Cliente sem dinheiro"
     end
+end
+
+function API.denyOrder(orderId)
+    local source = source
+    local user_id = vRP.Passport(source)
+    
+    if not (vRP.hasPermission(user_id, "Mechanic") or vRP.hasPermission(user_id, "Admin")) then
+        return false, "Sem permissão"
+    end
+
+    vRP.Query("nation_bennys/delete_order", { order_id = orderId })
+    return true, "Ordem recusada com sucesso"
 end
 
 function API.getSavedMods(NameCar, Plate)
@@ -306,8 +370,9 @@ function API.saveVehicle(NameCar, Plate, vehicle_mods)
             garageCustomize = toGaragesCustomize({})
         end
         if garageCustomize then
-            vRP.Query("entitydata/SetData",{ dkey = "Mods:"..user_id..":"..NameCar, dvalue = json.encode(garageCustomize) })
-            dbg("saveVehicle ok user="..user_id.." car="..NameCar.." plate="..tostring(Plate))
+            local dkey_val = "Mods:"..user_id..":"..NameCar
+            vRP.Query("entitydata/SetData",{ dkey = dkey_val, dvalue = json.encode(garageCustomize) })
+            dbg("saveVehicle ok user="..user_id.." car="..NameCar.." plate="..tostring(Plate).." dkey="..dkey_val)
             dbg("saveVehicle mods11="..tostring(garageCustomize["mods"] and garageCustomize["mods"]["11"]).." mods12="..tostring(garageCustomize["mods"] and garageCustomize["mods"]["12"]).." mods13="..tostring(garageCustomize["mods"] and garageCustomize["mods"]["13"]).." mods18="..tostring(garageCustomize["mods"] and garageCustomize["mods"]["18"]))
             dbg("saveVehicle colors="..json.encode(garageCustomize["colors"]).." extracolors="..json.encode(garageCustomize["extracolors"]))
             dbg("saveVehicle customPcolor="..json.encode(garageCustomize["customPcolor"]).." customScolor="..json.encode(garageCustomize["customScolor"]))
