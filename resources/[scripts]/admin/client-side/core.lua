@@ -12,6 +12,38 @@ vSERVER = Tunnel.getInterface("admin")
 -- INVISIBLABLES
 -----------------------------------------------------------------------------------------------------------------------------------------
 LocalPlayer["state"]["Spectate"] = false
+
+
+-----------------------------------------------------------------------------------------------------------------------------------------
+-- PLAYER:PLAYERCARRY
+-----------------------------------------------------------------------------------------------------------------------------------------
+local playerCarryAdmin = false
+RegisterNetEvent("player:playerCarryAdmin")
+AddEventHandler("player:playerCarryAdmin",function(entity,mode)
+	if playerCarryAdmin then
+		DetachEntity(PlayerPedId(),false,false)
+		playerCarryAdmin = false
+	else
+		if mode == "handcuff" then
+			AttachEntityToEntity(PlayerPedId(),GetPlayerPed(GetPlayerFromServerId(entity)),11816,0.0,0.5,0.0,0.0,0.0,0.0,false,false,false,false,2,true)
+		else
+			AttachEntityToEntity(PlayerPedId(),GetPlayerPed(GetPlayerFromServerId(entity)),11816,0.6,0.0,0.0,0.0,0.0,0.0,false,false,false,false,2,true)
+		end
+
+		playerCarryAdmin = true
+	end
+end)
+-----------------------------------------------------------------------------------------------------------------------------------------
+-- CARRYPLAYER
+-----------------------------------------------------------------------------------------------------------------------------------------
+RegisterCommand("carryplayeradmin",function(source,args)
+	vSERVER.CarryPlayerAdmin()
+end)
+-----------------------------------------------------------------------------------------------------------------------------------------
+-- TABLET:KEYMAPPING
+-----------------------------------------------------------------------------------------------------------------------------------------
+RegisterKeyMapping("carryplayeradmin","Carregar pelo braço","keyboard","H")
+-----------------------------------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- TELEPORTWAY
 -----------------------------------------------------------------------------------------------------------------------------------------

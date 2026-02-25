@@ -13,6 +13,34 @@ Creative = {}
 Tunnel.bindInterface("admin",Creative)
 vCLIENT = Tunnel.getInterface("admin")
 vKEYBOARD = Tunnel.getInterface("keyboard")
+
+-----------------------------------------------------------------------------------------------------------------------------------------
+-- CARRYPLAYERADMIN
+-----------------------------------------------------------------------------------------------------------------------------------------
+local playerCarryAdmin = {}
+function Creative.CarryPlayerAdmin()
+	local source = source
+	local Passport = vRP.Passport(source)
+	if Passport then
+		if vRP.HasGroup(Passport,"Admin",3) then
+			if not vRP.InsideVehicle(source) then
+				if playerCarryAdmin[Passport] then
+					TriggerClientEvent("player:playerCarryAdmin",playerCarryAdmin[Passport],source)
+					TriggerClientEvent("player:Commands",playerCarryAdmin[Passport],false)
+					playerCarryAdmin[Passport] = nil
+				else
+					local ClosestPed = vRPC.ClosestPed(source,2)
+					if ClosestPed then
+						playerCarryAdmin[Passport] = ClosestPed
+
+						TriggerClientEvent("player:playerCarryAdmin",playerCarryAdmin[Passport],source)
+						TriggerClientEvent("player:Commands",playerCarryAdmin[Passport],true)
+					end
+				end
+			end
+		end
+	end
+end
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- RESTARTED
 -----------------------------------------------------------------------------------------------------------------------------------------
