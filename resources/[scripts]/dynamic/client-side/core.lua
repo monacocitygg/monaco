@@ -133,7 +133,7 @@ RegisterCommand("globalFunctions",function()
 			exports["dynamic"]:AddButton("Propriedades","Marcar/Desmarcar propriedades no mapa.","propertys:Blips","","others",false)
 			exports["dynamic"]:AddButton("Armazéns","Marcar/Desmarcar armazéns no mapa.","warehouse:Blips","","others",false)
 			exports["dynamic"]:AddButton("Ferimentos","Verificar ferimentos no corpo.","paramedic:Injuries","","others",false)
-			exports["dynamic"]:AddButton("Desbugar","Recarregar o personagem.","player:Debug","","others",true)
+			exports["dynamic"]:AddButton("Desbugar", "Recarregar o personagem.", "barbershop:Debug", "", "", true)	
 			exports["dynamic"]:SubMenu("Outros","Todas as funções do personagem.","others")
 
 			exports["dynamic"]:openMenu()

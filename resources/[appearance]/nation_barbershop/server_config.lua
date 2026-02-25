@@ -173,6 +173,61 @@ function playerSpawn(user_id, source, first_spawn)
     end
 end
 
+function getGender(user_id)
+    local datatable = vRP.getUserDataTable(user_id) or vRP.getUData(user_id, "Datatable") or {}
+    if type(datatable) == "table" then
+        local model = datatable.Skin or datatable.customization
+        if model then
+            if type(model) == "table" then
+                model = model.modelhash or model.model
+            end
+            if model == GetHashKey("mp_m_freemode_01") or model == "mp_m_freemode_01" then
+                return "male"
+            elseif model == GetHashKey("mp_f_freemode_01") or model == "mp_f_freemode_01" then
+                return "female"
+            else
+                return model
+            end
+        end
+    end
+end
+
+local Cooldown = {}
+function desbugar(source)
+    local user_id = vRP.getUserId(source)
+    if not user_id then return end
+
+    local data = vRP.getUData(user_id, "nation_char")
+    if data and data ~= "" then
+        if Cooldown[user_id] and Cooldown[user_id] > os.time() then
+            TriggerClientEvent("Notify", source, "verde", "Aguarde para usar esse comando novamente.", 5000)
+            return
+        end
+
+        Cooldown[user_id] = os.time() + 20
+
+   --     exports["inventory"]:CleanWeapons(user_id, false)
+        Wait(500)
+
+        local char = data
+        
+        char.gender = getGender(user_id) or char.gender
+        fclient._setPlayerChar(source, char, false, true)
+        TriggerClientEvent("nation_barbershop:init", source, char)
+        TriggerClientEvent("forcereloadtattos", source)
+        setPlayerTattoos(source, user_id)
+        fclient._setClothing(source, getUserClothes(user_id))
+    end
+end
+
+
+RegisterServerEvent("barbershop:Debug")
+AddEventHandler("barbershop:Debug", function()
+    local source = source
+    desbugar(source)
+end)
+
+
 --AddEventHandler("vRP:playerSpawn",playerSpawn) -- caso nao use nation_creator, descomente
 
 -- tattoos dope nuis
