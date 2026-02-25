@@ -16,6 +16,7 @@ local Object = nil
 local Timer = GetGameTimer()
 local CurrentAnim = "radio_clip"
 local AnimPlaying = false
+local UseProp = true
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- ANIMATION FUNCTIONS
 -----------------------------------------------------------------------------------------------------------------------------------------
@@ -67,7 +68,7 @@ local function PlayRadioAnim(animId)
 	local flag = p.flag or 49
 	local playbackRate = p.playbackRate or 0
 
-	if animData.prop then
+	if animData.prop and UseProp then
 		local PropModel = GetHashKey(animData.prop.model)
 		RequestModel(PropModel)
 		while not HasModelLoaded(PropModel) do
@@ -133,7 +134,7 @@ AddEventHandler("radio:playTalkAnim", function()
 
 	TaskPlayAnim(Ped, animData.dict, animData.anim, blendIn, blendOut, duration, flag, playbackRate, false, false, false)
 
-	if animData.prop then
+	if animData.prop and UseProp then
 		local PropModel = GetHashKey(animData.prop.model)
 		RequestModel(PropModel)
 		while not HasModelLoaded(PropModel) do
@@ -174,7 +175,7 @@ AddEventHandler("radio:RadioNui",function()
 	local Permission = vSERVER.Permission()
 	SetNuiFocus(true,true)
 	SetCursorLocation(0.9,0.9)
-	SendNUIMessage({ Action = "Radio", Show = true, Permission = Permission, Animations = GetAnimListForNUI(), CurrentAnim = CurrentAnim })
+	SendNUIMessage({ Action = "Radio", Show = true, Permission = Permission, Animations = GetAnimListForNUI(), CurrentAnim = CurrentAnim, UseProp = UseProp })
 
 	if CurrentAnim ~= "none" and not IsPedInAnyVehicle(PlayerPedId()) then
 		PlayRadioAnim(CurrentAnim)
@@ -229,6 +230,35 @@ RegisterNUICallback("RadioAnimation",function(Data,Callback)
 	if Data["Animation"] then
 		CurrentAnim = Data["Animation"]
 		PlayRadioAnim(CurrentAnim)
+	end
+
+	Callback("Ok")
+end)
+-----------------------------------------------------------------------------------------------------------------------------------------
+-- RADIOPROP
+-----------------------------------------------------------------------------------------------------------------------------------------
+RegisterNUICallback("RadioProp",function(Data,Callback)
+	if Data["UseProp"] ~= nil then
+		UseProp = Data["UseProp"]
+
+		-- Remove prop existente se desativado
+		if not UseProp then
+			if DoesEntityExist(Object) then
+				DeleteEntity(Object)
+				Object = nil
+			end
+			if DoesEntityExist(TalkObject) then
+				DeleteEntity(TalkObject)
+				TalkObject = nil
+			end
+		else
+			-- Re-cria o prop se ativado e animação está rodando
+			if AnimPlaying then
+				PlayRadioAnim(CurrentAnim)
+			end
+		end
+	
+		TriggerEvent("Notify","verde","Prop do rádio <b>"..(UseProp and "ativado" or "desativado").."</b>.",3000)
 	end
 
 	Callback("Ok")

@@ -10,6 +10,11 @@ window.addEventListener("message",function(event){
 					$(".frequency-item").eq(0).show();
 				}
 
+				// Atualizar toggle de prop
+				if (typeof event["data"]["UseProp"] !== "undefined") {
+					$("#propToggle").prop("checked", event["data"]["UseProp"]);
+				}
+
 				if (event["data"]["Animations"]) {
 					var $container = $("#animationOptions");
 					$container.empty();
@@ -108,6 +113,12 @@ $(document).ready(function(){
         $(this).addClass("selected");
         var anim = $(this).data("anim");
         $.post("http://radio/RadioAnimation", JSON.stringify({ Animation: anim }));
+    });
+
+    // Prop Toggle
+    $("#propToggle").on("change", function() {
+        var useProp = $(this).is(":checked");
+        $.post("http://radio/RadioProp", JSON.stringify({ UseProp: useProp }));
     });
 
     // Volume Slider
