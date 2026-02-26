@@ -113,37 +113,32 @@ CreateThread(function()
                     local targetPed = GetPlayerPed(playerId)
                     if targetPed and DoesEntityExist(targetPed) then
                         local headCoords = GetPedBoneCoords(targetPed, 31086, 0.0, 0.0, 0.0) -- SKEL_Head
-                        local topHeadCoords = GetPedBoneCoords(targetPed, 65068, 0.0, 0.0, 0.1) -- IK_Head + offset pra cima (testa)
-                        local neckCoords = GetPedBoneCoords(targetPed, 39317, 0.0, 0.0, 0.0) -- SKEL_Neck
+                        -- testa = posicao da cabeca + 0.12 pra cima no eixo Z do mundo
+                        local foreheadCoords = vector3(headCoords.x, headCoords.y, headCoords.z + 0.12)
                         local distFromCam = #(headCoords - camCoords)
 
                         -- ignora players muito longe (>200m)
                         if distFromCam < 200.0 then
                             local perpDistHead = pointToLineDistance(headCoords, camCoords, dir)
-                            local perpDistTopHead = pointToLineDistance(topHeadCoords, camCoords, dir)
-                            local perpDistNeck = pointToLineDistance(neckCoords, camCoords, dir)
+                            local perpDistForehead = pointToLineDistance(foreheadCoords, camCoords, dir)
+                            local perpDist = math.min(perpDistHead, perpDistForehead)
 
-                            -- thresholds diferentes: cabeca/testa mais largo, pescoco bem apertado (pra nao pegar ombro)
-                            local distMult = distFromCam * 0.001
-                            local headThreshold = 0.13 + distMult
-                            local neckThreshold = 0.06 + distMult
-
-                            local isHeadshot = perpDistHead < headThreshold or perpDistTopHead < headThreshold
-                            local isNeckshot = perpDistNeck < neckThreshold
+                            -- threshold so pra cabeca/testa
+                            local threshold = 0.13 + (distFromCam * 0.001)
 
                             if Config.Antitank.Debug then
                                 local sId = GetPlayerServerId(playerId)
-                                print(('[ANTI-TANK] [Mira] player %d | dist: %.1f | headDist: %.2f | topDist: %.2f | neckDist: %.2f | headTh: %.2f | neckTh: %.2f'):format(
-                                    sId, distFromCam, perpDistHead, perpDistTopHead, perpDistNeck, headThreshold, neckThreshold
+                                print(('[ANTI-TANK] [Mira] player %d | dist: %.1f | headDist: %.2f | foreheadDist: %.2f | threshold: %.2f'):format(
+                                    sId, distFromCam, perpDistHead, perpDistForehead, threshold
                                 ))
                             end
 
-                            if isHeadshot or isNeckshot then
+                            if perpDist < threshold then
                                 local victimServerId = GetPlayerServerId(playerId)
 
                                 if Config.Antitank.Debug then
-                                    print(('[ANTI-TANK] [Mira] HS detectado! vitima: %d | tipo: %s'):format(
-                                        victimServerId, isHeadshot and 'cabeca' or 'pescoco'
+                                    print(('[ANTI-TANK] [Mira] HS detectado! vitima: %d | tipo: %s | perpDist: %.2f'):format(
+                                        victimServerId, perpDistForehead < perpDistHead and 'testa' or 'cabeca', perpDist
                                     ))
                                 end
 
