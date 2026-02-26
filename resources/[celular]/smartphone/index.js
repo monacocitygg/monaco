@@ -3889,7 +3889,7 @@ function vo(e$) {
     })
 }
 const xo = vo("client"),
-    yo = e$ => "http://191.96.225.198/Volphz/smartphone/" + e$,
+    yo = e$ => "assets/" + e$,
     ko = new ys;
 ko.setMaxListeners(300);
 const wo = {
