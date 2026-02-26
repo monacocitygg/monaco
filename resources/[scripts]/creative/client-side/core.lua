@@ -286,21 +286,12 @@ CreateThread(function()
 		local vehicleDensity = 0.2  -- Multiplicador de veículos (0.0 a 1.0)
 		local pedDensity = 0.9       -- Multiplicador de pedestres (0.0 a 1.0)
 
-		if isPlayingEvent() then
-			SetVehicleDensityMultiplierThisFrame(0.0)
-			SetRandomVehicleDensityMultiplierThisFrame(0.0)
-			SetParkedVehicleDensityMultiplierThisFrame(0.0)
-			SetAmbientVehicleRangeMultiplierThisFrame(0.0)
-			SetScenarioPedDensityMultiplierThisFrame(0.0, 0.0)
-			SetPedDensityMultiplierThisFrame(0.0)
-		else
-			SetVehicleDensityMultiplierThisFrame(vehicleDensity)
-			SetRandomVehicleDensityMultiplierThisFrame(vehicleDensity)
-			SetParkedVehicleDensityMultiplierThisFrame(vehicleDensity)
-			SetAmbientVehicleRangeMultiplierThisFrame(vehicleDensity)
-			SetScenarioPedDensityMultiplierThisFrame(pedDensity, pedDensity)
-			SetPedDensityMultiplierThisFrame(pedDensity)
-		end
+		SetVehicleDensityMultiplierThisFrame(vehicleDensity)
+		SetRandomVehicleDensityMultiplierThisFrame(vehicleDensity)
+		SetParkedVehicleDensityMultiplierThisFrame(vehicleDensity)
+		SetAmbientVehicleRangeMultiplierThisFrame(vehicleDensity)
+		SetScenarioPedDensityMultiplierThisFrame(pedDensity, pedDensity)
+		SetPedDensityMultiplierThisFrame(pedDensity)
 
 		if IsPedArmed(PlayerPedId(),6) then
 			DisableControlAction(1,140,true)
