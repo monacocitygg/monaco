@@ -163,39 +163,39 @@ html, body {
 /* Animation Button */
 .animation-container {
     border-top: 1px solid rgba(255, 255, 255, 0.05);
-    padding-top: 15px;
-    margin-bottom: 15px;
+    padding-top: 12px;
+    margin-bottom: 12px;
 }
 
 .animation-btn-wrapper {
-    background: linear-gradient(135deg, #8257E5, #6833cc);
-    border: none;
+    background: rgba(130, 87, 229, 0.15);
+    border: 1px solid rgba(130, 87, 229, 0.3);
     border-radius: 4px;
-    padding: 10px 15px;
-    color: #ffffff;
-    font-size: 12px;
-    font-weight: 600;
+    padding: 8px 12px;
+    color: #ccc;
+    font-size: 11px;
+    font-weight: 500;
     cursor: pointer;
-    transition: all 0.25s ease;
+    transition: all 0.2s;
     display: flex;
     align-items: center;
-    gap: 8px;
-    width: 100%;
+    gap: 6px;
     justify-content: center;
-    box-shadow: 0 4px 12px rgba(130, 87, 229, 0.3);
 }
 
 .animation-btn-wrapper:hover {
-    box-shadow: 0 6px 18px rgba(130, 87, 229, 0.5);
-    transform: translateY(-1px);
+    background: rgba(130, 87, 229, 0.25);
+    border-color: #8257E5;
+    color: #fff;
 }
 
 .animation-btn-wrapper:active {
-    transform: translateY(0);
+    background: rgba(130, 87, 229, 0.35);
 }
 
 .animation-btn-wrapper i {
-    font-size: 14px;
+    font-size: 13px;
+    color: #8257E5;
 }
 
 /* Animation Popup Overlay */
