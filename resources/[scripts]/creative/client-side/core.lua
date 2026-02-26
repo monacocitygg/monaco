@@ -265,7 +265,6 @@ CreateThread(function()
 		HideHudComponentThisFrame(21)
 		HideHudComponentThisFrame(22)
 
-		DisableWeaponWheelThisFrame()
 		HideHudComponentThisFrame(19)
 
 		DisableControlAction(1,37,true)
