@@ -13,6 +13,8 @@ Tunnel.bindInterface("hud",Hypex)
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- VARIABLES
 -----------------------------------------------------------------------------------------------------------------------------------------
+local TempoClima = 3
+local WeatherList = { "EXTRASUNNY", "CLEAR", "CLOUDS", "OVERCAST", "SMOG", "FOGGY", "RAIN", "THUNDER" }
 GlobalState["Work"] = 0
 GlobalState["Hours"] = 12
 GlobalState["Minutes"] = 0

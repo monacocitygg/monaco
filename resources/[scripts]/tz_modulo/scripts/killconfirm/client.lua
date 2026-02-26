@@ -92,7 +92,7 @@ CreateThread(function()
             elseif (now - data.time) > 5000 then
                 -- dano antigo demais, descarta
                 hitTargets[serverId] = nil
-            elseif DoesEntityExist(data.ped) and IsEntityDead(data.ped) then
+            elseif DoesEntityExist(data.ped) and IsPedFatallyInjured(data.ped) then
                 -- vitima morreu, confirma o kill
                 data.dead = true
                 showKillMarker()
@@ -115,7 +115,7 @@ AddEventHandler('gameEventTriggered', function(name, args)
 
     local victim = args[1]
     local attacker = args[2]
-    local isFatal = args[6]
+    local isFatal = args[4]
 
     if attacker ~= PlayerPedId() then return end
     if isFatal ~= 1 then return end
