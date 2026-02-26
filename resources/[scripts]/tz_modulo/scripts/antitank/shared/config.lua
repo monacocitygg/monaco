@@ -2,13 +2,12 @@ Config = Config or {}
 
 Config.Antitank = {
     Enabled = true,
-    Debug = false,
+    Debug = true,
 
     -- bones letais (cabeca + pescoco) -> tiro aqui = morte instantanea
     LethalBones = {
         [31086] = true, -- SKEL_Head
         [65068] = true, -- IK_Head
-        [39317] = true, -- SKEL_Neck
     },
 
     -- mensagem ao kickar player com godmode
