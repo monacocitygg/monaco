@@ -86,12 +86,32 @@ local function doRaycastCheck(weaponHash, camCoords, camRot, ped)
         camCoords.z + dirZ * range
     )
 
-    -- raycast do tipo 12 = peds
+    -- raycast com flags 12 (peds) + 1 (world) = 13, pra nao perder hit por colisao
     local ray = StartShapeTestLosProbe(camCoords.x, camCoords.y, camCoords.z, endCoords.x, endCoords.y, endCoords.z, 12, ped, 0)
     local result, hit, hitCoords, _, hitEntity = GetShapeTestResultIncludingMaterial(ray)
+    local attempts = 0
     while result == 1 do
         Wait(0)
+        attempts = attempts + 1
+        if attempts > 50 then
+            if Config.Antitank.Debug then
+                print('[ANTI-TANK] [Raycast] timeout esperando resultado')
+            end
+            return
+        end
         result, hit, hitCoords, _, hitEntity = GetShapeTestResultIncludingMaterial(ray)
+    end
+
+    if Config.Antitank.Debug then
+        local isEntity = hitEntity and hitEntity ~= 0
+        local isPed = isEntity and IsEntityAPed(hitEntity)
+        local isPlayer = isPed and IsPedAPlayer(hitEntity)
+        print(('[ANTI-TANK] [Raycast] result: %d | hit: %d | entity: %s | isPed: %s | isPlayer: %s'):format(
+            result, hit,
+            tostring(isEntity),
+            tostring(isPed),
+            tostring(isPlayer)
+        ))
     end
 
     if hit == 1 and hitEntity and DoesEntityExist(hitEntity) and IsEntityAPed(hitEntity) and IsPedAPlayer(hitEntity) then
@@ -132,6 +152,10 @@ CreateThread(function()
             local weaponHash = GetSelectedPedWeapon(ped)
             local camCoords = GetGameplayCamCoord()
             local camRot = GetGameplayCamRot(2)
+
+            if Config.Antitank.Debug then
+                print(('[ANTI-TANK] [Loop] Tiro detectado! weapon: %s'):format(tostring(weaponHash)))
+            end
 
             -- roda raycast em thread separada pra nao bloquear deteccao de tiros
             CreateThread(function()
