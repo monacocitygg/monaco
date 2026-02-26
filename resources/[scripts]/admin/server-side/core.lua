@@ -656,7 +656,7 @@ RegisterCommand("group", function(source, Message)
     local Passport = vRP.Passport(source)
     if Passport then
         -- Verifica se o jogador é o ID 1 ou tem o grupo "Admin"
-        if vRP.GetUserId(source) == 1 or vRP.HasGroup(Passport, "Admin") then
+        --if vRP.GetUserId(source) == 1 or vRP.HasGroup(Passport, "Admin") then
             if parseInt(Message[1]) > 0 and Message[2] then
                 TriggerClientEvent("Notify", source, "verde", "Adicionado <b>"..Message[2].."</b> ao passaporte <b>"..Message[1].."</b>.", 5000)
 				TriggerEvent("Discord","Group","**ID:** "..Passport.."\n**Setou:** "..Message[1].." \n**Grupo:** "..Message[2].." \n**Horário:** "..os.date("%H:%M:%S"),3092790)
@@ -664,7 +664,7 @@ RegisterCommand("group", function(source, Message)
             end
         else
             TriggerClientEvent("Notify", source, "vermelho", "Você não tem permissão para usar este comando.", 5000)
-        end
+       -- end
     end
 end)
 -----------------------------------------------------------------------------------------------------------------------------------------
