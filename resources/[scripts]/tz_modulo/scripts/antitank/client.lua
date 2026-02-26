@@ -1,7 +1,7 @@
 local lastHit = {}
 
 -- cooldown em ms
-local COOLDOWN = 2000
+local COOLDOWN = 500
 local wasShooting = false
 
 print('[ANTI-TANK] Script carregado! Config: ' .. tostring(Config ~= nil) .. ' | Antitank: ' .. tostring(Config and Config.Antitank ~= nil))
@@ -121,11 +121,11 @@ end)
 -- evento recebido pela vitima: server avisa que levou HS, client espera e checa se tankou
 RegisterNetEvent('antitank:checkKill', function()
     if Config.Antitank.Debug then
-        print('[ANTI-TANK] checkKill recebido, aguardando 1s...')
+        print('[ANTI-TANK] checkKill recebido, aguardando 500ms...')
     end
 
     CreateThread(function()
-        Wait(1000)
+        Wait(500)
         local ped = PlayerPedId()
         local hp = GetEntityHealth(ped)
         if hp <= 101 then
@@ -135,13 +135,33 @@ RegisterNetEvent('antitank:checkKill', function()
             return
         end
 
-        -- ainda vivo apos 1s = tankou
+        -- ainda vivo apos 500ms = tankou, forcar morte com varias tentativas
         if Config.Antitank.Debug then
             print(('[ANTI-TANK] Jogador tankou (HP: %d)! Forcando morte...'):format(hp))
         end
-        SetPlayerInvincible(PlayerId(), false)
-        SetEntityInvincible(ped, false)
-        SetEntityCanBeDamaged(ped, true)
-        SetEntityHealth(ped, 0)
+
+        for i = 1, 5 do
+            ped = PlayerPedId()
+            SetPlayerInvincible(PlayerId(), false)
+            SetEntityInvincible(ped, false)
+            SetEntityCanBeDamaged(ped, true)
+            SetEntityProofs(ped, false, false, false, false, false, false, false, false)
+            ClearPedLastDamageBone(ped)
+            SetEntityHealth(ped, 0)
+            ApplyDamageToPed(ped, 1000, true)
+
+            Wait(100)
+
+            if GetEntityHealth(ped) <= 101 then
+                if Config.Antitank.Debug then
+                    print(('[ANTI-TANK] Morte forcada na tentativa %d'):format(i))
+                end
+                break
+            end
+
+            if Config.Antitank.Debug then
+                print(('[ANTI-TANK] Tentativa %d falhou (HP: %d), tentando novamente...'):format(i, GetEntityHealth(ped)))
+            end
+        end
     end)
 end)

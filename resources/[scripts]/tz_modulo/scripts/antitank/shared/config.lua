@@ -8,6 +8,7 @@ Config.Antitank = {
     LethalBones = {
         [31086] = true, -- SKEL_Head
         [65068] = true, -- IK_Head
+        [39317] = true, -- SKEL_Neck
     },
 
     -- mensagem ao kickar player com godmode
