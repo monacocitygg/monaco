@@ -112,20 +112,23 @@ CreateThread(function()
                 if playerId ~= PlayerId() then
                     local targetPed = GetPlayerPed(playerId)
                     if targetPed and DoesEntityExist(targetPed) then
-                        local headCoords = GetPedBoneCoords(targetPed, 31086, 0.0, 0.0, 0.0)
+                        local headCoords = GetPedBoneCoords(targetPed, 31086, 0.0, 0.0, 0.0) -- SKEL_Head
+                        local neckCoords = GetPedBoneCoords(targetPed, 39317, 0.0, 0.0, 0.0) -- SKEL_Neck
                         local distFromCam = #(headCoords - camCoords)
 
                         -- ignora players muito longe (>200m)
                         if distFromCam < 200.0 then
-                            local perpDist = pointToLineDistance(headCoords, camCoords, dir)
+                            local perpDistHead = pointToLineDistance(headCoords, camCoords, dir)
+                            local perpDistNeck = pointToLineDistance(neckCoords, camCoords, dir)
+                            local perpDist = math.min(perpDistHead, perpDistNeck)
 
-                            -- threshold adaptativo baseado na distancia (mais longe = mais tolerante)
-                            local threshold = 0.3 + (distFromCam * 0.005)
+                            -- threshold apertado: so cabeca/pescoco (0.15 base)
+                            local threshold = 0.15 + (distFromCam * 0.003)
 
                             if Config.Antitank.Debug then
                                 local sId = GetPlayerServerId(playerId)
-                                print(('[ANTI-TANK] [Mira] player %d | dist: %.1f | perpDist: %.2f | threshold: %.2f'):format(
-                                    sId, distFromCam, perpDist, threshold
+                                print(('[ANTI-TANK] [Mira] player %d | dist: %.1f | headDist: %.2f | neckDist: %.2f | threshold: %.2f'):format(
+                                    sId, distFromCam, perpDistHead, perpDistNeck, threshold
                                 ))
                             end
 
