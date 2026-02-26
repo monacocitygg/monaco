@@ -31,6 +31,32 @@ local PurgeSprays = {}
 local PurgeParticles = {}
 local PurgeActive = false
 -----------------------------------------------------------------------------------------------------------------------------------------
+-- CACHED NITRO (fetched from server periodically)
+-----------------------------------------------------------------------------------------------------------------------------------------
+local cachedNitroValue = 0
+local cachedNitroPlate = ""
+
+CreateThread(function()
+	while true do
+		if LocalPlayer["state"]["Active"] and not LocalPlayer["state"]["Nitro"] then
+			local Ped = PlayerPedId()
+			if IsPedInAnyVehicle(Ped) then
+				local Vehicle = GetVehiclePedIsUsing(Ped)
+				local Plate = GetVehicleNumberPlateText(Vehicle)
+				cachedNitroPlate = Plate
+				cachedNitroValue = vSERVER.GetNitroFuel(Plate)
+			else
+				cachedNitroValue = 0
+				cachedNitroPlate = ""
+			end
+		else
+			cachedNitroValue = 0
+			cachedNitroPlate = ""
+		end
+		Wait(3000)
+	end
+end)
+-----------------------------------------------------------------------------------------------------------------------------------------
 -- Lights Car
 -----------------------------------------------------------------------------------------------------------------------------------------
 local lightState = "off"
@@ -118,9 +144,10 @@ CreateThread(function()
 						Nitro = NitroFuel
 					end
 				else
-					if (GlobalState["Nitro"][Plate] or 0) ~= Nitro then
-						SendNUIMessage({ Action = "Nitro", Number = GlobalState["Nitro"][Plate] or 0 })
-						Nitro = GlobalState["Nitro"][Plate] or 0
+					local nVal = cachedNitroValue or 0
+					if nVal ~= Nitro then
+						SendNUIMessage({ Action = "Nitro", Number = nVal })
+						Nitro = nVal
 					end
 				end
 
@@ -204,7 +231,7 @@ function NitroEnable()
 			if GetPedInVehicleSeat(Vehicle,-1) == Ped then
 				if GetVehicleTopSpeedModifier(Vehicle) < 50.0 then
 					local Plate = GetVehicleNumberPlateText(Vehicle)
-					NitroFuel = GlobalState["Nitro"][Plate] or 0
+					NitroFuel = vSERVER.GetNitroFuel(Plate)
 
 					if NitroFuel >= 1 then
 						if GetIsVehicleEngineRunning(Vehicle) then

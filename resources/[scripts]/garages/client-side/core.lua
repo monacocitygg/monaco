@@ -717,6 +717,31 @@ end
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- LOOPHOTWIRED
 -----------------------------------------------------------------------------------------------------------------------------------------
+local cachedPlateValid = false
+local cachedPlateText = ""
+
+CreateThread(function()
+	while true do
+		if LocalPlayer["state"]["Route"] == 0 then
+			local Ped = PlayerPedId()
+			if IsPedInAnyVehicle(Ped) then
+				local Vehicle = GetVehiclePedIsUsing(Ped)
+				local Plate = GetVehicleNumberPlateText(Vehicle)
+				if Plate ~= cachedPlateText then
+					cachedPlateText = Plate
+					cachedPlateValid = vSERVER.CheckPlate(Plate) ~= nil
+				else
+					cachedPlateValid = vSERVER.CheckPlate(Plate) ~= nil
+				end
+			else
+				cachedPlateValid = false
+				cachedPlateText = ""
+			end
+		end
+		Wait(2000)
+	end
+end)
+
 CreateThread(function()
 	while true do
 		local TimeDistance = 999
@@ -724,8 +749,7 @@ CreateThread(function()
 			local Ped = PlayerPedId()
 			if IsPedInAnyVehicle(Ped) then
 				local Vehicle = GetVehiclePedIsUsing(Ped)
-				local Plate = GetVehicleNumberPlateText(Vehicle)
-				if GetPedInVehicleSeat(Vehicle,-1) == Ped and not GlobalState["Plates"][Plate] then
+				if GetPedInVehicleSeat(Vehicle,-1) == Ped and not cachedPlateValid then
 					SetVehicleEngineOn(Vehicle,false,true,true)
 					DisablePlayerFiring(Ped,true)
 					TimeDistance = 1

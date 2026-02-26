@@ -55,9 +55,19 @@ function Creative.GarageHasSpace(TargetSource)
 	return false
 end
 -----------------------------------------------------------------------------------------------------------------------------------------
--- GLOBALSTATE
+-- PLATES (local table, no GlobalState)
 -----------------------------------------------------------------------------------------------------------------------------------------
-GlobalState["Plates"] = {}
+local lPlates = {}
+exports("GetPlate",function(Plate) return lPlates[Plate] end)
+exports("SetPlate",function(Plate,Value) lPlates[Plate] = Value end)
+exports("RemovePlate",function(Plate) lPlates[Plate] = nil end)
+exports("CheckPlate",function(Plate) return lPlates[Plate] ~= nil end)
+-----------------------------------------------------------------------------------------------------------------------------------------
+-- TUNNEL CHECKPLATE (client access via vSERVER.CheckPlate)
+-----------------------------------------------------------------------------------------------------------------------------------------
+function Creative.CheckPlate(Plate)
+	return lPlates[Plate]
+end
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- SERVERVEHICLE
 -----------------------------------------------------------------------------------------------------------------------------------------
@@ -99,9 +109,7 @@ function Creative.ServerVehicle(Model,x,y,z,Heading,Plate,Nitrox,Doors,Body,Fuel
 			local Network = NetworkGetEntityFromNetworkId(Network)
 			SetVehicleDoorsLocked(Network,2)
 
-			local Nitro = GlobalState["Nitro"]
-			Nitro[Plate] = Nitrox or 0
-			GlobalState:set("Nitro",Nitro,true)
+			exports["hud"]:SetNitro(Plate,Nitrox or 0)
 		end
 
 		return true,Network,Vehicle
@@ -250,28 +258,22 @@ end)
 -- PLATEREVERYONE
 -----------------------------------------------------------------------------------------------------------------------------------------
 AddEventHandler("plateReveryone",function(Plate)
-	if GlobalState["Plates"][Plate] then
-		local Plates = GlobalState["Plates"]
-		Plates[Plate] = nil
-		GlobalState:set("Plates",Plates,true)
+	if lPlates[Plate] then
+		lPlates[Plate] = nil
 	end
 end)
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- PLATEEVERYONE
 -----------------------------------------------------------------------------------------------------------------------------------------
 AddEventHandler("plateEveryone",function(Plate)
-	local Plates = GlobalState["Plates"]
-	Plates[Plate] = true
-	GlobalState:set("Plates",Plates,true)
+	lPlates[Plate] = true
 end)
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- PLATEPLAYERS
 -----------------------------------------------------------------------------------------------------------------------------------------
 AddEventHandler("platePlayers",function(Plate,Passport)
 	if not vRP.PassportPlate(Plate) then
-		local Plate = GlobalState["Plates"]
-		Plate[Plate] = Passport
-		GlobalState:set("Plates",Plate,true)
+		lPlates[Plate] = Passport
 	end
 end)
 -----------------------------------------------------------------------------------------------------------------------------------------
@@ -629,7 +631,6 @@ AddEventHandler("garages:Spawn",function(Table,Number)
 		end
 
 		if vehicle[1] then
-			local Plates = GlobalState["Plates"]
 			local Plate = vehicle[1]["plate"]
 
 			if Spawn[Plate] then
@@ -651,9 +652,8 @@ AddEventHandler("garages:Spawn",function(Table,Number)
 								Spawn[Plate] = nil
 							end
 
-							if Plates[Plate] then
-								Plates[Plate] = nil
-								GlobalState:set("Plates",Plates,true)
+							if lPlates[Plate] then
+								lPlates[Plate] = nil
 							end
 
 							TriggerClientEvent("Notify",source,"verde","A seguradora efetuou o resgate do seu veículo e o mesmo já se encontra disponível para retirada.",5000)
@@ -705,8 +705,7 @@ AddEventHandler("garages:Spawn",function(Table,Number)
 									TriggerEvent("engine:tryFuel",Plate,vehicle[1]["fuel"])
 									Spawn[Plate] = { Passport,Name,Network }
 
-									Plates[Plate] = Passport
-									GlobalState:set("Plates",Plates,true)
+									lPlates[Plate] = Passport
 								end
 							else
 								local VehiclePrice = VehiclePrice(Name)
@@ -721,8 +720,7 @@ AddEventHandler("garages:Spawn",function(Table,Number)
 											TriggerEvent("engine:tryFuel",Plate,vehicle[1]["fuel"])
 											Spawn[Plate] = { Passport,Name,Network }
 
-											Plates[Plate] = Passport
-											GlobalState:set("Plates",Plates,true)
+											lPlates[Plate] = Passport
 										end
 									end
 								end
@@ -737,8 +735,7 @@ AddEventHandler("garages:Spawn",function(Table,Number)
 								TriggerEvent("engine:tryFuel",Plate,vehicle[1]["fuel"])
 								Spawn[Plate] = { Passport,Name,Network }
 
-								Plates[Plate] = Passport
-								GlobalState:set("Plates",Plates,true)
+								lPlates[Plate] = Passport
 							end
 						end
 					end
@@ -770,9 +767,7 @@ RegisterCommand("car",function(source,Message)
 			TriggerEvent("engine:tryFuel",Plate,100)
 			SetPedIntoVehicle(Ped,Vehicle,-1)
 
-			local Plates = GlobalState["Plates"]
-			Plates[Plate] = Passport
-			GlobalState:set("Plates",Plates,true)
+			lPlates[Plate] = Passport
 		end
 	end
 end)
@@ -793,7 +788,7 @@ AddEventHandler("garages:Key",function(entity)
 	local source = source
 	local Plate = entity[1]
 	local Passport = vRP.Passport(source)
-	if Passport and GlobalState["Plates"][Plate] == Passport then
+	if Passport and lPlates[Plate] == Passport then
 		vRP.GenerateItem(Passport,"vehkey-"..Plate,1,true,false)
 	end
 end)
@@ -804,7 +799,7 @@ RegisterServerEvent("garages:Lock")
 AddEventHandler("garages:Lock",function(Network,Plate)
 	local source = source
 	local Passport = vRP.Passport(source)
-	if Passport and GlobalState["Plates"][Plate] == Passport then
+	if Passport and lPlates[Plate] == Passport then
 		TriggerEvent("garages:LockVehicle",source,Network)
 	end
 end)
@@ -857,7 +852,7 @@ function Creative.Delete(Network,Health,Engine,Body,Fuel,Doors,Windows,Tyres,Pla
 
 		local vehicle = vRP.Query("vehicles/selectVehicles",{ Passport = Passport, vehicle = Name })
 		if vehicle[1] ~= nil then
-			vRP.Query("vehicles/updateVehicles",{ Passport = Passport, vehicle = Name, nitro = GlobalState["Nitro"][Plate] or 0, engine = parseInt(Engine), body = parseInt(Body), health = parseInt(Health), fuel = parseInt(Fuel), doors = json.encode(Doors), windows = json.encode(Windows), tyres = json.encode(Tyres) })
+				vRP.Query("vehicles/updateVehicles",{ Passport = Passport, vehicle = Name, nitro = exports["hud"]:GetNitro(Plate), engine = parseInt(Engine), body = parseInt(Body), health = parseInt(Health), fuel = parseInt(Fuel), doors = json.encode(Doors), windows = json.encode(Windows), tyres = json.encode(Tyres) })
 		end
 	end
 
@@ -869,17 +864,11 @@ end
 RegisterServerEvent("garages:deleteVehicle")
 AddEventHandler("garages:deleteVehicle",function(Network,Plate)
 	if Network ~= nil and Plate ~= nil then
-		if GlobalState["Plates"][Plate] then
-			local Plates = GlobalState["Plates"]
-			Plates[Plate] = nil
-			GlobalState:set("Plates",Plates,true)
+		if lPlates[Plate] then
+			lPlates[Plate] = nil
 		end
 
-		if GlobalState["Nitro"][Plate] then
-			local Nitro = GlobalState["Nitro"]
-			Nitro[Plate] = nil
-			GlobalState:set("Nitro",Nitro,true)
-		end
+		exports["hud"]:RemoveNitro(Plate)
 
 		if Signal[Plate] then
 			Signal[Plate] = nil

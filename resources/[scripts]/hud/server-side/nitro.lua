@@ -1,27 +1,38 @@
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- VARIABLES
 -----------------------------------------------------------------------------------------------------------------------------------------
-GlobalState["Nitro"] = {}
-GlobalState["Purge"] = {}
+local NitroData = {}
+local PurgeData = {}
 local nitroColor = true
+-----------------------------------------------------------------------------------------------------------------------------------------
+-- EXPORTS (server-side access from other resources)
+-----------------------------------------------------------------------------------------------------------------------------------------
+exports("GetNitro",function(Plate) return NitroData[Plate] or 0 end)
+exports("SetNitro",function(Plate,Fuel) NitroData[Plate] = Fuel end)
+exports("RemoveNitro",function(Plate) NitroData[Plate] = nil end)
+exports("GetPurge",function(Plate) return PurgeData[Plate] or 0 end)
+exports("SetPurge",function(Plate,Fuel) PurgeData[Plate] = Fuel end)
+exports("RemovePurge",function(Plate) PurgeData[Plate] = nil end)
+-----------------------------------------------------------------------------------------------------------------------------------------
+-- TUNNEL (client access via vSERVER.GetNitroFuel)
+-----------------------------------------------------------------------------------------------------------------------------------------
+function Hypex.GetNitroFuel(Plate)
+	return NitroData[Plate] or 0
+end
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- UPDATENITRO
 -----------------------------------------------------------------------------------------------------------------------------------------
 function Hypex.UpdateNitro(Plate,Fuel)
-	if GlobalState["Nitro"][Plate] then
-		local Nitro = GlobalState["Nitro"]
-		Nitro[Plate] = Fuel
-		GlobalState:set("Nitro",Nitro,true)
+	if NitroData[Plate] then
+		NitroData[Plate] = Fuel
 	end
 end
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- UPDATEPURGE
 -----------------------------------------------------------------------------------------------------------------------------------------
 function Hypex.UpdatePurge(Plate,Fuel)
-	if GlobalState["Purge"][Plate] then
-		local Purge = GlobalState["Purge"]
-		Purge[Plate] = Fuel
-		GlobalState:set("Purge",Purge,true)
+	if PurgeData[Plate] then
+		PurgeData[Plate] = Fuel
 	end
 end
 -----------------------------------------------------------------------------------------------------------------------------------------

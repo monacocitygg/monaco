@@ -1034,3 +1034,25 @@ AddEventHandler("Disconnect",function(Passport)
 		Spectate[Passport] = nil
 	end
 end)
+-----------------------------------------------------------------------------------------------------------------------------------------
+-- WL 
+-----------------------------------------------------------------------------------------------------------------------------------------
+RegisterCommand("wl",function(source,args)
+	local Passport = vRP.Passport(source)
+	if Passport then
+		if vRP.HasGroup(Passport,"Admin",1) then
+			local id = tonumber(args[1])
+			local value = tonumber(args[2])
+			if id and value and (value == 0 or value == 1) then
+				vRP.Query("accounts/updateWhitelist",{ whitelist = value, id = id })
+				if value == 1 then
+					TriggerClientEvent("Notify",source,"verde","Whitelist do ID <b>"..id.."</b> foi <b>liberada</b>.",5000)
+				else
+					TriggerClientEvent("Notify",source,"vermelho","Whitelist do ID <b>"..id.."</b> foi <b>removida</b>.",5000)
+				end
+			else
+				TriggerClientEvent("Notify",source,"amarelo","Use: /wl [id] [0/1]",5000)
+			end
+		end
+	end
+end)

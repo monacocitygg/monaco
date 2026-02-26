@@ -960,7 +960,7 @@ function TargetEnable()
 									Selected[5] = true
 									Menu[#Menu + 1] = { event = "engine:Supply", label = "Abastecer", tunnel = "client" }
 								else
-									if GlobalState["Plates"][Plate] then
+									if vSERVER.CheckPlate(Plate) then
 										if GetVehicleDoorLockStatus(Entity) == 1 then
 											for k,Tyre in pairs(tyreList) do
 												local Wheel = GetEntityBoneIndexByName(Entity,k)
@@ -1010,7 +1010,7 @@ function TargetEnable()
 										Menu[#Menu + 1] = { event = "police:Plate", label = "Verificar Placa", tunnel = "police" }
 										Menu[#Menu + 1] = { event = "police:Impound", label = "Registrar Veículo", tunnel = "police" }
 
-										if GlobalState["Plates"][Plate] then
+										if vSERVER.CheckPlate(Plate) then
 											Menu[#Menu + 1] = { event = "police:Arrest", label = "Apreender Veículo", tunnel = "police" }
 										end
 									else
