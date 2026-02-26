@@ -43,31 +43,40 @@ local function showKillMarker()
     end
 end
 
--- unico metodo de deteccao: gameEventTriggered com CEventNetworkEntityDamage
--- so ativa o X quando: atacante == jogador local, dano fatal, vitima eh player e esta realmente morta
+-- deteccao de kill via CEventNetworkEntityDamage
+-- checa todo dano do jogador local em players, e apos um curto delay confirma se a vitima morreu
+local pendingVictims = {}
+
 AddEventHandler('gameEventTriggered', function(name, args)
     if not Config.KillConfirm.Enabled then return end
     if name ~= 'CEventNetworkEntityDamage' then return end
 
     local victim = args[1]
     local attacker = args[2]
-    local isFatal = args[4]
 
     if attacker ~= PlayerPedId() then return end
-    if isFatal ~= 1 then return end
     if not DoesEntityExist(victim) then return end
     if not IsEntityAPed(victim) then return end
     if not IsPedAPlayer(victim) then return end
-    if not IsPedFatallyInjured(victim) then return end
 
     local victimServerId = GetPlayerServerId(NetworkGetPlayerIndexFromPed(victim))
     if victimServerId <= 0 then return end
 
-    if Config.KillConfirm.Debug then
-        print(('[KILL-CONFIRM] Kill confirmado -> vitima server id: %d'):format(victimServerId))
-    end
+    -- evita criar multiplas threads pro mesmo alvo
+    if pendingVictims[victimServerId] then return end
+    pendingVictims[victimServerId] = true
 
-    showKillMarker()
+    CreateThread(function()
+        Wait(200)
+        pendingVictims[victimServerId] = nil
+
+        if DoesEntityExist(victim) and (IsEntityDead(victim) or IsPedFatallyInjured(victim)) then
+            if Config.KillConfirm.Debug then
+                print(('[KILL-CONFIRM] Kill confirmado -> vitima server id: %d'):format(victimServerId))
+            end
+            showKillMarker()
+        end
+    end)
 end)
 
 -- thread de renderizacao do X na tela
