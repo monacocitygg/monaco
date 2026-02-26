@@ -55,20 +55,6 @@ set onesync_forceMigration true
 set onesync_workaround763185 true
 set onesync_distanceCullVehicles true
 
-
-increase_pool_size "TxdStore" 23000
-increase_pool_size "DrawableStore" 50000
-increase_pool_size "FragmentStore" 14000
-increase_pool_size "CMoveObject" 600      # docs dizem até 600 :contentReference[oaicite:13]{index=13}
-increase_pool_size "StaticBounds" 6500     # docs: até ~6500 :contentReference[oaicite:14]{index=14}
-increase_pool_size "ScaleformStore" 200   # docs até ~200 :contentReference[oaicite:15]{index=15}
-increase_pool_size "OcclusionInteriorInfo" 20
-increase_pool_size "OcclusionPathNode" 5000
-increase_pool_size "OcclusionPortalEntity" 750
-increase_pool_size "OcclusionPortalInfo" 750
-increase_pool_size "PortalInst" 225
-increase_pool_size "AnimStore" 20480 
-
 setr voice_syncData 1
 setr voice_useNativeAudio true
 setr voice_useSendingRangeOnly true

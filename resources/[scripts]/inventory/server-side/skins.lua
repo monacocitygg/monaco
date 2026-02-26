@@ -1,4 +1,13 @@
 vRP.prepare("inventory/get_skins", "SELECT skins FROM skins WHERE identifier = @user_id")
+vRP.Prepare("inventory/insert_skin_user","INSERT IGNORE INTO skins(identifier,skins,boxes,tokentrade) VALUES(@identifier,'[]',0,0)")
+
+AddEventHandler("Connect",function(Passport,source)
+    vRP.Execute("inventory/insert_skin_user",{ identifier = Passport })
+end)
+
+AddEventHandler("CharacterChosen",function(Passport,source)
+    vRP.Execute("inventory/insert_skin_user",{ identifier = Passport })
+end)
 
 function Creative.requestSkins()
     local source = source

@@ -23,9 +23,6 @@ AddEventHandler("gameEventTriggered",function(name,Message)
 		if name == "CEventNetworkEntityDamage" then
 			if PlayerPedId() == Message[1] and LocalPlayer["state"]["Active"] then
 				local Hit,Mark = GetPedLastDamageBone(Message[1])
-				if Hit and (Mark == 31086 or Mark == 12844 or Mark == 65068) and GetEntityHealth(Message[1]) > 100 then
-					SetEntityHealth(Message[1],0)
-				end
 
 				if GetGameTimer() >= Injuried then
 					if not IsPedInAnyVehicle(Message[1]) and GetEntityHealth(Message[1]) > 100 then

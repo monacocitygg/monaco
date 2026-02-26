@@ -455,9 +455,9 @@ CreateThread(function()
         if LoadTexture("circleminimap") then
             AddReplaceTexture("platform:/textures/graphics", "radarmasksm", "circleminimap", "radarmasksm")
 
-            SetMinimapComponentPosition("minimap", "L", "B", 0.005, -0.025, 0.215, 0.185)
+            SetMinimapComponentPosition("minimap", "L", "B", 0.005, -0.025, 0.245, 0.185)
             SetMinimapComponentPosition("minimap_mask", "L", "B", 0.02, 0.39, 0.1135, 0.5)
-            SetMinimapComponentPosition("minimap_blur", "L", "B", -0.02, -0.01, 0.305, 0.185)
+            SetMinimapComponentPosition("minimap_blur", "L", "B", -0.02, -0.01, 0.335, 0.185)
 
             SetBigmapActive(true, false)
 

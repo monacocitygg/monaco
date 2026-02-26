@@ -191,7 +191,7 @@ html.dark button.active[data-v-1e353ded] {
 }
 
 [container][data-v-21268b06] {
-    background: url(https://fivem-static.jesteriruka.dev/stock/whatsapp/bg-light.jpg) #e0e0e0;
+    background: url(http://191.96.225.198/Volphz/smartphone/stock/whatsapp/bg-light.jpg) #e0e0e0;
     background-size: 100%
 }
 
@@ -204,7 +204,7 @@ html.dark .bg-target[data-v-21268b06] {
 }
 
 html.dark [container][data-v-21268b06] {
-    background: url(https://fivem-static.jesteriruka.dev/stock/whatsapp/bg-dark.jpg) #101d25;
+    background: url(http://191.96.225.198/Volphz/smartphone/stock/whatsapp/bg-dark.jpg) #101d25;
     background-size: 100%
 }
 
@@ -436,19 +436,19 @@ div[bankType=purple] .relative-white {
 div[bankType=fleeca],
 div[bankType=green],
 div[bankType=picpay] {
-    background: #16a34a
+    background: rgb(10, 10, 10)
 }
 
 div[bankType=fleeca] .bank-dark,
 div[bankType=green] .bank-dark,
 div[bankType=picpay] .bank-dark {
-    background: #166534
+    background: #000000
 }
 
 div[bankType=fleeca] .bank-light,
 div[bankType=green] .bank-light,
 div[bankType=picpay] .bank-light {
-    background: #22c55e
+    background: rgb(20, 20, 20)
 }
 
 div[bankType=fleeca] .relative-white,

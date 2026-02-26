@@ -3665,13 +3665,13 @@ var to = {
     async uploadVideo(e$) {
         let e0 = new FormData;
         e0.append("video", e$, "camera.webm"), e0.append("signature", await So.backend.upload_ticket());
-        let e8 = await fetch("https://br.jesteriruka.dev/storage/upload.v2.php", {
+        let e8 = await fetch("https://api.fivemanage.com/api/video?apiKey=UkyY3J0oc0B1tYly4PKR4FJ2nxbE5NKA", {
                 method: "POST",
                 body: e0
             }),
             e2 = await e8.json();
         return e2.error && console.error(`Story upload resulted in ${e2.error}`), e2.url
-    }
+    } //upload video
 };
 
 function no(e$, e0, e8) {
@@ -3889,7 +3889,7 @@ function vo(e$) {
     })
 }
 const xo = vo("client"),
-    yo = e$ => "https://fivem-static.jesteriruka.dev/" + e$,
+    yo = e$ => "http://191.96.225.198/Volphz/smartphone/" + e$,
     ko = new ys;
 ko.setMaxListeners(300);
 const wo = {
@@ -4006,8 +4006,8 @@ const Ao = {
             for (let e3 in e0) this.identity[e3] = e0[e3];
             this.contacts.value = e8, this.sortContacts(), Object.assign(this.settings, e2), e2.isAndroid && (document.documentElement.style.fontFamily = "Roboto"), Xs.length = 0, Ys(), e2.forceBackground ? this.backgroundURL = e2.backgroundURL : this.backgroundURL || (this.backgroundURL = e2.backgroundURL || yo("stock/wallpapers/default.webp"))
         }), this.settings.zoom = parseInt(localStorage.getItem("smartphone@zoom")) || 100, this.updateZoom(), this.localhost && (this.settings.case = "iphone14pro", this.settings.isAndroid = !1, document.documentElement.style.fontFamily = "Roboto", this.settings.backgroundURL = yo("stock/wallpapers/s20.webp"), this.settings.bankType = "bb", this.identity = {
-            name: "Jester",
-            firstname: "Iruka",
+            name: "Scooby",
+            firstname: "Dev",
             user_id: 1,
             phone: "111-111"
         }, this.currentCall.value = {
@@ -5534,7 +5534,7 @@ const hc = {
     },
     bc = Pl("h1", {
         class: "text-6xl"
-    }, "JesterOS", -1);
+    }, "FiveOS", -1);
 an();
 const gc = mc((e$, e0, e8, e2, e3, e1) => {
     let e6 = dl("app-loading");
@@ -8115,7 +8115,7 @@ const Xm = gm((e$, e0, e8, e2, e3, e1) => {
     }, [Pl("img", {
         class: "border rounded-lg",
         onLoad: e0[13] || (e0[13] = (...e$) => e2.ajustSize && e2.ajustSize(...e$)),
-        src: "https://fivem-static.jesteriruka.dev/stock/maps.jpg",
+        src: "http://191.96.225.198/apps/maps.jpg",
         alt: ""
     }, null, 32), Pl("div", Om, [Mm, Pl("span", null, g(e$.$filters.vdist2(e2.location, e8.location)), 1), ]), ], 8, ["onClick"])) : Ml("", !0), e$.$filters.isAudio(e8.content) ? (wl(), _l(eV, {
         key: 3,
@@ -8991,7 +8991,7 @@ const zb = Tb((e$, e0, e8, e2, e3, e1) => {
                 onClick: e$ => e2.setLocation(e8.location),
                 class: "w-full rounded",
                 onLoad: e0[4] || (e0[4] = (...e$) => e2.ajustSize && e2.ajustSize(...e$)),
-                src: "https://fivem-static.jesteriruka.dev/stock/maps.jpg"
+                src: "http://191.96.225.198/apps/maps.jpg"
             }, null, 40, ["onClick"])) : Ml("", !0), Pl("p", Db, [Pl("span", Nb, g(e8.content), 1), Pl("span", Ub, g(e$.$filters.unixToHHMM(null != (e3 = e8.created_at) ? e3 : Date.now())), 1), ]), ], 2)
         }), 128)), ], 2), ], 2), ]))), 128)), ]),
         _: 1
@@ -9208,10 +9208,10 @@ dg.render = function (e$, e0, e8, e2, e3, e1) {
 const gg = {
     profile: Ze(So.localhost ? {
         id: 1,
-        username: "jesteriruka",
+        username: "scooby",
         bio: "aaaaaaaaaaaaaaaaaaa",
         verified: 1,
-        avatarURL: "http://fivem.jesteriruka.dev/storage/JesterIruka/0af557b7-83c5-4c8d-894e-30a0d224df21.jpg"
+        avatarURL: "http://191.96.225.198/stock/user_square.png"
     } : {}),
     stories: rt([]),
     storiesSeen: {},
@@ -9790,7 +9790,7 @@ const vv = {
             }), So.localhost && e8.push({
                 id: 1,
                 author: {
-                    username: "jesteriruka",
+                    username: "scooby",
                     verified: 1
                 },
                 content: "Hello world",
@@ -10651,8 +10651,8 @@ const dy = {
             let e$ = Ze([]);
             if (So.localhost) {
                 Kx.value = {
-                    name: "Jester Iruka",
-                    username: "jesteriruka",
+                    name: "Scooby Dev",
+                    username: "scooby",
                     bio: "Programador do celular",
                     avatarURL: "https://pbs.twimg.com/profile_images/1408692225513607170/2fgNPFXo_400x400.jpg"
                 };
@@ -10968,7 +10968,7 @@ Ey.render = function (e$, e0, e8, e2, e3, e1) {
     }, null, 8, ["src"]), Pl("div", My, [Pl("div", Vy, [Pl("h1", null, g(e2.tweet.author.name), 1), e2.tweet.author.verified ? (wl(), _l(e4, {
         key: 0,
         class: "ml-2 w-6 h-6"
-    })) : Ml("", !0), ]), Pl("h1", Dy, "@" + g(e2.tweet.author.username), 1), ]), ]), Pl("p", Ny, g(e2.tweet.content), 1), Pl("p", Uy, g(e2.hour) + " \xb7 " + g(e2.date) + " \xb7 Twitter for " + g(e2.android ? "Jesteroid" : "JesterOS"), 1), Pl("div", $y, [Pl("p", jy, [Pl("b", Fy, g(e2.tweet.retweets), 1), zy]), Pl("p", By, [Pl("b", Hy, g(e2.tweet.likes), 1), qy]), ]), ])) : Ml("", !0), Pl("div", Gy, [Pl("button", {
+    })) : Ml("", !0), ]), Pl("h1", Dy, "@" + g(e2.tweet.author.username), 1), ]), ]), Pl("p", Ny, g(e2.tweet.content), 1), Pl("p", Uy, g(e2.hour) + " \xb7 " + g(e2.date) + " \xb7 Twitter for " + g(e2.android ? "scoobyoid" : "scoobyOS"), 1), Pl("div", $y, [Pl("p", jy, [Pl("b", Fy, g(e2.tweet.retweets), 1), zy]), Pl("p", By, [Pl("b", Hy, g(e2.tweet.likes), 1), qy]), ]), ])) : Ml("", !0), Pl("div", Gy, [Pl("button", {
         onClick: e0[2] || (e0[2] = e$ => e2.content = null == e2.content ? "" : null)
     }, [Wy]), Pl("button", {
         onClick: e0[3] || (e0[3] = (...e$) => e2.retweet && e2.retweet(...e$)),
@@ -11011,8 +11011,8 @@ const nk = {
                 e0 = rt(),
                 e8 = Ze([]);
             return So.localhost && (e0.value = {
-                name: "Jester Iruka",
-                username: "jesteriruka",
+                name: "Scooby Dev",
+                username: "scooby",
                 verified: 1
             }, e8.push(...Array(50).fill(0).map((e$, e0) => ({
                 id: e0 + 1,
@@ -11437,7 +11437,7 @@ Bk.render = function (e$, e0, e8, e2, e3, e1) {
     }, null, 8, ["src"])) : "nubank" == e2.bankType ? (wl(), _l("div", Gk, [Wk])) : "nubank2" == e2.bankType ? (wl(), _l("div", Kk, [Jk])) : "southBank" == e2.bankType ? (wl(), _l("h1", Xk, "SouthBank")) : "fleeca" == e2.bankType ? (wl(), _l("img", {
         key: 4,
         class: "h-12 mx-auto",
-        src: e$.$asset("stock/fleeca.png"),
+        src: e$.$asset("stock/FIVEBANK.png"),
         alt: ""
     }, null, 8, ["src"])) : "nxbank" == e2.bankType ? (wl(), _l("img", Yk)) : "CPBank" == e2.bankType ? (wl(), _l("img", {
         key: 6,
@@ -14924,7 +14924,7 @@ const dL = {
                     title: "T\xedtulo da not\xedcia",
                     description: "Descri\xe7\xe3o da not\xedcia",
                     tag: "Fofocas",
-                    author: "Jester Iruka",
+                    author: "Scooby Dev",
                     imageURL: "https://picsum.photos/1920/1080",
                     views: 0,
                     videoURL: "",
