@@ -169,6 +169,9 @@ end
 -- CONSUMEFUEL
 -----------------------------------------------------------------------------------------------------------------------------------------
 
+local fuelSaveTimer = 0
+local lastSyncPlate = nil
+
 Citizen.CreateThread(function()
 	SetNuiFocus(false,false)
 
@@ -190,12 +193,21 @@ Citizen.CreateThread(function()
 					end
 
 					if GetPedInVehicleSeat(vehicle,-1) == ped then
-						TriggerServerEvent("engine:tryFuel",Plate,fuelVeh[Plate])
+						if GetGameTimer() >= fuelSaveTimer then
+							fuelSaveTimer = GetGameTimer() + 30000
+							TriggerServerEvent("engine:tryFuel",Plate,fuelVeh[Plate])
+							lastSyncPlate = Plate
+						end
 					end
 				end
 			else
 				SetVehicleEngineOn(vehicle,false,true,true)
 				timeDistance = 1
+			end
+		else
+			if lastSyncPlate and fuelVeh[lastSyncPlate] then
+				TriggerServerEvent("engine:tryFuel",lastSyncPlate,fuelVeh[lastSyncPlate])
+				lastSyncPlate = nil
 			end
 		end
 

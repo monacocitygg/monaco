@@ -46,38 +46,18 @@ end)
 CreateThread(function()
 	while true do
 		local TimeDistance = 999
-		local Ped = PlayerPedId()
 		if LocalPlayer["state"]["Active"] and LocalPlayer["state"]["Cancel"] then
 			TimeDistance = 1
+			local Ped = PlayerPedId()
+			DisableControlAction(0,18,true)
 			DisableControlAction(0,24,true)
 			DisableControlAction(0,25,true)
 			DisableControlAction(0,38,true)
 			DisableControlAction(0,47,true)
-			DisableControlAction(0,257,true)
-			DisableControlAction(0,140,true)
-			DisableControlAction(0,142,true)
-			DisableControlAction(0,137,true)
-			DisablePlayerFiring(Ped,true)
-		end
-
-		Wait(TimeDistance)
-	end
-end)
------------------------------------------------------------------------------------------------------------------------------------------
--- THREADPHONE
------------------------------------------------------------------------------------------------------------------------------------------
-CreateThread(function()
-	while true do
-		local TimeDistance = 999
-		local Ped = PlayerPedId()
-		if LocalPlayer["state"]["Active"] and LocalPlayer["state"]["Cancel"] then
-			TimeDistance = 1
-			DisableControlAction(0,18,true)
-			DisableControlAction(0,24,true)
-			DisableControlAction(0,25,true)
 			DisableControlAction(0,68,true)
 			DisableControlAction(0,70,true)
 			DisableControlAction(0,91,true)
+			DisableControlAction(0,137,true)
 			DisableControlAction(0,140,true)
 			DisableControlAction(0,142,true)
 			DisableControlAction(0,143,true)

@@ -1006,6 +1006,33 @@ AddEventHandler("drops:Atualizar",function(Number,Amount)
 	end
 end)
 -----------------------------------------------------------------------------------------------------------------------------------------
+-- DROPNEARBYCACHE
+-----------------------------------------------------------------------------------------------------------------------------------------
+local nearbyDrops = {}
+
+CreateThread(function()
+	while true do
+		if LocalPlayer["state"]["Route"] < 900000 then
+			local Ped = PlayerPedId()
+			local Coords = GetEntityCoords(Ped)
+			local temp = {}
+
+			for k,v in pairs(Drops) do
+				local Distance = #(Coords - vec3(v["Coords"][1],v["Coords"][2],v["Coords"][3]))
+				if Distance <= 50 then
+					temp[k] = v
+				end
+			end
+
+			nearbyDrops = temp
+		else
+			nearbyDrops = {}
+		end
+
+		Wait(2000)
+	end
+end)
+-----------------------------------------------------------------------------------------------------------------------------------------
 -- THREADDROPBLIPS
 -----------------------------------------------------------------------------------------------------------------------------------------
 CreateThread(function()
@@ -1015,7 +1042,7 @@ CreateThread(function()
 			local Ped = PlayerPedId()
 			local Coords = GetEntityCoords(Ped)
 
-			for _,v in pairs(Drops) do
+			for _,v in pairs(nearbyDrops) do
 				local Distance = #(Coords - vec3(v["Coords"][1],v["Coords"][2],v["Coords"][3]))
 				if Distance <= 50 then
 					TimeDistance = 1

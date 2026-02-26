@@ -34,6 +34,11 @@ local PurgeActive = false
 -- Lights Car
 -----------------------------------------------------------------------------------------------------------------------------------------
 local lightState = "off"
+local lastLightState = nil
+local lastEngineVal = -1
+local lastEngineRunning = nil
+local lastRpmVal = -1
+local lastGearVal = -1
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- SEATBELT
 -----------------------------------------------------------------------------------------------------------------------------------------
@@ -84,9 +89,9 @@ CreateThread(function()
 					Locked = VLocked
 				end
 
-				if lightState then
+				if lightState ~= lastLightState then
 					SendNUIMessage({ Action = "Lights", lightState = lightState })
-					lightState = lightState
+					lastLightState = lightState
 				end
 
 				if Headlights ~= VHeadlight or Headbeams ~= VHighBeam then
@@ -108,8 +113,10 @@ CreateThread(function()
 				end
 
 				if LocalPlayer["state"]["Nitro"] then
-					SendNUIMessage({ Action = "Nitro", Number = NitroFuel })
-					Nitro = NitroFuel
+					if Nitro ~= NitroFuel then
+						SendNUIMessage({ Action = "Nitro", Number = NitroFuel })
+						Nitro = NitroFuel
+					end
 				else
 					if (GlobalState["Nitro"][Plate] or 0) ~= Nitro then
 						SendNUIMessage({ Action = "Nitro", Number = GlobalState["Nitro"][Plate] or 0 })
@@ -131,8 +138,20 @@ CreateThread(function()
 					Gear = 7
 				end
 
-				SendNUIMessage({ Action = "Engine", Number = parseInt(GetVehicleEngineHealth(Vehicle) / 10), Status = GetVehicleEngineHealth(Vehicle) > 500, Running = GetIsVehicleEngineRunning(Vehicle) })
-				SendNUIMessage({ Action = "Rpm", Number = IsVehicleEngineOn(Vehicle) and parseInt(GetVehicleCurrentRpm(Vehicle) * 100) or 0, Gear = Gear })
+				local engineVal = parseInt(GetVehicleEngineHealth(Vehicle) / 10)
+				local engineRunning = GetIsVehicleEngineRunning(Vehicle)
+				if lastEngineVal ~= engineVal or lastEngineRunning ~= engineRunning then
+					SendNUIMessage({ Action = "Engine", Number = engineVal, Status = GetVehicleEngineHealth(Vehicle) > 500, Running = engineRunning })
+					lastEngineVal = engineVal
+					lastEngineRunning = engineRunning
+				end
+
+				local rpmVal = IsVehicleEngineOn(Vehicle) and parseInt(GetVehicleCurrentRpm(Vehicle) * 100) or 0
+				if lastRpmVal ~= rpmVal or lastGearVal ~= Gear then
+					SendNUIMessage({ Action = "Rpm", Number = rpmVal, Gear = Gear })
+					lastRpmVal = rpmVal
+					lastGearVal = Gear
+				end
 			else
 				if ActualVehicle then
 					ActualVehicle = nil

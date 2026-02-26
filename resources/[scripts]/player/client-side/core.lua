@@ -131,24 +131,6 @@ AddEventHandler("resetEnergetic",function()
 	end
 end)
 -----------------------------------------------------------------------------------------------------------------------------------------
--- THREADENERGETIC
------------------------------------------------------------------------------------------------------------------------------------------
-CreateThread(function()
-	while true do
-		if Energetic > 0 then
-			Energetic = Energetic - 1
-			RestorePlayerStamina(PlayerId(),1.0)
-
-			if Energetic <= 0 or GetEntityHealth(PlayerPedId()) <= 100 then
-				SetRunSprintMultiplierForPlayer(PlayerId(),1.0)
-				Energetic = 0
-			end
-		end
-
-		Wait(1000)
-	end
-end)
------------------------------------------------------------------------------------------------------------------------------------------
 -- SETMETH
 -----------------------------------------------------------------------------------------------------------------------------------------
 RegisterNetEvent("setMeth")
@@ -160,26 +142,6 @@ AddEventHandler("setMeth",function()
 	end
 end)
 -----------------------------------------------------------------------------------------------------------------------------------------
--- THREADMETH
------------------------------------------------------------------------------------------------------------------------------------------
-CreateThread(function()
-	while true do
-		if Meth > 0 then
-			Meth = Meth - 1
-
-			if Meth <= 0 or GetEntityHealth(PlayerPedId()) <= 100 then
-				Meth = 0
-
-				if GetScreenEffectIsActive("DMT_flight") then
-					StopScreenEffect("DMT_flight")
-				end
-			end
-		end
-
-		Wait(1000)
-	end
-end)
------------------------------------------------------------------------------------------------------------------------------------------
 -- SETCOCAINE
 -----------------------------------------------------------------------------------------------------------------------------------------
 RegisterNetEvent("setCocaine")
@@ -188,26 +150,6 @@ AddEventHandler("setCocaine",function()
 
 	if not GetScreenEffectIsActive("MinigameTransitionIn") then
 		StartScreenEffect("MinigameTransitionIn",0,true)
-	end
-end)
------------------------------------------------------------------------------------------------------------------------------------------
--- THREADCOCAINE
------------------------------------------------------------------------------------------------------------------------------------------
-CreateThread(function()
-	while true do
-		if Cocaine > 0 then
-			Cocaine = Cocaine - 1
-
-			if Cocaine <= 0 or GetEntityHealth(PlayerPedId()) <= 100 then
-				Cocaine = 0
-
-				if GetScreenEffectIsActive("MinigameTransitionIn") then
-					StopScreenEffect("MinigameTransitionIn")
-				end
-			end
-		end
-
-		Wait(1000)
 	end
 end)
 -----------------------------------------------------------------------------------------------------------------------------------------
@@ -224,15 +166,52 @@ AddEventHandler("setDrunkTime",function(Timer)
 	end
 end)
 -----------------------------------------------------------------------------------------------------------------------------------------
--- THREADDRUNK
+-- THREADTIMERS
 -----------------------------------------------------------------------------------------------------------------------------------------
 CreateThread(function()
 	while true do
+		local Ped = PlayerPedId()
+		local Health = GetEntityHealth(Ped)
+
+		if Energetic > 0 then
+			Energetic = Energetic - 1
+			RestorePlayerStamina(PlayerId(),1.0)
+
+			if Energetic <= 0 or Health <= 100 then
+				SetRunSprintMultiplierForPlayer(PlayerId(),1.0)
+				Energetic = 0
+			end
+		end
+
+		if Meth > 0 then
+			Meth = Meth - 1
+
+			if Meth <= 0 or Health <= 100 then
+				Meth = 0
+
+				if GetScreenEffectIsActive("DMT_flight") then
+					StopScreenEffect("DMT_flight")
+				end
+			end
+		end
+
+		if Cocaine > 0 then
+			Cocaine = Cocaine - 1
+
+			if Cocaine <= 0 or Health <= 100 then
+				Cocaine = 0
+
+				if GetScreenEffectIsActive("MinigameTransitionIn") then
+					StopScreenEffect("MinigameTransitionIn")
+				end
+			end
+		end
+
 		if Drunk > 0 then
 			Drunk = Drunk - 1
 
-			if Drunk <= 0 or GetEntityHealth(PlayerPedId()) <= 100 then
-				ResetPedMovementClipset(PlayerPedId(),0.25)
+			if Drunk <= 0 or Health <= 100 then
+				ResetPedMovementClipset(Ped,0.25)
 				LocalPlayer["state"]["Drunk"] = false
 			end
 		end
@@ -277,13 +256,17 @@ end)
 -----------------------------------------------------------------------------------------------------------------------------------------
 CreateThread(function()
     while true do
-        Wait(1000)
+        Wait(5000)
+        local playerPed = PlayerPedId()
+        local playerCoords = GetEntityCoords(playerPed)
         local peds = GetGamePool('CPed')
         for i=1, #peds do
             local ped = peds[i]
             if not IsPedAPlayer(ped) then
-                if GetSelectedPedWeapon(ped) ~= -1569615261 then
-                    RemoveAllPedWeapons(ped, true)
+                if #(playerCoords - GetEntityCoords(ped)) <= 100.0 then
+                    if GetSelectedPedWeapon(ped) ~= -1569615261 then
+                        RemoveAllPedWeapons(ped, true)
+                    end
                 end
             end
         end
@@ -527,7 +510,7 @@ CreateThread(function()
 
 			local Vehicle = GetVehiclePedIsUsing(Ped)
 			if IsPedShooting(Ped) and (GetVehicleClass(Vehicle) ~= 15 and GetVehicleClass(Vehicle) ~= 16) then
-				ShakeGameplayCam("SMALL_EXPLOSION_SHAKE",0.2)
+				ShakeGameplayCam("SMALL_EXPLOSION_SHAKE",0.45)
 				wasShaking = true
 			elseif wasShaking then
 				StopGameplayCamShaking(true)

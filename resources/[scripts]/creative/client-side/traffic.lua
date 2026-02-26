@@ -52,36 +52,7 @@ if trafficDensitivity or crowdDensitivity then
     end)
 end
 
-Citizen.CreateThread(function()
-    local player = GetPlayerPed(-1)
-    while true do
-        Citizen.Wait(0)
-
-        if crowdDensitivity then 
-            if crowdScaling then
-                SetPedDensityMultiplierThisFrame(nCrowd)  
-                SetScenarioPedDensityMultiplierThisFrame(nCrowd,nCrowd)
-            else 
-                local d = math.max(0.05, math.min(1.0, crowdDensity))
-                SetPedDensityMultiplierThisFrame(d)
-                SetScenarioPedDensityMultiplierThisFrame(d,d)
-            end
-        end
-  
-        if trafficDensitivity then
-            if trafficScaling then
-                SetVehicleDensityMultiplierThisFrame(nTraff)
-                SetRandomVehicleDensityMultiplierThisFrame(nTraff)
-                SetParkedVehicleDensityMultiplierThisFrame(nTraff)
-            else
-                local t = math.max(0.05, math.min(1.0, trafficDensity))
-                SetVehicleDensityMultiplierThisFrame(t)
-                SetRandomVehicleDensityMultiplierThisFrame(t)
-                SetParkedVehicleDensityMultiplierThisFrame(t)
-            end
-        end
-    end
-end)
+-- density multipliers movidos para creative/core.lua (loop per-frame unificado)
 
 local cayoPeds = {}
 local maxCayoPeds = 20

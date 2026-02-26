@@ -210,20 +210,17 @@ end)
 -----------------------------------------------------------------------------------------------------------------------------------------
 local isMapOpen = false
 
-Citizen.CreateThread(function()
-    while true do
-        Citizen.Wait(0)
-        if IsControlJustReleased(0, 322) then 
-            if isMapOpen then
-                Citizen.InvokeNative(0xC58FF9713A0A7E97, 0, 200, 1)
-                isMapOpen = false
-            else
-                ActivateFrontendMenu(GetHashKey("FE_MENU_VERSION_MP_PAUSE"), 0, -1)
-                isMapOpen = true
-            end
-        end
-    end
-end)
+RegisterCommand("+openMap",function()
+	if isMapOpen then
+		Citizen.InvokeNative(0xC58FF9713A0A7E97, 0, 200, 1)
+		isMapOpen = false
+	else
+		ActivateFrontendMenu(GetHashKey("FE_MENU_VERSION_MP_PAUSE"), 0, -1)
+		isMapOpen = true
+	end
+end,false)
+RegisterCommand("-openMap",function() end,false)
+RegisterKeyMapping("+openMap","Abrir/Fechar Mapa","keyboard","F10")
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- THREADTIMERS
 -----------------------------------------------------------------------------------------------------------------------------------------
@@ -246,14 +243,6 @@ CreateThread(function()
 		SetWeaponDamageModifierThisFrame("WEAPON_NIGHTSTICK",0.35)
 		SetWeaponDamageModifierThisFrame("WEAPON_STONE_HATCHET",0.25)
 		SetWeaponDamageModifierThisFrame("WEAPON_SMOKEGRENADE",0.0)
-
-		RemoveAllPickupsOfType("PICKUP_WEAPON_KNIFE")
-		RemoveAllPickupsOfType("PICKUP_WEAPON_PISTOL")
-		RemoveAllPickupsOfType("PICKUP_WEAPON_MINISMG")
-		RemoveAllPickupsOfType("PICKUP_WEAPON_MICROSMG")
-		RemoveAllPickupsOfType("PICKUP_WEAPON_PUMPSHOTGUN")
-		RemoveAllPickupsOfType("PICKUP_WEAPON_CARBINERIFLE")
-		RemoveAllPickupsOfType("PICKUP_WEAPON_SAWNOFFSHOTGUN")
 
 		HideHudComponentThisFrame(1)
 		HideHudComponentThisFrame(2)
@@ -306,19 +295,68 @@ CreateThread(function()
 			DisableControlAction(1,142,true)
 		end
 
+		SetPauseMenuActive(false)
+
+		if crowdDensitivity then
+			if crowdScaling then
+				SetPedDensityMultiplierThisFrame(nCrowd)
+				SetScenarioPedDensityMultiplierThisFrame(nCrowd,nCrowd)
+			else
+				local d = math.max(0.05, math.min(1.0, crowdDensity))
+				SetPedDensityMultiplierThisFrame(d)
+				SetScenarioPedDensityMultiplierThisFrame(d,d)
+			end
+		end
+
+		if trafficDensitivity then
+			if trafficScaling then
+				SetVehicleDensityMultiplierThisFrame(nTraff)
+				SetRandomVehicleDensityMultiplierThisFrame(nTraff)
+				SetParkedVehicleDensityMultiplierThisFrame(nTraff)
+			else
+				local t = math.max(0.05, math.min(1.0, trafficDensity))
+				SetVehicleDensityMultiplierThisFrame(t)
+				SetRandomVehicleDensityMultiplierThisFrame(t)
+				SetParkedVehicleDensityMultiplierThisFrame(t)
+			end
+		end
+
+		Wait(0)
+	end
+end)
+-----------------------------------------------------------------------------------------------------------------------------------------
+-- THREADCLEANUP
+-----------------------------------------------------------------------------------------------------------------------------------------
+CreateThread(function()
+	while true do
+		RemoveAllPickupsOfType("PICKUP_WEAPON_KNIFE")
+		RemoveAllPickupsOfType("PICKUP_WEAPON_PISTOL")
+		RemoveAllPickupsOfType("PICKUP_WEAPON_MINISMG")
+		RemoveAllPickupsOfType("PICKUP_WEAPON_MICROSMG")
+		RemoveAllPickupsOfType("PICKUP_WEAPON_PUMPSHOTGUN")
+		RemoveAllPickupsOfType("PICKUP_WEAPON_CARBINERIFLE")
+		RemoveAllPickupsOfType("PICKUP_WEAPON_SAWNOFFSHOTGUN")
+
 		if GetPlayerWantedLevel(PlayerId()) ~= 0 then
 			ClearPlayerWantedLevel(PlayerId())
 		end
 
-		SetPauseMenuActive(false)
 		DisablePlayerVehicleRewards(PlayerId())
 
+		Wait(5000)
+	end
+end)
+-----------------------------------------------------------------------------------------------------------------------------------------
+-- THREADWEATHERSYNC
+-----------------------------------------------------------------------------------------------------------------------------------------
+CreateThread(function()
+	while true do
 		SetWeatherTypeNow(GlobalState["Weather"])
 		SetWeatherTypePersist(GlobalState["Weather"])
 		SetWeatherTypeNowPersist(GlobalState["Weather"])
 		NetworkOverrideClockTime(GlobalState["Hours"],GlobalState["Minutes"],00)
 
-		Wait(0)
+		Wait(10000)
 	end
 end)
 -----------------------------------------------------------------------------------------------------------------------------------------

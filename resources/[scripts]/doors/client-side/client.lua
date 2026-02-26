@@ -9,6 +9,28 @@ vRP = Proxy.getInterface("vRP")
 -----------------------------------------------------------------------------------------------------------------------------------------
 vSERVER = Tunnel.getInterface("doors")
 -----------------------------------------------------------------------------------------------------------------------------------------
+-- DOORSNEARBYCACHE
+-----------------------------------------------------------------------------------------------------------------------------------------
+local nearbyDoors = {}
+
+CreateThread(function()
+	while true do
+		local ped = PlayerPedId()
+		local coords = GetEntityCoords(ped)
+		local temp = {}
+
+		for k,v in pairs(GlobalState["Doors"]) do
+			local distance = #(coords - vector3(v["x"],v["y"],v["z"]))
+			if distance <= (v["distance"] or 10) + 10.0 then
+				temp[k] = v
+			end
+		end
+
+		nearbyDoors = temp
+		Wait(1000)
+	end
+end)
+-----------------------------------------------------------------------------------------------------------------------------------------
 -- THREADBUTTON
 -----------------------------------------------------------------------------------------------------------------------------------------
 CreateThread(function()
@@ -17,7 +39,7 @@ CreateThread(function()
 		local ped = PlayerPedId()
 		local coords = GetEntityCoords(ped)
 
-		for k,v in pairs(GlobalState["Doors"]) do
+		for k,v in pairs(nearbyDoors) do
 			local distance = #(coords - vector3(v["x"],v["y"],v["z"]))
 			if distance <= v["distance"] then
 				local closestDoor = GetClosestObjectOfType(v["x"],v["y"],v["z"],v["distance"] + 0.0,v["hash"],false,false,false)

@@ -468,21 +468,8 @@ CreateThread(function()
             until not IsBigmapActive()
 
             while Quadrado do
-                Wait(100)
-                local Ped = PlayerPedId()
-                local Vehicle = GetVehiclePedIsIn(Ped, false)
-                
-                if Vehicle ~= 0 then
-                    local Velocidade = GetEntitySpeed(Vehicle) * 3.6
-                    
-                    if Velocidade < 70 then
-                        SetRadarZoom(1100)
-                    else
-                        SetRadarZoom(1100)
-                    end
-                else
-                    SetRadarZoom(1100)
-                end
+                SetRadarZoom(1100)
+                Wait(500)
             end
         end
     end

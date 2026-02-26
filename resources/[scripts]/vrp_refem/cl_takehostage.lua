@@ -153,8 +153,10 @@ Citizen.CreateThread(function()
 				TaskPlayAnim(GetPlayerPed(-1), takeHostageAnimDictPlaying, takeHostageAnimNamePlaying, 8.0, -8.0, 100000, takeHostageControlFlagPlaying, 0, false, false, false)
 				Citizen.Wait(0)
 			end
+			Wait(100)
+		else
+			Wait(500)
 		end
-		Wait(0)
 	end
 end)
 
@@ -255,7 +257,11 @@ Citizen.CreateThread(function()
 			DisableControlAction(0,35,true) -- disable move right
 			DisableControlAction(0,271,true)
 		end
-		Wait(0)
+		if holdingHostage or beingHeldHostage then
+			Wait(0)
+		else
+			Wait(500)
+		end
 	end
 end)
 
