@@ -45,7 +45,11 @@ end
 local function PlayRadioAnim(animId)
 	local Ped = PlayerPedId()
 
-	StopRadioAnim()
+	-- Remove prop se existir
+	if DoesEntityExist(Object) then
+		DeleteEntity(Object)
+		Object = nil
+	end
 
 	local animData = GetAnimConfig(animId)
 	if not animData or not animData.dict or IsPedInAnyVehicle(Ped) then
@@ -54,24 +58,17 @@ local function PlayRadioAnim(animId)
 
 	RequestAnimDict(animData.dict)
 	while not HasAnimDictLoaded(animData.dict) do
-		Wait(1)
+		Citizen.Wait(100)
 	end
-
-	local p = animData.animParams or {}
-	local blendIn = p.blendIn or 8.0
-	local blendOut = p.blendOut or -8.0
-	local duration = p.duration or -1
-	local flag = p.flag or 49
-	local playbackRate = p.playbackRate or 0
 
 	if animData.prop and UseProp then
 		local PropModel = GetHashKey(animData.prop.model)
 		RequestModel(PropModel)
 		while not HasModelLoaded(PropModel) do
-			Wait(1)
+			Citizen.Wait(100)
 		end
 
-		TaskPlayAnim(Ped, animData.dict, animData.anim, blendIn, blendOut, duration, flag, playbackRate, false, false, false)
+		TaskPlayAnim(Ped, animData.dict, animData.anim, 8.0, -8.0, -1, 49, 0, false, false, false)
 
 		local BoneIndex = GetPedBoneIndex(Ped, animData.prop.bone)
 		Object = CreateObject(PropModel, 1.0, 1.0, 1.0, true, true, false)
@@ -80,7 +77,7 @@ local function PlayRadioAnim(animId)
 			animData.prop.rotation.x, animData.prop.rotation.y, animData.prop.rotation.z,
 			true, true, false, true, 1, true)
 	else
-		TaskPlayAnim(Ped, animData.dict, animData.anim, blendIn, blendOut, duration, flag, playbackRate, false, false, false)
+		TaskPlayAnim(Ped, animData.dict, animData.anim, 8.0, -8.0, -1, 49, 0, false, false, false)
 	end
 
 	AnimPlaying = true
@@ -118,7 +115,7 @@ AddEventHandler("radio:playTalkAnim", function()
 
 	RequestAnimDict(animData.dict)
 	while not HasAnimDictLoaded(animData.dict) do
-		Wait(1)
+		Citizen.Wait(100)
 	end
 
 	local p = animData.animParams or {}
@@ -134,7 +131,7 @@ AddEventHandler("radio:playTalkAnim", function()
 		local PropModel = GetHashKey(animData.prop.model)
 		RequestModel(PropModel)
 		while not HasModelLoaded(PropModel) do
-			Wait(1)
+			Citizen.Wait(100)
 		end
 
 		if DoesEntityExist(TalkObject) then
