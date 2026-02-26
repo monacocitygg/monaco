@@ -17,7 +17,8 @@
             "truco": {"name": "Truco", "icon": "assets/apps/truco.png"},
             "settings": {"name": "Config", "icon": "assets/apps/config.png"},
             "contacts": {"name": "Contatos", "icon": "assets/apps/chamadas.png"},
-            "yellowpages": {"name": "Yellow Pages", "icon": "assets/apps/yellowpages.png"}
+            "yellowpages": {"name": "Yellow Pages", "icon": "assets/apps/yellowpages.png"},
+            "whatsapp": {"name": "WhatsApp", "icon": "assets/apps/whatsapp.png"}
       },
       "bankType": "fleeca",
       "uploadServer": "https://api.fivemanage.com/api/image?apiKey=vL5SUt8LGCsAPuJJlkcsEH2CqJyA3wJw",
