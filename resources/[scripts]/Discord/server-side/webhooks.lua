@@ -118,7 +118,9 @@ Discords = {
 -- DISCORD
 -----------------------------------------------------------------------------------------------------------------------------------------
 AddEventHandler("Discord",function(Hook,Message,Color)
-	PerformHttpRequest(Discords[Hook],function(err,text,headers) end,"POST",json.encode({
+	local url = Discords[Hook]
+	if not url or url == "" or url == "SEU_WEBHOOK" then return end
+	PerformHttpRequest(url,function(err,text,headers) end,"POST",json.encode({
 		username = ServerName,
 		embeds = { { color = Color, description = Message } }
 	}),{ ["Content-Type"] = "application/json" })
@@ -133,7 +135,9 @@ end)
 -- TABLET POLICE
 -----------------------------------------------------------------------------------------------------------------------------------------
 AddEventHandler("DiscordTablet",function(Hook,Message,Color,Image)
-	PerformHttpRequest(Discords[Hook],function(err,text,headers) end,"POST",json.encode({
+	local url = Discords[Hook]
+	if not url or url == "" or url == "SEU_WEBHOOK" then return end
+	PerformHttpRequest(url,function(err,text,headers) end,"POST",json.encode({
 		username = ServerName,
 		embeds = { { color = Color, description = Message, image = { url = Image } } }
 	}),{ ["Content-Type"] = "application/json" })
