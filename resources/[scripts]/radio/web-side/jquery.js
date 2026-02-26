@@ -16,19 +16,20 @@ window.addEventListener("message",function(event){
 				}
 
 				if (event["data"]["Animations"]) {
-					var $container = $("#animationOptions");
-					$container.empty();
-					var currentAnim = event["data"]["CurrentAnim"] || "none";
-					$.each(event["data"]["Animations"], function(i, anim) {
-						var selectedClass = (anim.id === currentAnim) ? " selected" : "";
-						$container.append(
-							'<div class="anim-option' + selectedClass + '" data-anim="' + anim.id + '">' +
-							'<i class="mdi ' + anim.icon + '"></i>' +
-							'<span>' + anim.label + '</span>' +
-							'</div>'
-						);
-					});
-				}
+				var $grid = $("#animationGrid");
+				$grid.empty();
+				var currentAnim = event["data"]["CurrentAnim"] || "none";
+				$.each(event["data"]["Animations"], function(i, anim) {
+					var selectedClass = (anim.id === currentAnim) ? " selected" : "";
+					var imgSrc = anim.image ? "images/" + anim.image : "images/Radio.png";
+					$grid.append(
+						'<div class="anim-grid-item' + selectedClass + '" data-anim="' + anim.id + '">' +
+						'<img src="' + imgSrc + '" alt="' + anim.label + '">' +
+						'<div class="anim-grid-label">' + anim.label + '</div>' +
+						'</div>'
+					);
+				});
+			}
 
 				if ($("#Radio").css("display") === "none"){
 					$("#Radio").fadeIn(300);
@@ -51,7 +52,9 @@ $(document).ready(function(){
 	document.onkeyup = function(event){
 		switch (event["key"]){
 			case "Escape":
-				if ($("#Radio").css("display") !== "none"){
+				if ($("#animOverlay").css("display") !== "none"){
+					$("#animOverlay").fadeOut(300);
+				} else if ($("#Radio").css("display") !== "none"){
 					$("#Radio").fadeOut(300);
 					$.post("http://radio/RadioClose");
 				}
@@ -107,12 +110,32 @@ $(document).ready(function(){
         }
     });
 
-    // Animation Selector (event delegation for dynamic elements)
-    $("#animationOptions").on("click", ".anim-option", function() {
-        $(".anim-option").removeClass("selected");
+    // Open Animation Popup
+    $("#openAnimPopup").on("click", function() {
+        $("#animOverlay").fadeIn(300);
+    });
+
+    // Close Animation Popup
+    $("#closeAnimPopup").on("click", function() {
+        $("#animOverlay").fadeOut(300);
+    });
+
+    // Close popup when clicking overlay background
+    $("#animOverlay").on("click", function(e) {
+        if ($(e.target).is("#animOverlay")) {
+            $("#animOverlay").fadeOut(300);
+        }
+    });
+
+    // Animation Grid Item Selection (event delegation for dynamic elements)
+    $("#animationGrid").on("click", ".anim-grid-item", function() {
+        $(".anim-grid-item").removeClass("selected");
         $(this).addClass("selected");
         var anim = $(this).data("anim");
         $.post("http://radio/RadioAnimation", JSON.stringify({ Animation: anim }));
+        setTimeout(function() {
+            $("#animOverlay").fadeOut(300);
+        }, 200);
     });
 
     // Prop Toggle

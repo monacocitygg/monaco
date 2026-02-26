@@ -37,8 +37,9 @@
 			</div>
 
 			<div class="animation-container">
-				<div class="animation-label">Animação do rádio</div>
-				<div class="animation-options" id="animationOptions">
+				<div class="animation-btn-wrapper" id="openAnimPopup">
+					<i class="mdi mdi-play"></i>
+					<span>Trocar Animação</span>
 				</div>
 			</div>
 
@@ -61,6 +62,18 @@
 					</div>
 					<input type="range" class="volume-slider" min="0" max="100" value="90">
 					<div class="volume-text">90%</div>
+				</div>
+			</div>
+		</div>
+		<div class="anim-popup-overlay" id="animOverlay" style="display:none;">
+			<div class="anim-popup-modal">
+				<div class="anim-popup-header">
+					<div class="anim-popup-title">Lista de Animações</div>
+					<div class="anim-popup-close" id="closeAnimPopup">
+						<i class="mdi mdi-close"></i>
+					</div>
+				</div>
+				<div class="anim-popup-grid" id="animationGrid">
 				</div>
 			</div>
 		</div>

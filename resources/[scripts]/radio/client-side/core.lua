@@ -93,7 +93,7 @@ end
 local function GetAnimListForNUI()
 	local list = {}
 	for _, v in ipairs(Config.Animations) do
-		table.insert(list, { id = v.id, label = v.label, icon = v.icon })
+		table.insert(list, { id = v.id, label = v.label, icon = v.icon, image = v.image })
 	end
 	return list
 end
