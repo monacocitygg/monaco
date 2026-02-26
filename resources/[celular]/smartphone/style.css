@@ -1,5 +1,5 @@
 @import url(https://pro.fontawesome.com/releases/v5.13.0/css/all.css);
-@import url(https://fivem-static.jesteriruka.dev/fonts/fonts.css);
+@import url(assets/fonts/fonts.css);
 @import url(https://fonts.googleapis.com/css2?family=Roboto:wght@300;400&display=swap);
 @import url(https://flutter.github.io/assets-for-api-docs/assets/cupertino/cupertino.css);
 
@@ -191,7 +191,7 @@ html.dark button.active[data-v-1e353ded] {
 }
 
 [container][data-v-21268b06] {
-    background: url(http://191.96.225.198/Volphz/smartphone/stock/whatsapp/bg-light.jpg) #e0e0e0;
+    background: url(assets/stock/whatsapp/bg-light.jpg) #e0e0e0;
     background-size: 100%
 }
 
@@ -204,7 +204,7 @@ html.dark .bg-target[data-v-21268b06] {
 }
 
 html.dark [container][data-v-21268b06] {
-    background: url(http://191.96.225.198/Volphz/smartphone/stock/whatsapp/bg-dark.jpg) #101d25;
+    background: url(assets/stock/whatsapp/bg-dark.jpg) #101d25;
     background-size: 100%
 }
 
@@ -905,7 +905,7 @@ textarea[data-v-dfd1e998] {
 
 @font-face {
     font-family: 'Font Awesome 6';
-    src: url(https://cdn.jesteriruka.dev/fonts/fa-thin-100.woff2)
+    src: url(assets/fonts/fa-thin-100.woff2)
 }
 
 .f6-thin[data-v-6c02b606] {
@@ -964,25 +964,25 @@ textarea[data-v-dfd1e998] {
 @font-face {
     font-family: SofiaPro;
     font-weight: 400;
-    src: url(https://cdn.jesteriruka.dev/fonts/SofiaPro-Regular.otf)
+    src: url(assets/fonts/SofiaPro-Regular.otf)
 }
 
 @font-face {
     font-family: SofiaPro;
     font-weight: 500;
-    src: url(https://cdn.jesteriruka.dev/fonts/SofiaPro-Medium.otf)
+    src: url(assets/fonts/SofiaPro-Medium.otf)
 }
 
 @font-face {
     font-family: SofiaPro;
     font-weight: 700;
-    src: url(https://cdn.jesteriruka.dev/fonts/SofiaPro-Bold.otf)
+    src: url(assets/fonts/SofiaPro-Bold.otf)
 }
 
 @font-face {
     font-family: SofiaPro;
     font-weight: 900;
-    src: url(https://cdn.jesteriruka.dev/fonts/SofiaPro-Black.otf)
+    src: url(assets/fonts/SofiaPro-Black.otf)
 }
 
 .square {
