@@ -122,8 +122,8 @@ CreateThread(function()
                             local perpDistNeck = pointToLineDistance(neckCoords, camCoords, dir)
                             local perpDist = math.min(perpDistHead, perpDistNeck)
 
-                            -- threshold apertado: so cabeca/pescoco (0.15 base)
-                            local threshold = 0.15 + (distFromCam * 0.003)
+                            -- threshold bem apertado: so cabeca/pescoco
+                            local threshold = 0.08 + (distFromCam * 0.001)
 
                             if Config.Antitank.Debug then
                                 local sId = GetPlayerServerId(playerId)
