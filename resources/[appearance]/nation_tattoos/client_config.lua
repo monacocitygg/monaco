@@ -470,33 +470,28 @@ local activeTattooInteracts = {}
 
 function createTattooInteract(tattooId, coords)
     if activeTattooInteracts[tattooId] then return end
-
-    local id = exports.urban_interact:addCoords(vec3(coords.x, coords.y, coords.z), {
-        label = "Tatuagem",
-        icon = "spray-can", -- pode trocar por outro ícone
-        distance = 2.0,
-        onSelect = function(data)
-            local ped = PlayerPedId()
-            if GetEntityHealth(ped) > 101 and func.checkPermission(nearestTattooShop.perm) then
-                startTattoos(tattooId)
-            else
-                TriggerEvent("Notify", "negado", "Você não pode usar esta loja agora.")
-            end
-        end,
-        canInteract = function(entity, distance, coords, name)
-            return distance < 2.0 and not inMenu
-        end
-    })
-
-    activeTattooInteracts[tattooId] = id
+    activeTattooInteracts[tattooId] = true
+    CreateThread(nearTattooShop)
 end
 
 function removeTattooInteract(tattooId)
-    if activeTattooInteracts[tattooId] then
-        exports.urban_interact:remove(activeTattooInteracts[tattooId])
-        activeTattooInteracts[tattooId] = nil
-    end
+    activeTattooInteracts[tattooId] = nil
 end
+
+-- Blips nativos para todas as lojas de tatuagem
+CreateThread(function()
+    for i, v in ipairs(tattooShops) do
+        local blip = AddBlipForCoord(v.coords.x, v.coords.y, v.coords.z)
+        SetBlipSprite(blip, 75)
+        SetBlipDisplay(blip, 4)
+        SetBlipScale(blip, 0.8)
+        SetBlipColour(blip, 47)
+        SetBlipAsShortRange(blip, true)
+        BeginTextCommandSetBlipName("STRING")
+        AddTextComponentString("Tatuagem")
+        EndTextCommandSetBlipName(blip)
+    end
+end)
 
 mainThread = function()
     while true do
