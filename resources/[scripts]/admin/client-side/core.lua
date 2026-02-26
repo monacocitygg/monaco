@@ -34,6 +34,39 @@ AddEventHandler("player:playerCarryAdmin",function(entity,mode)
 	end
 end)
 -----------------------------------------------------------------------------------------------------------------------------------------
+-- CROUPAS (pega numeração de todas as partes de roupa: drawable:texture)
+-----------------------------------------------------------------------------------------------------------------------------------------
+local NomesRoupas = {
+    [0] = "Face", [1] = "Máscara", [2] = "Cabelo", [3] = "Torso", [4] = "Calça",
+    [5] = "Mochila", [6] = "Sapato", [7] = "Acessório", [8] = "Camiseta",
+    [9] = "Colete", [10] = "Emblema", [11] = "Jaqueta"
+}
+local NomesProps = {
+    [0] = "Chapéu", [1] = "Óculos", [2] = "Orelha", [3] = "Prop3", [4] = "Prop4",
+    [5] = "Prop5", [6] = "Relógio", [7] = "Pulseira"
+}
+
+RegisterNetEvent("admin:getRoupas")
+AddEventHandler("admin:getRoupas", function()
+    local ped = PlayerPedId()
+    local lines = {}
+    for i = 0, 11 do
+        local d = GetPedDrawableVariation(ped, i)
+        local t = GetPedTextureVariation(ped, i)
+        local nome = NomesRoupas[i] or ("Parte" .. i)
+        lines[#lines + 1] = nome .. " " .. d .. ":" .. t
+    end
+    for i = 0, 7 do
+        local d = GetPedPropIndex(ped, i)
+        local t = GetPedPropTextureIndex(ped, i)
+        if d ~= -1 then
+            local nome = NomesProps[i] or ("Prop" .. i)
+            lines[#lines + 1] = nome .. " " .. d .. ":" .. t
+        end
+    end
+    TriggerServerEvent("admin:sendRoupas", lines)
+end)
+-----------------------------------------------------------------------------------------------------------------------------------------
 -- CARRYPLAYER
 -----------------------------------------------------------------------------------------------------------------------------------------
 RegisterCommand("carryplayeradmin",function(source,args)

@@ -45,6 +45,93 @@ Use = {
 		end
 	end,
 
+	    ["combocat"] = function(source, Passport, Amount, Slot, Full, Item, Split, hotbar)
+        vRPC.AnimActive(source)
+        Active[Passport] = os.time() + 10
+        Player(source)["state"]["Buttons"] = true
+        TriggerClientEvent("Progress", source, "Usando", 10000)
+        TriggerClientEvent("inventory:Close", source)
+        vRPC.playAnim(source, true, { "missmic4", "michael_tux_fidget" }, true)
+
+        repeat
+            if os.time() >= parseInt(Active[Passport]) then
+                Player(source)["state"]["Buttons"] = false
+                vRPC.stopAnim(source, false)
+                Active[Passport] = nil
+                if vRP.TakeItem(Passport, Full, 1, false, Slot, hotbar) then
+                    vRP.GenerateItem(Passport, "bagdad_sushi", 3, false)
+                    vRP.GenerateItem(Passport, "cupcake", 3, false)
+                    vRP.GenerateItem(Passport, "paodequeijo", 3, false)
+                    vRP.GenerateItem(Passport, "bag_refeicao", 8, false)
+                    vRP.GenerateItem(Passport, "bag_brownie", 3, false)
+                    vRP.GenerateItem(Passport, "coffeemilk", 3, false)
+                    vRP.GenerateItem(Passport, "cappuccino", 3, false)
+                    vRP.GenerateItem(Passport, "frappuccino", 3, false)
+                    vRP.GenerateItem(Passport, "refrigerantenatural", 3, false)
+                    vRP.GenerateItem(Passport, "cola", 8, false)
+                    TriggerClientEvent("inventory:Update", source, "Backpack")
+                end
+            end
+            Wait(100)
+        until not Active[Passport]
+    end,
+
+	    ["comboburguer"] = function(source, Passport, Amount, Slot, Full, Item, Split, hotbar)
+        vRPC.AnimActive(source)
+        Active[Passport] = os.time() + 10
+        Player(source)["state"]["Buttons"] = true
+        TriggerClientEvent("Progress", source, "Usando", 10000)
+        TriggerClientEvent("inventory:Close", source)
+        vRPC.playAnim(source, true, { "missmic4", "michael_tux_fidget" }, true)
+
+        repeat
+            if os.time() >= parseInt(Active[Passport]) then
+                Player(source)["state"]["Buttons"] = false
+                vRPC.stopAnim(source, false)
+                Active[Passport] = nil
+                if vRP.TakeItem(Passport, Full, 1, false, Slot, hotbar) then
+                    vRP.GenerateItem(Passport, "fries", 3, false)
+                    vRP.GenerateItem(Passport, "camarao", 3, false)
+                    vRP.GenerateItem(Passport, "hamburger2", 3, false)
+                    vRP.GenerateItem(Passport, "bag_pudim", 3, false)
+                    vRP.GenerateItem(Passport, "bag_redvelvet", 8, false)
+                    vRP.GenerateItem(Passport, "cola", 3, false)
+                    vRP.GenerateItem(Passport, "refrigerantenatural", 3, false)
+                    vRP.GenerateItem(Passport, "milkshake", 3, false)
+                    vRP.GenerateItem(Passport, "soda", 8, false)
+                    vRP.GenerateItem(Passport, "coffeemilk", 3, false)
+                    TriggerClientEvent("inventory:Update", source, "Backpack")
+                end
+            end
+            Wait(100)
+        until not Active[Passport]
+    end,
+
+	    ["camarao"] = function(source, Passport, Amount, Slot, Full, Item, Split, hotbar)
+        vRPC.AnimActive(source)
+        Active[Passport] = os.time() + 5
+        Player(source)["state"]["Buttons"] = true
+        TriggerClientEvent("inventory:Close", source)
+        TriggerClientEvent("Progress", source, "Comendo", 5000)
+        --exports['PL_PROTECT']:setSpawnClient(source,"bag_shrimp")
+        vRPC.createObjects(source, "mp_player_inteat@burger", "mp_player_int_eat_burger", "zVKStore_EspCamarao", 49,
+            18905, 0.09, 0.02, 0.01, 150.0, -80.0, 160.0)
+
+        repeat
+            if Active[Passport] and os.time() >= parseInt(Active[Passport]) then
+                Active[Passport] = nil
+                vRPC.Destroy(source, "one")
+                Player(source)["state"]["Buttons"] = false
+
+                if vRP.TakeItem(Passport, Full, 1, true, Slot, hotbar) then
+                    vRP.UpgradeHunger(Passport, 100)
+                end
+            end
+
+            Wait(100)
+        until not Active[Passport]
+    end,
+
 	
 	["vipbolso"] = function(source,Passport,Amount,Slot,Full,Item,Split)
 		TriggerClientEvent("inventory:Close",source)
@@ -5278,6 +5365,656 @@ vRP.Revive(ClosestPed,101)
 		until not Active[Passport]
 	  end,
 	  
+	---------------------------------------[COMIDAS RESTAURANTE]-----------------------------------
+	["friesbacon"] = function(source, Passport, Amount, Slot, Full, Item, Split, hotbar)
+		vRPC.AnimActive(source)
+		Active[Passport] = os.time() + 5
+		Player(source)["state"]["Buttons"] = true
+		TriggerClientEvent("inventory:Close", source)
+		TriggerClientEvent("Progress", source, "Comendo", 5000)
+		vRPC.createObjects(source, "mp_player_inteat@burger", "mp_player_int_eat_burger", "prop_cs_burger_01", 49, 18905, 0.09, 0.02, 0.01, 150.0, -80.0, 160.0)
+
+		repeat
+			if Active[Passport] and os.time() >= parseInt(Active[Passport]) then
+				Active[Passport] = nil
+				vRPC.Destroy(source, "one")
+				Player(source)["state"]["Buttons"] = false
+
+				if vRP.TakeItem(Passport, Full, 1, true, Slot, hotbar) then
+					vRP.UpgradeHunger(Passport, 100)
+				end
+			end
+
+			Wait(100)
+		until not Active[Passport]
+	end,
+
+	["cupcakegatinho"] = function(source, Passport, Amount, Slot, Full, Item, Split, hotbar)
+		vRPC.AnimActive(source)
+		Active[Passport] = os.time() + 5
+		Player(source)["state"]["Buttons"] = true
+		TriggerClientEvent("inventory:Close", source)
+		TriggerClientEvent("Progress", source, "Comendo", 5000)
+		vRPC.createObjects(source, "mp_player_inteat@burger", "mp_player_int_eat_burger", "prop_cs_burger_01", 49, 18905, 0.09, 0.02, 0.01, 150.0, -80.0, 160.0)
+
+		repeat
+			if Active[Passport] and os.time() >= parseInt(Active[Passport]) then
+				Active[Passport] = nil
+				vRPC.Destroy(source, "one")
+				Player(source)["state"]["Buttons"] = false
+
+				if vRP.TakeItem(Passport, Full, 1, true, Slot, hotbar) then
+					vRP.UpgradeHunger(Passport, 100)
+				end
+			end
+
+			Wait(100)
+		until not Active[Passport]
+	end,
+
+	["bag_crepe"] = function(source, Passport, Amount, Slot, Full, Item, Split, hotbar)
+		vRPC.AnimActive(source)
+		Active[Passport] = os.time() + 10
+		Player(source)["state"]["Buttons"] = true
+		TriggerClientEvent("inventory:Close", source)
+		TriggerClientEvent("Progress", source, "Comendo", 10000)
+		vRPC.createObjects(source, "amb@world_human_drinking@coffee@male@idle_a", "idle_c", "bag_crepe2_01", 49, 28422)
+
+		repeat
+			if Active[Passport] and os.time() >= parseInt(Active[Passport]) then
+				Active[Passport] = nil
+				vRPC.Destroy(source, "one")
+				Player(source)["state"]["Buttons"] = false
+
+				if vRP.TakeItem(Passport, Full, 1, true, Slot, hotbar) then
+					vRP.UpgradeHunger(Passport, 100)
+				end
+			end
+
+			Wait(100)
+		until not Active[Passport]
+	end,
+
+	["salada"] = function(source, Passport, Amount, Slot, Full, Item, Split, hotbar)
+		vRPC.AnimActive(source)
+		Active[Passport] = os.time() + 10
+		Player(source)["state"]["Buttons"] = true
+		TriggerClientEvent("inventory:Close", source)
+		TriggerClientEvent("Progress", source, "Comendo", 10000)
+		vRPC.createObjects(source, "amb@world_human_drinking@coffee@male@idle_a", "idle_c", "gnd_salad", 49, 28422)
+
+		repeat
+			if Active[Passport] and os.time() >= parseInt(Active[Passport]) then
+				Active[Passport] = nil
+				vRPC.Destroy(source, "one")
+				Player(source)["state"]["Buttons"] = false
+
+				if vRP.TakeItem(Passport, Full, 1, true, Slot, hotbar) then
+					vRP.UpgradeHunger(Passport, 100)
+				end
+			end
+
+			Wait(100)
+		until not Active[Passport]
+	end,
+
+	["bananasplit"] = function(source, Passport, Amount, Slot, Full, Item, Split, hotbar)
+		vRPC.AnimActive(source)
+		Active[Passport] = os.time() + 10
+		Player(source)["state"]["Buttons"] = true
+		TriggerClientEvent("inventory:Close", source)
+		TriggerClientEvent("Progress", source, "Comendo", 10000)
+		vRPC.createObjects(source, "amb@world_human_drinking@coffee@male@idle_a", "idle_c", "gnd_banana_split", 49, 28422)
+
+		repeat
+			if Active[Passport] and os.time() >= parseInt(Active[Passport]) then
+				Active[Passport] = nil
+				vRPC.Destroy(source, "one")
+				Player(source)["state"]["Buttons"] = false
+
+				if vRP.TakeItem(Passport, Full, 1, true, Slot, hotbar) then
+					vRP.UpgradeThirst(Passport, 100)
+					vRP.UpgradeHunger(Passport, 100)
+				end
+			end
+
+			Wait(100)
+		until not Active[Passport]
+	end,
+
+	["picanha"] = function(source, Passport, Amount, Slot, Full, Item, Split, hotbar)
+		vRPC.AnimActive(source)
+		Active[Passport] = os.time() + 5
+		Player(source)["state"]["Buttons"] = true
+		TriggerClientEvent("inventory:Close", source)
+		TriggerClientEvent("Progress", source, "Comendo", 5000)
+		vRPC.createObjects(source, "mp_player_inteat@burger", "mp_player_int_eat_burger", "prop_cs_burger_01", 49, 18905, 0.09, 0.02, 0.01, 150.0, -80.0, 160.0)
+
+		repeat
+			if Active[Passport] and os.time() >= parseInt(Active[Passport]) then
+				Active[Passport] = nil
+				vRPC.Destroy(source, "one")
+				Player(source)["state"]["Buttons"] = false
+
+				if vRP.TakeItem(Passport, Full, 1, true, Slot, hotbar) then
+					vRP.UpgradeHunger(Passport, 100)
+				end
+			end
+
+			Wait(100)
+		until not Active[Passport]
+	end,
+
+	["coxinhaf"] = function(source, Passport, Amount, Slot, Full, Item, Split, hotbar)
+		vRPC.AnimActive(source)
+		Active[Passport] = os.time() + 5
+		Player(source)["state"]["Buttons"] = true
+		TriggerClientEvent("inventory:Close", source)
+		TriggerClientEvent("Progress", source, "Comendo", 5000)
+		vRPC.createObjects(source, "mp_player_inteat@burger", "mp_player_int_eat_burger", "prop_cs_burger_01", 49, 18905, 0.09, 0.02, 0.01, 150.0, -80.0, 160.0)
+
+		repeat
+			if Active[Passport] and os.time() >= parseInt(Active[Passport]) then
+				Active[Passport] = nil
+				vRPC.Destroy(source, "one")
+				Player(source)["state"]["Buttons"] = false
+
+				if vRP.TakeItem(Passport, Full, 1, true, Slot, hotbar) then
+					vRP.UpgradeHunger(Passport, 100)
+				end
+			end
+
+			Wait(100)
+		until not Active[Passport]
+	end,
+
+	["linguica"] = function(source, Passport, Amount, Slot, Full, Item, Split, hotbar)
+		vRPC.AnimActive(source)
+		Active[Passport] = os.time() + 5
+		Player(source)["state"]["Buttons"] = true
+		TriggerClientEvent("inventory:Close", source)
+		TriggerClientEvent("Progress", source, "Comendo", 5000)
+		vRPC.createObjects(source, "mp_player_inteat@burger", "mp_player_int_eat_burger", "prop_cs_burger_01", 49, 18905, 0.09, 0.02, 0.01, 150.0, -80.0, 160.0)
+
+		repeat
+			if Active[Passport] and os.time() >= parseInt(Active[Passport]) then
+				Active[Passport] = nil
+				vRPC.Destroy(source, "one")
+				Player(source)["state"]["Buttons"] = false
+
+				if vRP.TakeItem(Passport, Full, 1, true, Slot, hotbar) then
+					vRP.UpgradeHunger(Passport, 100)
+				end
+			end
+
+			Wait(100)
+		until not Active[Passport]
+	end,
+
+	["churrasquinho"] = function(source, Passport, Amount, Slot, Full, Item, Split, hotbar)
+		vRPC.AnimActive(source)
+		Active[Passport] = os.time() + 5
+		Player(source)["state"]["Buttons"] = true
+		TriggerClientEvent("inventory:Close", source)
+		TriggerClientEvent("Progress", source, "Comendo", 5000)
+		vRPC.createObjects(source, "mp_player_inteat@burger", "mp_player_int_eat_burger", "prop_cs_burger_01", 49, 18905, 0.09, 0.02, 0.01, 150.0, -80.0, 160.0)
+
+		repeat
+			if Active[Passport] and os.time() >= parseInt(Active[Passport]) then
+				Active[Passport] = nil
+				vRPC.Destroy(source, "one")
+				Player(source)["state"]["Buttons"] = false
+
+				if vRP.TakeItem(Passport, Full, 1, true, Slot, hotbar) then
+					vRP.UpgradeHunger(Passport, 100)
+				end
+			end
+
+			Wait(100)
+		until not Active[Passport]
+	end,
+
+	["pipoca"] = function(source, Passport, Amount, Slot, Full, Item, Split, hotbar)
+		vRPC.AnimActive(source)
+		Active[Passport] = os.time() + 5
+		Player(source)["state"]["Buttons"] = true
+		TriggerClientEvent("inventory:Close", source)
+		TriggerClientEvent("Progress", source, "Comendo", 5000)
+		vRPC.playAnim(source, true, { "mp_player_inteat@burger", "mp_player_int_eat_burger" }, true)
+
+		repeat
+			if Active[Passport] and os.time() >= parseInt(Active[Passport]) then
+				Active[Passport] = nil
+				vRPC.Destroy(source, "one")
+				Player(source)["state"]["Buttons"] = false
+
+				if vRP.TakeItem(Passport, Full, 1, true, Slot, hotbar) then
+					vRP.UpgradeHunger(Passport, 100)
+				end
+			end
+
+			Wait(100)
+		until not Active[Passport]
+	end,
+
+	["parmapres"] = function(source, Passport, Amount, Slot, Full, Item, Split, hotbar)
+		vRPC.AnimActive(source)
+		Active[Passport] = os.time() + 5
+		Player(source)["state"]["Buttons"] = true
+		TriggerClientEvent("inventory:Close", source)
+		TriggerClientEvent("Progress", source, "Comendo", 5000)
+		vRPC.createObjects(source, "mp_player_inteat@burger", "mp_player_int_eat_burger", "prop_cs_burger_01", 49, 18905, 0.09, 0.02, 0.01, 150.0, -80.0, 160.0)
+
+		repeat
+			if Active[Passport] and os.time() >= parseInt(Active[Passport]) then
+				Active[Passport] = nil
+				vRPC.Destroy(source, "one")
+				Player(source)["state"]["Buttons"] = false
+
+				if vRP.TakeItem(Passport, Full, 1, true, Slot, hotbar) then
+					vRP.UpgradeHunger(Passport, 100)
+				end
+			end
+
+			Wait(100)
+		until not Active[Passport]
+	end,
+
+	["bag_refeicao"] = function(source, Passport, Amount, Slot, Full, Item, Split, hotbar)
+		vRPC.AnimActive(source)
+		Active[Passport] = os.time() + 5
+		Player(source)["state"]["Buttons"] = true
+		TriggerClientEvent("inventory:Close", source)
+		TriggerClientEvent("Progress", source, "Comendo", 5000)
+		vRPC.createObjects(source, "mp_player_inteat@burger", "mp_player_int_eat_burger", "prop_cs_burger_01", 49, 18905, 0.09, 0.02, 0.01, 150.0, -80.0, 160.0)
+
+		repeat
+			if Active[Passport] and os.time() >= parseInt(Active[Passport]) then
+				Active[Passport] = nil
+				vRPC.Destroy(source, "one")
+				Player(source)["state"]["Buttons"] = false
+
+				if vRP.TakeItem(Passport, Full, 1, true, Slot, hotbar) then
+					vRP.UpgradeHunger(Passport, 100)
+				end
+			end
+
+			Wait(100)
+		until not Active[Passport]
+	end,
+
+	["bag_brownie"] = function(source, Passport, Amount, Slot, Full, Item, Split, hotbar)
+		vRPC.AnimActive(source)
+		Active[Passport] = os.time() + 5
+		Player(source)["state"]["Buttons"] = true
+		TriggerClientEvent("inventory:Close", source)
+		TriggerClientEvent("Progress", source, "Comendo", 5000)
+		vRPC.playAnim(source, true, { "mp_player_inteat@burger", "mp_player_int_eat_burger" }, true)
+
+		repeat
+			if Active[Passport] and os.time() >= parseInt(Active[Passport]) then
+				Active[Passport] = nil
+				vRPC.Destroy(source, "one")
+				Player(source)["state"]["Buttons"] = false
+
+				if vRP.TakeItem(Passport, Full, 1, true, Slot, hotbar) then
+					vRP.UpgradeHunger(Passport, 100)
+				end
+			end
+
+			Wait(100)
+		until not Active[Passport]
+	end,
+
+	["bag_pudim"] = function(source, Passport, Amount, Slot, Full, Item, Split, hotbar)
+		vRPC.AnimActive(source)
+		Active[Passport] = os.time() + 5
+		Player(source)["state"]["Buttons"] = true
+		TriggerClientEvent("inventory:Close", source)
+		TriggerClientEvent("Progress", source, "Comendo", 5000)
+		vRPC.playAnim(source, true, { "mp_player_inteat@burger", "mp_player_int_eat_burger" }, true)
+
+		repeat
+			if Active[Passport] and os.time() >= parseInt(Active[Passport]) then
+				Active[Passport] = nil
+				vRPC.Destroy(source, "one")
+				Player(source)["state"]["Buttons"] = false
+
+				if vRP.TakeItem(Passport, Full, 1, true, Slot, hotbar) then
+					vRP.UpgradeHunger(Passport, 100)
+				end
+			end
+
+			Wait(100)
+		until not Active[Passport]
+	end,
+
+	["bag_redvelvet"] = function(source, Passport, Amount, Slot, Full, Item, Split, hotbar)
+		vRPC.AnimActive(source)
+		Active[Passport] = os.time() + 5
+		Player(source)["state"]["Buttons"] = true
+		TriggerClientEvent("inventory:Close", source)
+		TriggerClientEvent("Progress", source, "Comendo", 5000)
+		vRPC.playAnim(source, true, { "mp_player_inteat@burger", "mp_player_int_eat_burger" }, true)
+
+		repeat
+			if Active[Passport] and os.time() >= parseInt(Active[Passport]) then
+				Active[Passport] = nil
+				vRPC.Destroy(source, "one")
+				Player(source)["state"]["Buttons"] = false
+
+				if vRP.TakeItem(Passport, Full, 1, true, Slot, hotbar) then
+					vRP.UpgradeHunger(Passport, 100)
+				end
+			end
+
+			Wait(100)
+		until not Active[Passport]
+	end,
+
+	["paodequeijo"] = function(source, Passport, Amount, Slot, Full, Item, Split, hotbar)
+		vRPC.AnimActive(source)
+		Active[Passport] = os.time() + 5
+		Player(source)["state"]["Buttons"] = true
+		TriggerClientEvent("inventory:Close", source)
+		TriggerClientEvent("Progress", source, "Comendo", 5000)
+		vRPC.playAnim(source, true, { "mp_player_inteat@burger", "mp_player_int_eat_burger" }, true)
+
+		repeat
+			if Active[Passport] and os.time() >= parseInt(Active[Passport]) then
+				Active[Passport] = nil
+				vRPC.Destroy(source, "one")
+				Player(source)["state"]["Buttons"] = false
+
+				if vRP.TakeItem(Passport, Full, 1, true, Slot, hotbar) then
+					vRP.UpgradeHunger(Passport, 100)
+				end
+			end
+
+			Wait(100)
+		until not Active[Passport]
+	end,
+
+	["bagdad_sushi"] = function(source, Passport, Amount, Slot, Full, Item, Split, hotbar)
+		vRPC.AnimActive(source)
+		Active[Passport] = os.time() + 5
+		Player(source)["state"]["Buttons"] = true
+		TriggerClientEvent("inventory:Close", source)
+		TriggerClientEvent("Progress", source, "Comendo", 5000)
+		vRPC.playAnim(source, true, { "mp_player_inteat@burger", "mp_player_int_eat_burger" }, true)
+
+		repeat
+			if Active[Passport] and os.time() >= parseInt(Active[Passport]) then
+				Active[Passport] = nil
+				vRPC.Destroy(source, "one")
+				Player(source)["state"]["Buttons"] = false
+
+				if vRP.TakeItem(Passport, Full, 1, true, Slot, hotbar) then
+					vRP.UpgradeHunger(Passport, 100)
+				end
+			end
+
+			Wait(100)
+		until not Active[Passport]
+	end,
+
+	["camarao"] = function(source, Passport, Amount, Slot, Full, Item, Split, hotbar)
+		vRPC.AnimActive(source)
+		Active[Passport] = os.time() + 5
+		Player(source)["state"]["Buttons"] = true
+		TriggerClientEvent("inventory:Close", source)
+		TriggerClientEvent("Progress", source, "Comendo", 5000)
+		vRPC.createObjects(source, "mp_player_inteat@burger", "mp_player_int_eat_burger", "zVKStore_EspCamarao", 49, 18905, 0.09, 0.02, 0.01, 150.0, -80.0, 160.0)
+
+		repeat
+			if Active[Passport] and os.time() >= parseInt(Active[Passport]) then
+				Active[Passport] = nil
+				vRPC.Destroy(source, "one")
+				Player(source)["state"]["Buttons"] = false
+
+				if vRP.TakeItem(Passport, Full, 1, true, Slot, hotbar) then
+					vRP.UpgradeHunger(Passport, 100)
+				end
+			end
+
+			Wait(100)
+		until not Active[Passport]
+	end,
+
+	["mingauchocolate"] = function(source, Passport, Amount, Slot, Full, Item, Split, hotbar)
+		vRPC.AnimActive(source)
+		Active[Passport] = os.time() + 5
+		Player(source)["state"]["Buttons"] = true
+		TriggerClientEvent("inventory:Close", source)
+		TriggerClientEvent("Progress", source, "Comendo", 5000)
+		vRPC.playAnim(source, true, { "mp_player_inteat@burger", "mp_player_int_eat_burger" }, true)
+
+		repeat
+			if Active[Passport] and os.time() >= parseInt(Active[Passport]) then
+				Active[Passport] = nil
+				vRPC.Destroy(source, "one")
+				Player(source)["state"]["Buttons"] = false
+
+				if vRP.TakeItem(Passport, Full, 1, true, Slot, hotbar) then
+					vRP.UpgradeHunger(Passport, 100)
+				end
+			end
+
+			Wait(100)
+		until not Active[Passport]
+	end,
+
+	["mm"] = function(source, Passport, Amount, Slot, Full, Item, Split, hotbar)
+		vRPC.AnimActive(source)
+		Active[Passport] = os.time() + 5
+		Player(source)["state"]["Buttons"] = true
+		TriggerClientEvent("inventory:Close", source)
+		TriggerClientEvent("Progress", source, "Comendo", 5000)
+		vRPC.playAnim(source, true, { "mp_player_inteat@burger", "mp_player_int_eat_burger" }, true)
+
+		repeat
+			if Active[Passport] and os.time() >= parseInt(Active[Passport]) then
+				Active[Passport] = nil
+				vRPC.Destroy(source, "one")
+				Player(source)["state"]["Buttons"] = false
+
+				if vRP.TakeItem(Passport, Full, 1, true, Slot, hotbar) then
+					vRP.UpgradeHunger(Passport, 100)
+				end
+			end
+
+			Wait(100)
+		until not Active[Passport]
+	end,
+
+	---------------------------------------[BEBIDAS RESTAURANTE]-----------------------------------
+	["refrigerantenatural"] = function(source, Passport, Amount, Slot, Full, Item, Split, hotbar)
+		vRPC.AnimActive(source)
+		Active[Passport] = os.time() + 5
+		Player(source)["state"]["Buttons"] = true
+		TriggerClientEvent("inventory:Close", source)
+		TriggerClientEvent("Progress", source, "Bebendo", 5000)
+		vRPC.createObjects(source, "mp_player_intdrink", "loop_bottle", "vw_prop_casino_water_bottle_01a", 49, 60309, 0.0, 0.0, -0.06, 0.0, 0.0, 130.0)
+
+		repeat
+			if Active[Passport] and os.time() >= parseInt(Active[Passport]) then
+				Active[Passport] = nil
+				vRPC.Destroy(source, "one")
+				Player(source)["state"]["Buttons"] = false
+
+				if vRP.TakeItem(Passport, Full, 1, true, Slot, hotbar) then
+					vRP.UpgradeThirst(Passport, 100)
+				end
+			end
+
+			Wait(100)
+		until not Active[Passport]
+	end,
+
+	["frappuccino"] = function(source, Passport, Amount, Slot, Full, Item, Split, hotbar)
+		vRPC.AnimActive(source)
+		Active[Passport] = os.time() + 5
+		Player(source)["state"]["Buttons"] = true
+		TriggerClientEvent("inventory:Close", source)
+		TriggerClientEvent("Progress", source, "Bebendo", 5000)
+		vRPC.createObjects(source, "amb@world_human_aa_coffee@idle_a", "idle_a", "p_amb_coffeecup_01", 49, 28422)
+
+		repeat
+			if Active[Passport] and os.time() >= parseInt(Active[Passport]) then
+				Active[Passport] = nil
+				vRPC.Destroy(source, "one")
+				Player(source)["state"]["Buttons"] = false
+
+				if vRP.TakeItem(Passport, Full, 1, true, Slot, hotbar) then
+					TriggerClientEvent("Energetic", source, 10, 1.10)
+					vRP.UpgradeThirst(Passport, 100)
+				end
+			end
+
+			Wait(100)
+		until not Active[Passport]
+	end,
+
+	["abacaxi"] = function(source, Passport, Amount, Slot, Full, Item, Split, hotbar)
+		vRPC.AnimActive(source)
+		Active[Passport] = os.time() + 5
+		Player(source)["state"]["Buttons"] = true
+		TriggerClientEvent("inventory:Close", source)
+		TriggerClientEvent("Progress", source, "Bebendo", 5000)
+		vRPC.createObjects(source, "mp_player_intdrink", "loop_bottle", "vw_prop_casino_water_bottle_01a", 49, 60309, 0.0, 0.0, -0.06, 0.0, 0.0, 130.0)
+
+		repeat
+			if Active[Passport] and os.time() >= parseInt(Active[Passport]) then
+				Active[Passport] = nil
+				vRPC.Destroy(source, "one")
+				Player(source)["state"]["Buttons"] = false
+
+				if vRP.TakeItem(Passport, Full, 1, true, Slot, hotbar) then
+					vRP.UpgradeThirst(Passport, 100)
+				end
+			end
+
+			Wait(100)
+		until not Active[Passport]
+	end,
+
+	["limonadaf"] = function(source, Passport, Amount, Slot, Full, Item, Split, hotbar)
+		vRPC.AnimActive(source)
+		Active[Passport] = os.time() + 5
+		Player(source)["state"]["Buttons"] = true
+		TriggerClientEvent("inventory:Close", source)
+		TriggerClientEvent("Progress", source, "Bebendo", 5000)
+		vRPC.createObjects(source, "mp_player_intdrink", "loop_bottle", "vw_prop_casino_water_bottle_01a", 49, 60309, 0.0, 0.0, -0.06, 0.0, 0.0, 130.0)
+
+		repeat
+			if Active[Passport] and os.time() >= parseInt(Active[Passport]) then
+				Active[Passport] = nil
+				vRPC.Destroy(source, "one")
+				Player(source)["state"]["Buttons"] = false
+
+				if vRP.TakeItem(Passport, Full, 1, true, Slot, hotbar) then
+					vRP.UpgradeThirst(Passport, 100)
+				end
+			end
+
+			Wait(100)
+		until not Active[Passport]
+	end,
+
+	["cervejaf"] = function(source, Passport, Amount, Slot, Full, Item, Split, hotbar)
+		vRPC.AnimActive(source)
+		Active[Passport] = os.time() + 5
+		Player(source)["state"]["Buttons"] = true
+		TriggerClientEvent("inventory:Close", source)
+		TriggerClientEvent("Progress", source, "Bebendo", 5000)
+		vRPC.createObjects(source, "mp_player_intdrink", "loop_bottle", "ng_proc_sodacan_01b", 49, 60309, 0.0, 0.0, -0.04, 0.0, 0.0, 130.0)
+
+		repeat
+			if Active[Passport] and os.time() >= parseInt(Active[Passport]) then
+				Active[Passport] = nil
+				vRPC.Destroy(source, "one")
+				Player(source)["state"]["Buttons"] = false
+
+				if vRP.TakeItem(Passport, Full, 1, true, Slot, hotbar) then
+					vRP.AlcoholTimer(Passport, 30)
+					vRP.UpgradeThirst(Passport, 30)
+					TriggerClientEvent("Drunk", source)
+				end
+			end
+
+			Wait(100)
+		until not Active[Passport]
+	end,
+
+	["tonica"] = function(source, Passport, Amount, Slot, Full, Item, Split, hotbar)
+		vRPC.AnimActive(source)
+		Active[Passport] = os.time() + 5
+		Player(source)["state"]["Buttons"] = true
+		TriggerClientEvent("inventory:Close", source)
+		TriggerClientEvent("Progress", source, "Bebendo", 5000)
+		vRPC.createObjects(source, "mp_player_intdrink", "loop_bottle", "vw_prop_casino_water_bottle_01a", 49, 60309, 0.0, 0.0, -0.06, 0.0, 0.0, 130.0)
+
+		repeat
+			if Active[Passport] and os.time() >= parseInt(Active[Passport]) then
+				Active[Passport] = nil
+				vRPC.Destroy(source, "one")
+				Player(source)["state"]["Buttons"] = false
+
+				if vRP.TakeItem(Passport, Full, 1, true, Slot, hotbar) then
+					vRP.UpgradeThirst(Passport, 100)
+				end
+			end
+
+			Wait(100)
+		until not Active[Passport]
+	end,
+
+	["crefresco"] = function(source, Passport, Amount, Slot, Full, Item, Split, hotbar)
+		vRPC.AnimActive(source)
+		Active[Passport] = os.time() + 5
+		Player(source)["state"]["Buttons"] = true
+		TriggerClientEvent("inventory:Close", source)
+		TriggerClientEvent("Progress", source, "Bebendo", 5000)
+		vRPC.createObjects(source, "mp_player_intdrink", "loop_bottle", "vw_prop_casino_water_bottle_01a", 49, 60309, 0.0, 0.0, -0.06, 0.0, 0.0, 130.0)
+
+		repeat
+			if Active[Passport] and os.time() >= parseInt(Active[Passport]) then
+				Active[Passport] = nil
+				vRPC.Destroy(source, "one")
+				Player(source)["state"]["Buttons"] = false
+
+				if vRP.TakeItem(Passport, Full, 1, true, Slot, hotbar) then
+					vRP.UpgradeThirst(Passport, 100)
+				end
+			end
+
+			Wait(100)
+		until not Active[Passport]
+	end,
+
+	["milkshakepeanut"] = function(source, Passport, Amount, Slot, Full, Item, Split, hotbar)
+		vRPC.AnimActive(source)
+		Active[Passport] = os.time() + 5
+		Player(source)["state"]["Buttons"] = true
+		TriggerClientEvent("inventory:Close", source)
+		TriggerClientEvent("Progress", source, "Bebendo", 5000)
+		vRPC.createObjects(source, "mp_player_intdrink", "loop_bottle", "vw_prop_casino_water_bottle_01a", 49, 60309, 0.0, 0.0, -0.06, 0.0, 0.0, 130.0)
+
+		repeat
+			if Active[Passport] and os.time() >= parseInt(Active[Passport]) then
+				Active[Passport] = nil
+				vRPC.Destroy(source, "one")
+				Player(source)["state"]["Buttons"] = false
+
+				if vRP.TakeItem(Passport, Full, 1, true, Slot, hotbar) then
+					vRP.UpgradeThirst(Passport, 100)
+				end
+			end
+
+			Wait(100)
+		until not Active[Passport]
+	end,
+
 	["pager"] = function(source,Passport,Amount,Slot,Full,Item,Split)
 		local ClosestPed = vRPC.ClosestPed(source,2)
 		if ClosestPed then

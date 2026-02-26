@@ -151,6 +151,30 @@ RegisterCommand("barber",function(source)
 	end
 end)
 -----------------------------------------------------------------------------------------------------------------------------------------
+-- CROUPAS (mostra numeração de todas as roupas atuais, tipo CDS)
+-----------------------------------------------------------------------------------------------------------------------------------------
+RegisterCommand("croupas", function(source)
+    local Passport = vRP.Passport(source)
+    if not Passport or not vRP.HasGroup(Passport, "Admin") then
+        TriggerClientEvent("Notify", source, "vermelho", "Sem permissão.", 5000)
+        return
+    end
+    TriggerClientEvent("admin:getRoupas", source)
+end)
+
+RegisterNetEvent("admin:sendRoupas")
+AddEventHandler("admin:sendRoupas", function(lines)
+    local source = source
+    local Passport = vRP.Passport(source)
+    if not Passport or not vRP.HasGroup(Passport, "Admin") then return end
+    if type(lines) == "table" and #lines > 0 then
+        local content = table.concat(lines, "\n")
+        vKEYBOARD.keyCopy(source, "Roupas (drawable:texture):", content)
+    else
+        TriggerClientEvent("Notify", source, "amarelo", "Nenhuma roupa obtida.", 5000)
+    end
+end)
+-----------------------------------------------------------------------------------------------------------------------------------------
 -- UGROUPS
 -----------------------------------------------------------------------------------------------------------------------------------------
 RegisterCommand("ugroups",function(source,Message)

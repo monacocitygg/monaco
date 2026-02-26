@@ -3364,6 +3364,325 @@ local List = {
 		["Durability"] = 7,
 		["Weight"] = 0.75,
 		["Economy"] = 325
+	},
+	---------------------------------------[COMIDAS RESTAURANTE]-----------------------------------
+	["friesbacon"] = {
+		["Index"] = "friesbacon",
+		["Name"] = "Fritas com Bacon",
+		["Type"] = "Usável",
+		["SubType"] = "Comida",
+		["Durability"] = 1,
+		["Weight"] = 0.25,
+		["Scape"] = true,
+		["Max"] = 3,
+		["Economy"] = 75
+	},
+	["cupcakegatinho"] = {
+		["Index"] = "cupcakegatinho",
+		["Name"] = "Cupcake Catcafe",
+		["Type"] = "Usável",
+		["SubType"] = "Comida",
+		["Durability"] = 1,
+		["Weight"] = 0.55,
+		["Scape"] = true,
+		["Max"] = 3,
+		["Economy"] = 75
+	},
+	["bag_crepe"] = {
+		["Index"] = "bag_crepe",
+		["Name"] = "Crepe",
+		["Type"] = "Usável",
+		["SubType"] = "Comida",
+		["Durability"] = 1,
+		["Weight"] = 0.65,
+		["Scape"] = true,
+		["Max"] = 3,
+		["Economy"] = 125
+	},
+	["salada"] = {
+		["Index"] = "salada",
+		["Name"] = "Salada de Fruta",
+		["Type"] = "Usável",
+		["SubType"] = "Comida",
+		["Durability"] = 1,
+		["Weight"] = 0.65,
+		["Scape"] = true,
+		["Max"] = 3,
+		["Economy"] = 125
+	},
+	["bananasplit"] = {
+		["Index"] = "bananasplit",
+		["Name"] = "Banana Split",
+		["Type"] = "Usável",
+		["SubType"] = "Comida",
+		["Durability"] = 1,
+		["Weight"] = 0.65,
+		["Scape"] = true,
+		["Max"] = 3,
+		["Economy"] = 125
+	},
+	["picanha"] = {
+		["Index"] = "picanha",
+		["Name"] = "Espetinho de Picanha",
+		["Type"] = "Usável",
+		["SubType"] = "Comida",
+		["Durability"] = 1,
+		["Weight"] = 0.25,
+		["Max"] = 3,
+		["Economy"] = 25
+	},
+	["coxinhaf"] = {
+		["Index"] = "coxinha",
+		["Name"] = "Coxinha",
+		["Type"] = "Usável",
+		["SubType"] = "Comida",
+		["Durability"] = 1,
+		["Weight"] = 0.25,
+		["Max"] = 3,
+		["Economy"] = 25
+	},
+	["linguica"] = {
+		["Index"] = "linguica",
+		["Name"] = "Linguica",
+		["Type"] = "Usável",
+		["SubType"] = "Comida",
+		["Durability"] = 1,
+		["Weight"] = 0.25,
+		["Max"] = 3,
+		["Economy"] = 25
+	},
+	["churrasquinho"] = {
+		["Index"] = "churrasquinho",
+		["Name"] = "Churrasquinho",
+		["Type"] = "Usável",
+		["SubType"] = "Comida",
+		["Durability"] = 1,
+		["Weight"] = 0.25,
+		["Max"] = 3,
+		["Economy"] = 25
+	},
+	["pipoca"] = {
+		["Index"] = "pipoca",
+		["Name"] = "Pipoca",
+		["Type"] = "Usável",
+		["SubType"] = "Comida",
+		["Durability"] = 1,
+		["Weight"] = 0.25,
+		["Max"] = 3,
+		["Economy"] = 25
+	},
+	["parmapres"] = {
+		["Index"] = "parmapres",
+		["Name"] = "Petisco Parma",
+		["Type"] = "Usável",
+		["SubType"] = "Comida",
+		["Durability"] = 1,
+		["Weight"] = 0.25,
+		["Max"] = 3,
+		["Economy"] = 25
+	},
+	["bag_refeicao"] = {
+		["Index"] = "bag_refeicao",
+		["Name"] = "Refeição",
+		["Type"] = "Usável",
+		["SubType"] = "Comida",
+		["Durability"] = 1,
+		["Weight"] = 0.65,
+		["Scape"] = true,
+		["Max"] = 3,
+		["Economy"] = 125
+	},
+	["bag_brownie"] = {
+		["Index"] = "bag_brownie",
+		["Name"] = "Brownie",
+		["Type"] = "Usável",
+		["SubType"] = "Comida",
+		["Durability"] = 1,
+		["Weight"] = 0.55,
+		["Scape"] = true,
+		["Max"] = 3,
+		["Economy"] = 75
+	},
+	["bag_pudim"] = {
+		["Index"] = "bag_pudim",
+		["Name"] = "Pudim",
+		["Type"] = "Usável",
+		["SubType"] = "Comida",
+		["Durability"] = 1,
+		["Weight"] = 0.55,
+		["Scape"] = true,
+		["Max"] = 3,
+		["Economy"] = 75
+	},
+	["bag_redvelvet"] = {
+		["Index"] = "bag_redvelvet",
+		["Name"] = "Red Velvet",
+		["Type"] = "Usável",
+		["SubType"] = "Comida",
+		["Durability"] = 1,
+		["Weight"] = 0.55,
+		["Scape"] = true,
+		["Max"] = 3,
+		["Economy"] = 75
+	},
+	["paodequeijo"] = {
+		["Index"] = "paodequeijo",
+		["Name"] = "Pão de Queijo",
+		["Type"] = "Usável",
+		["SubType"] = "Comida",
+		["Durability"] = 1,
+		["Weight"] = 0.25,
+		["Scape"] = true,
+		["Max"] = 3,
+		["Economy"] = 50
+	},
+	["bagdad_sushi"] = {
+		["Index"] = "bagdad_sushi",
+		["Name"] = "Sushi Especial",
+		["Type"] = "Usável",
+		["SubType"] = "Comida",
+		["Durability"] = 1,
+		["Weight"] = 0.65,
+		["Scape"] = true,
+		["Max"] = 3,
+		["Economy"] = 75
+	},
+	["camarao"] = {
+		["Index"] = "camarao",
+		["Name"] = "Espetinho de Camarão",
+		["Type"] = "Usável",
+		["SubType"] = "Comida",
+		["Durability"] = 1,
+		["Weight"] = 0.55,
+		["Scape"] = true,
+		["Max"] = 3,
+		["Economy"] = 95
+	},
+	["mingauchocolate"] = {
+		["Index"] = "mingauchocolate",
+		["Name"] = "Mingau de Chocolate",
+		["Type"] = "Usável",
+		["SubType"] = "Comida",
+		["Durability"] = 1,
+		["Weight"] = 0.25,
+		["Scape"] = true,
+		["Max"] = 3,
+		["Economy"] = 125
+	},
+	["mm"] = {
+		["Index"] = "mm",
+		["Name"] = "M&M",
+		["Type"] = "Usável",
+		["SubType"] = "Comida",
+		["Durability"] = 1,
+		["Weight"] = 0.25,
+		["Scape"] = true,
+		["Max"] = 3,
+		["Economy"] = 125
+	},
+	---------------------------------------[BEBIDAS RESTAURANTE]-----------------------------------
+	["refrigerantenatural"] = {
+		["Index"] = "refrigerantenatural",
+		["Name"] = "Refrigerante Natural",
+		["Type"] = "Usável",
+		["SubType"] = "Comida",
+		["Durability"] = 1,
+		["Weight"] = 0.25,
+		["Scape"] = true,
+		["Max"] = 3,
+		["Economy"] = 100
+	},
+	["frappuccino"] = {
+		["Index"] = "frappuccino",
+		["Name"] = "Frappuccino",
+		["Type"] = "Usável",
+		["SubType"] = "Comida",
+		["Durability"] = 1,
+		["Weight"] = 0.65,
+		["Scape"] = true,
+		["Max"] = 3,
+		["Economy"] = 150
+	},
+	["abacaxi"] = {
+		["Index"] = "abacaxi",
+		["Name"] = "Suco de Abacaxi",
+		["Type"] = "Usável",
+		["SubType"] = "Comida",
+		["Durability"] = 1,
+		["Weight"] = 0.25,
+		["Scape"] = true,
+		["Max"] = 3,
+		["Economy"] = 125
+	},
+	["limonadaf"] = {
+		["Index"] = "limonadaf",
+		["Name"] = "Limonada",
+		["Type"] = "Usável",
+		["SubType"] = "Comida",
+		["Durability"] = 1,
+		["Weight"] = 0.25,
+		["Scape"] = true,
+		["Max"] = 3,
+		["Economy"] = 25
+	},
+	["cervejaf"] = {
+		["Index"] = "cervejaf",
+		["Name"] = "Cerveja",
+		["Type"] = "Usável",
+		["SubType"] = "Comida",
+		["Durability"] = 1,
+		["Weight"] = 0.25,
+		["Max"] = 3,
+		["Economy"] = 25
+	},
+	["tonica"] = {
+		["Index"] = "tonica",
+		["Name"] = "Tonica",
+		["Type"] = "Usável",
+		["SubType"] = "Comida",
+		["Durability"] = 1,
+		["Weight"] = 0.25,
+		["Max"] = 3,
+		["Economy"] = 25
+	},
+	["crefresco"] = {
+		["Index"] = "crefresco",
+		["Name"] = "Refresco",
+		["Type"] = "Usável",
+		["SubType"] = "Comida",
+		["Durability"] = 1,
+		["Weight"] = 0.25,
+		["Scape"] = true,
+		["Max"] = 3,
+		["Economy"] = 25
+	},
+	["milkshakepeanut"] = {
+		["Index"] = "milkshakepeanut",
+		["Name"] = "Milk-shake de Paçoca",
+		["Type"] = "Usável",
+		["SubType"] = "Comida",
+		["Durability"] = 1,
+		["Weight"] = 0.85,
+		["Scape"] = true,
+		["Max"] = 3,
+		["Economy"] = 125
+	},
+	---------------------------------------[COMBOS RESTAURANTE]-----------------------------------
+	["combocat"] = {
+		["Index"] = "combocat",
+		["Name"] = "Combo CatCafe",
+		["Type"] = "Usável",
+		["Weight"] = 1.25,
+		["Max"] = 2,
+		["Economy"] = 270
+	},
+	["comboburguer"] = {
+		["Index"] = "comboburguer",
+		["Name"] = "Combo BurguerShot",
+		["Type"] = "Usável",
+		["Weight"] = 1.25,
+		["Max"] = 2,
+		["Economy"] = 270
 	}
 }
 
