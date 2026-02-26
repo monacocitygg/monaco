@@ -124,7 +124,7 @@ CreateThread(function()
                             local perpDist = math.min(perpDistHead, perpDistForehead)
 
                             -- threshold so pra cabeca/testa
-                            local threshold = 0.13 + (distFromCam * 0.001)
+                            local threshold = 0.12 + (distFromCam * 0.001)
 
                             if Config.Antitank.Debug then
                                 local sId = GetPlayerServerId(playerId)
