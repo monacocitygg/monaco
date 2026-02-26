@@ -1,76 +1,91 @@
 {
     "token": "",
     "client": {
-        "bankType": "fleeca",
-       "uploadServer": "http://45.149.153.98:8080/upload" ,
-        "allowUnsafeURL": true,
-        "videoServer": "ws://45.149.153.98:8080/",
-        "case": "iphonexs",
-        "isAndroid": true,
+        "instagramLogo": "images/instagram_hand.png",
+        "bankLogo": "images/fleeca_hand.png",
+        "tinderLogo": "images/logo.svg",
+        "tinderFlame": "images/flame.png",
         "apps": {
-
-            "paypal": {"name": "Paypal", "icon": "http://192.95.36.145/smartphone/apps/paypal.png"},
-            "bank": {"name": "Fleeca", "icon": "http://192.95.36.145/smartphone/apps/fleeca.png"},
-            "olx": {"name": "Olx", "icon": "http://192.95.36.145/smartphone/apps/olx.png"},
-            "tor": {"name": "Tor", "icon": "http://192.95.36.145/smartphone/apps/tor.png"},
-            "twitter": {"name": "Twitter", "icon": "http://192.95.36.145/smartphone/apps/twitter.png"},
-            "instagram": {"name": "Instagram", "icon": "http://192.95.36.145/smartphone/apps/instagram.png"},
-            "minesweeper": {"name": "Campo Minado", "icon": "http://192.95.36.145/smartphone/apps/mina-naval.png"},
-            "calculator": {"name": "Calculadora", "icon": "http://192.95.36.145/smartphone/apps/calculadora.png"},
-            "gallery": {"name": "Galeria", "icon": "http://192.95.36.145/smartphone/apps/Galeria.png"},
-            "sms": {"name": "Mensagens", "icon": "http://192.95.36.145/smartphone/apps/Mensagens.png"},
-            "notes": {"name": "Anotações", "icon": "http://192.95.36.145/smartphone/apps/Anotacoes.png"},
-            "truco": {"name": "Truco", "icon": "http://192.95.36.145/smartphone/apps/truco.png"},
-            "settings": {"name": "Config", "icon": "http://192.95.36.145/smartphone/apps/settings.png"},
-            "contacts": {"name": "Contatos", "icon": "http://192.95.36.145/smartphone/apps/Contatos.png"},
-            "yellowpages": {"name": "Yellow Pages", "icon": "http://192.95.36.145/smartphone/apps/yellowpages.png"}
-          }, 
+            "whatsapp": { "name": "ZipZop", "icon": "images/whatsapp.png" },
+            "tor": { "name": "Deep Web", "icon": "images/tor.png" },
+            "instagram": { "name": "Instaban", "icon": "images/instagram.png" },
+            "bank": "images/fleeca.png",
+            "tinder": { "name": "Cupidlov", "icon": "images/tinder.png" },
+            "yellowpages": { "name": "Yellow P.", "icon": "images/yellowpages.png" },
+            "calculator": { "name": "Calculad.", "icon": "images/calculator.png" },
+            "notes": { "name": "Notas", "icon": "images/notes.png" },
+            "minesweeper": { "name": "Minadin", "icon": "images/minado.png" },
+            "truco": "images/truco.png",
+            "settings": "images/settings.png",
+            "contacts": "images/phone.png",
+            "sms": "images/sms.png",
+            "gallery": "images/gallery.png"
+          },
+        "bankType": "fleeca",
+        "uploadServer": "https://discord.com/api/webhooks/1476367449522835479/hxpcbjp1_gsRI5c_fPlKwbBc-XWYJwNlpZhoolTFtGtHJ9uIbPRT-bwSrrkSPkAUwdY0",
+        "allowUnsafeURL": true,
+        "videoServer": "ws://:8080/",
+        "case": "intense",
+        "isAndroid": false,
         "useGameClock": true,
         "phone_template": "XXX-XXX",
         "backgroundURL": "",
+        "db_driver": "oxmysql",
         "disabledApps": [
-            "paypal",
-            "Tinder",
-            "Blaze",
-            "Cassino",
-            "casino",
-            "weazel",
-            "blaze"
-        ]
+          "paypal",
+          "truco",
+          "casino"
+        ],
+        "ringSound": "images/ring.ogg",
+        "notificationSound": "images/notification.ogg"
+    },
+    "exclusive": {
+        "weazel": {
+            "tags": [
+                "Noticias"
+            ],
+            "permission": "Admin"
+        },
+        "casino": {
+            "maxBet": 10000
+        }
     },
     "call_mode": "pma-voice",
-    "webhookURL": "https://discord.com/api/webhooks/1474563046264410123/YBwxF54IeC7VrQuDe6kexAjfNUAG8Y2t5xnZ7cNG57baP1a-AIxUXlUCcC1EuTLEfF-E",
-    "instagram_verify": "verificado",
-    "weazel_tags": "Dono",
+    "webhookURL": "https://discord.com/api/webhooks/1476367449522835479/hxpcbjp1_gsRI5c_fPlKwbBc-XWYJwNlpZhoolTFtGtHJ9uIbPRT-bwSrrkSPkAUwdY0",
+    "instagram_verify": [
+        "Admin",
+        "Premium"
+    ],
+    "weazel_tags": "Admin",
     "instagram_accounts": {
         "*": 1,
-        "VIP": 2
+        "Admin": 2
     },
-    "moderator": "Dono",
+    "moderator": "Admin",
     "item": "cellphone",
+    "tor_blocked": [
+        "Policia"
+    ],
     "services": [
         {
             "name": "Policia",
             "number": "911",
-            "permission": "Police"
+            "permission": "Policia",
+            "dev": true
         },
         {
-            "name": "Hospital",
-            "number": "112",
-            "permission": "Paramedic"
+            "name": "Paramédico",
+            "number": "912",
+            "permission": "Paramedico",
+            "dev": true
         },
         {
-            "name": "Mecanica",
-            "number": "0800 043",
-            "permission": "Mechanic"
-        },
-        {
-            "name": "Prefeitura",
-            "number": "0800 044",
-            "permission": "Dono"
+            "name": "Mecânico",
+            "number": "0800 042",
+            "permission": "Mecanico",
+            "dev": true
         }
     ],
     "base": "creative_network",
-    "db_driver": "oxmysql",
     "channel": "stable"
 }

