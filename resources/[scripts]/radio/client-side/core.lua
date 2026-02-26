@@ -14,7 +14,7 @@ vSERVER = Tunnel.getInterface("radio")
 local Frequency = 0
 local Object = nil
 local Timer = GetGameTimer()
-local CurrentAnim = "anim_1"
+local CurrentAnim = "radio_clip"
 local AnimPlaying = false
 local UseProp = true
 -----------------------------------------------------------------------------------------------------------------------------------------
@@ -37,7 +37,11 @@ local function StopRadioAnim()
 		Object = nil
 	end
 
-	ClearPedTasks(Ped)
+	for _, v in ipairs(Config.Animations) do
+		if v.dict and v.anim then
+			StopAnimTask(Ped, v.dict, v.anim, 2.0)
+		end
+	end
 
 	AnimPlaying = false
 end
@@ -45,11 +49,7 @@ end
 local function PlayRadioAnim(animId)
 	local Ped = PlayerPedId()
 
-	-- Remove prop se existir
-	if DoesEntityExist(Object) then
-		DeleteEntity(Object)
-		Object = nil
-	end
+	StopRadioAnim()
 
 	local animData = GetAnimConfig(animId)
 	if not animData or not animData.dict or IsPedInAnyVehicle(Ped) then
@@ -58,17 +58,24 @@ local function PlayRadioAnim(animId)
 
 	RequestAnimDict(animData.dict)
 	while not HasAnimDictLoaded(animData.dict) do
-		Citizen.Wait(100)
+		Wait(1)
 	end
+
+	local p = animData.animParams or {}
+	local blendIn = p.blendIn or 8.0
+	local blendOut = p.blendOut or -8.0
+	local duration = p.duration or -1
+	local flag = p.flag or 49
+	local playbackRate = p.playbackRate or 0
 
 	if animData.prop and UseProp then
 		local PropModel = GetHashKey(animData.prop.model)
 		RequestModel(PropModel)
 		while not HasModelLoaded(PropModel) do
-			Citizen.Wait(100)
+			Wait(1)
 		end
 
-		TaskPlayAnim(Ped, animData.dict, animData.anim, 8.0, -8.0, -1, 49, 0, false, false, false)
+		TaskPlayAnim(Ped, animData.dict, animData.anim, blendIn, blendOut, duration, flag, playbackRate, false, false, false)
 
 		local BoneIndex = GetPedBoneIndex(Ped, animData.prop.bone)
 		Object = CreateObject(PropModel, 1.0, 1.0, 1.0, true, true, false)
@@ -77,7 +84,7 @@ local function PlayRadioAnim(animId)
 			animData.prop.rotation.x, animData.prop.rotation.y, animData.prop.rotation.z,
 			true, true, false, true, 1, true)
 	else
-		TaskPlayAnim(Ped, animData.dict, animData.anim, 8.0, -8.0, -1, 49, 0, false, false, false)
+		TaskPlayAnim(Ped, animData.dict, animData.anim, blendIn, blendOut, duration, flag, playbackRate, false, false, false)
 	end
 
 	AnimPlaying = true
@@ -86,7 +93,7 @@ end
 local function GetAnimListForNUI()
 	local list = {}
 	for _, v in ipairs(Config.Animations) do
-		table.insert(list, { id = v.id, label = v.label, icon = v.icon, image = v.image })
+		table.insert(list, { id = v.id, label = v.label, icon = v.icon })
 	end
 	return list
 end
@@ -115,7 +122,7 @@ AddEventHandler("radio:playTalkAnim", function()
 
 	RequestAnimDict(animData.dict)
 	while not HasAnimDictLoaded(animData.dict) do
-		Citizen.Wait(100)
+		Wait(1)
 	end
 
 	local p = animData.animParams or {}
@@ -131,7 +138,7 @@ AddEventHandler("radio:playTalkAnim", function()
 		local PropModel = GetHashKey(animData.prop.model)
 		RequestModel(PropModel)
 		while not HasModelLoaded(PropModel) do
-			Citizen.Wait(100)
+			Wait(1)
 		end
 
 		if DoesEntityExist(TalkObject) then
@@ -149,8 +156,11 @@ end)
 
 AddEventHandler("radio:stopTalkAnim", function()
 	local Ped = PlayerPedId()
+	local animData = GetAnimConfig(CurrentAnim)
 
-	ClearPedTasks(Ped)
+	if animData and animData.dict then
+		StopAnimTask(Ped, animData.dict, animData.anim, 8.0)
+	end
 
 	if DoesEntityExist(TalkObject) then
 		DeleteEntity(TalkObject)

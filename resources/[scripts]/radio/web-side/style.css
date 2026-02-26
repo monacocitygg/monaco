@@ -160,194 +160,57 @@ html, body {
     color: #8257E5;
 }
 
-/* Animation Button */
+/* Animation Selector */
 .animation-container {
     border-top: 1px solid rgba(255, 255, 255, 0.05);
-    padding-top: 12px;
-    margin-bottom: 12px;
+    padding-top: 15px;
+    margin-bottom: 15px;
 }
 
-.animation-btn-wrapper {
-    background: rgba(130, 87, 229, 0.15);
-    border: 1px solid rgba(130, 87, 229, 0.3);
-    border-radius: 4px;
-    padding: 8px 12px;
-    color: #ccc;
+.animation-label {
+    color: #666;
+    margin-bottom: 10px;
     font-size: 11px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.2s;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    justify-content: center;
 }
 
-.animation-btn-wrapper:hover {
-    background: rgba(130, 87, 229, 0.25);
+.animation-options {
+    display: flex;
+    gap: 8px;
+}
+
+.anim-option {
+    flex: 1;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 4px;
+    padding: 8px 6px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    cursor: pointer;
+    border: 1px solid transparent;
+    transition: all 0.2s;
+    font-size: 10px;
+    color: #888;
+}
+
+.anim-option i {
+    font-size: 18px;
+}
+
+.anim-option:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: #ccc;
+}
+
+.anim-option.selected {
+    background: rgba(130, 87, 229, 0.15);
     border-color: #8257E5;
     color: #fff;
 }
 
-.animation-btn-wrapper:active {
-    background: rgba(130, 87, 229, 0.35);
-}
-
-.animation-btn-wrapper i {
-    font-size: 13px;
+.anim-option.selected i {
     color: #8257E5;
-}
-
-/* Animation Popup Overlay */
-.anim-popup-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background: rgba(0, 0, 0, 0.7);
-    z-index: 10000;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    animation: animFadeIn 0.3s ease;
-}
-
-@keyframes animFadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-}
-
-@keyframes animPopupSlide {
-    from {
-        transform: scale(0.85) translateY(-20px);
-        opacity: 0;
-    }
-    to {
-        transform: scale(1) translateY(0);
-        opacity: 1;
-    }
-}
-
-/* Animation Popup Modal */
-.anim-popup-modal {
-    background: rgba(22, 22, 22, 0.95);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    outline: 5px solid rgba(255, 255, 255, 0.03);
-    border-radius: 12px;
-    width: 500px;
-    max-height: 80vh;
-    overflow: hidden;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
-    animation: animPopupSlide 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-}
-
-.anim-popup-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 18px 20px 14px 20px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-}
-
-.anim-popup-title {
-    color: #ffffff;
-    font-size: 15px;
-    font-weight: 700;
-}
-
-.anim-popup-close {
-    background: rgba(255, 255, 255, 0.08);
-    border: none;
-    color: #ccc;
-    width: 30px;
-    height: 30px;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 16px;
-}
-
-.anim-popup-close:hover {
-    background: rgba(255, 255, 255, 0.15);
-    color: #fff;
-    transform: scale(1.05);
-}
-
-/* Animation Grid */
-.anim-popup-grid {
-    padding: 15px 20px 20px 20px;
-    max-height: calc(80vh - 60px);
-    overflow-y: auto;
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 12px;
-}
-
-.anim-popup-grid::-webkit-scrollbar {
-    width: 4px;
-}
-
-.anim-popup-grid::-webkit-scrollbar-track {
-    background: rgba(255, 255, 255, 0.03);
-    border-radius: 2px;
-}
-
-.anim-popup-grid::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.15);
-    border-radius: 2px;
-}
-
-.anim-popup-grid::-webkit-scrollbar-thumb:hover {
-    background: rgba(255, 255, 255, 0.25);
-}
-
-/* Animation Item Card */
-.anim-grid-item {
-    background: rgba(255, 255, 255, 0.04);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 10px;
-    cursor: pointer;
-    transition: all 0.25s ease;
-    overflow: hidden;
-    position: relative;
-}
-
-.anim-grid-item:hover {
-    background: rgba(255, 255, 255, 0.08);
-    border-color: rgba(255, 255, 255, 0.15);
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
-}
-
-.anim-grid-item.selected {
-    background: rgba(130, 87, 229, 0.15);
-    border-color: rgba(130, 87, 229, 0.5);
-    box-shadow: 0 4px 15px rgba(130, 87, 229, 0.25);
-}
-
-.anim-grid-item img {
-    width: 90%;
-    aspect-ratio: 1;
-    object-fit: cover;
-    border-radius: 10px;
-    display: block;
-    margin: 8px auto 0 auto;
-}
-
-.anim-grid-item .anim-grid-label {
-    text-align: center;
-    padding: 8px 6px;
-    color: #ccc;
-    font-size: 12px;
-    font-weight: 500;
-}
-
-.anim-grid-item.selected .anim-grid-label {
-    color: #fff;
 }
 
 /* Prop Toggle */
@@ -460,7 +323,6 @@ input:checked + .slider:before {
 
 .volume-slider {
     -webkit-appearance: none;
-    appearance: none;
     width: 100%;
     height: 4px;
     background: rgba(255, 255, 255, 0.1);
