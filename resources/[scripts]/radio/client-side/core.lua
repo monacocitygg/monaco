@@ -37,11 +37,7 @@ local function StopRadioAnim()
 		Object = nil
 	end
 
-	for _, v in ipairs(Config.Animations) do
-		if v.dict and v.anim then
-			StopAnimTask(Ped, v.dict, v.anim, 2.0)
-		end
-	end
+	ClearPedTasks(Ped)
 
 	AnimPlaying = false
 end
@@ -156,11 +152,8 @@ end)
 
 AddEventHandler("radio:stopTalkAnim", function()
 	local Ped = PlayerPedId()
-	local animData = GetAnimConfig(CurrentAnim)
 
-	if animData and animData.dict then
-		StopAnimTask(Ped, animData.dict, animData.anim, 8.0)
-	end
+	ClearPedTasks(Ped)
 
 	if DoesEntityExist(TalkObject) then
 		DeleteEntity(TalkObject)
