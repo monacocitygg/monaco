@@ -71,6 +71,55 @@ AddEventHandler('gameEventTriggered', function(name, args)
 end)
 
 -- METODO 2: Raycast a cada tiro (funciona contra godmode que bloqueia o evento de dano)
+local function doRaycastCheck(weaponHash, camCoords, camRot, ped)
+    -- converte rotacao pra direcao
+    local rX = camRot.x * math.pi / 180.0
+    local rZ = camRot.z * math.pi / 180.0
+    local dirX = -math.sin(rZ) * math.abs(math.cos(rX))
+    local dirY = math.cos(rZ) * math.abs(math.cos(rX))
+    local dirZ = math.sin(rX)
+
+    local range = 200.0
+    local endCoords = vector3(
+        camCoords.x + dirX * range,
+        camCoords.y + dirY * range,
+        camCoords.z + dirZ * range
+    )
+
+    -- raycast do tipo 12 = peds
+    local ray = StartShapeTestLosProbe(camCoords.x, camCoords.y, camCoords.z, endCoords.x, endCoords.y, endCoords.z, 12, ped, 0)
+    local result, hit, hitCoords, _, hitEntity = GetShapeTestResultIncludingMaterial(ray)
+    while result == 1 do
+        Wait(0)
+        result, hit, hitCoords, _, hitEntity = GetShapeTestResultIncludingMaterial(ray)
+    end
+
+    if hit == 1 and hitEntity and DoesEntityExist(hitEntity) and IsEntityAPed(hitEntity) and IsPedAPlayer(hitEntity) then
+        -- checa o bone mais proximo do ponto de impacto
+        local boneHead = GetPedBoneCoords(hitEntity, 31086, 0.0, 0.0, 0.0)
+
+        local distHead = #(hitCoords - boneHead)
+
+        local threshold = 0.3 -- distancia maxima pro bone contar como hit
+
+        if Config.Antitank.Debug then
+            print(('[ANTI-TANK] [Raycast] hit ped | distHead: %.2f | threshold: %.2f'):format(distHead, threshold))
+        end
+
+        if distHead < threshold then
+            local victimServerId = GetPlayerServerId(NetworkGetPlayerIndexFromPed(hitEntity))
+
+            if Config.Antitank.Debug then
+                print(('[ANTI-TANK] [Raycast] HS detectado | vitima: %d | distHead: %.2f'):format(
+                    victimServerId, distHead
+                ))
+            end
+
+            processHeadshot(victimServerId, weaponHash)
+        end
+    end
+end
+
 CreateThread(function()
     while true do
         Wait(0)
@@ -81,53 +130,13 @@ CreateThread(function()
 
         if isShooting and not wasShooting then
             local weaponHash = GetSelectedPedWeapon(ped)
-
-            -- pega posicao do cano da arma e direcao do tiro
             local camCoords = GetGameplayCamCoord()
             local camRot = GetGameplayCamRot(2)
 
-            -- converte rotacao pra direcao
-            local rX = camRot.x * math.pi / 180.0
-            local rZ = camRot.z * math.pi / 180.0
-            local dirX = -math.sin(rZ) * math.abs(math.cos(rX))
-            local dirY = math.cos(rZ) * math.abs(math.cos(rX))
-            local dirZ = math.sin(rX)
-
-            local range = 200.0
-            local endCoords = vector3(
-                camCoords.x + dirX * range,
-                camCoords.y + dirY * range,
-                camCoords.z + dirZ * range
-            )
-
-            -- raycast do tipo 12 = peds
-            local ray = StartShapeTestLosProbe(camCoords.x, camCoords.y, camCoords.z, endCoords.x, endCoords.y, endCoords.z, 12, ped, 0)
-            local result, hit, hitCoords, _, hitEntity = GetShapeTestResultIncludingMaterial(ray)
-            while result == 1 do
-                Wait(0)
-                result, hit, hitCoords, _, hitEntity = GetShapeTestResultIncludingMaterial(ray)
-            end
-
-            if hit == 1 and hitEntity and DoesEntityExist(hitEntity) and IsEntityAPed(hitEntity) and IsPedAPlayer(hitEntity) then
-                -- checa o bone mais proximo do ponto de impacto
-                local boneHead = GetPedBoneCoords(hitEntity, 31086, 0.0, 0.0, 0.0)
-
-                local distHead = #(hitCoords - boneHead)
-
-                local threshold = 0.15 -- distancia maxima pro bone contar como hit
-
-                if distHead < threshold then
-                    local victimServerId = GetPlayerServerId(NetworkGetPlayerIndexFromPed(hitEntity))
-
-                    if Config.Antitank.Debug then
-                        print(('[ANTI-TANK] [Raycast] HS detectado | vitima: %d | distHead: %.2f'):format(
-                            victimServerId, distHead
-                        ))
-                    end
-
-                    processHeadshot(victimServerId, weaponHash)
-                end
-            end
+            -- roda raycast em thread separada pra nao bloquear deteccao de tiros
+            CreateThread(function()
+                doRaycastCheck(weaponHash, camCoords, camRot, ped)
+            end)
         end
 
         wasShooting = isShooting
