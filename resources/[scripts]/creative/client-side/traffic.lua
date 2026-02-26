@@ -1,7 +1,7 @@
 local convarInt = 200
 local onlinePlayers = 10
-local crowdDensity = 1.0
-local trafficDensity = 0.2
+local crowdDensity = 0.6
+local trafficDensity = 0.1
 local crowdScaling = true
 local crowdDensitivity = true
 local trafficDensitivity = true
@@ -38,7 +38,7 @@ if trafficDensitivity or crowdDensitivity then
 
                         if crowdDensitivity then
                             nCrowd = crowdDensity - (onlinePlayers / convarInt / (2 / crowdDensity))
-                            nCrowd = math.max(0.5, math.min(1.0, nCrowd))
+                            nCrowd = math.max(0.3, math.min(0.6, nCrowd))
                         end
 
                         if trafficDensitivity then

@@ -153,7 +153,12 @@ local Blips = {
 	{ 919.38,-182.83,74.02,198,62,"Taxista",0.5 },
 	{ 1696.19,4785.25,42.02,198,62,"Taxista",0.5 },
 	{ -680.9,5832.41,17.32,141,62,"Caçador",0.7 },
-	{ 918.69,50.33,80.9,617,62,"Cassino",0.6 }
+	{ 918.69,50.33,80.9,617,62,"Cassino",0.6 },
+
+	{ -545.52,-205.45,38.22,422,62,"Tribunal",0.6 },
+	{ -1180.44,-885.24,13.8,93,62,"BurgerShot",0.5 },
+	{ 275.54,-1559.06,29.27,422,62,"Casa Branca",0.6 },
+	{ 243.67,-387.82,45.51,422,62,"OAB",0.5 }
 }
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- THREADTIMERS
@@ -286,14 +291,14 @@ CreateThread(function()
 		DisableControlAction(1,165,true)
 		SetPauseMenuActive(false)
 
-		if LocalPlayer["state"]["Route"] > 0 then
-			SetVehicleDensityMultiplierThisFrame(0.0)
-			SetRandomVehicleDensityMultiplierThisFrame(0.0)
-			SetParkedVehicleDensityMultiplierThisFrame(0.0)
-			SetAmbientVehicleRangeMultiplierThisFrame(0.0)
-			SetScenarioPedDensityMultiplierThisFrame(0.0,0.0)
-			SetPedDensityMultiplierThisFrame(0.0)
-		end
+	--if LocalPlayer["state"]["Route"] > 0 then
+	--	SetVehicleDensityMultiplierThisFrame(0.0)
+	--	SetRandomVehicleDensityMultiplierThisFrame(0.0)
+	--	SetParkedVehicleDensityMultiplierThisFrame(0.0)
+	--	SetAmbientVehicleRangeMultiplierThisFrame(0.0)
+	--	SetScenarioPedDensityMultiplierThisFrame(0.0,0.0)
+	--	SetPedDensityMultiplierThisFrame(0.0)
+	--end
 
 		if IsPedArmed(PlayerPedId(),6) then
 			DisableControlAction(1,140,true)
