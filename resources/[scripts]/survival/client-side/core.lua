@@ -180,3 +180,27 @@ end)
 function Creative.Revive(Health,Arena)
 	exports["survival"]:Revive(Health,Arena)
 end
+-----------------------------------------------------------------------------------------------------------------------------------------
+-- ARENA:RESPAWN
+-----------------------------------------------------------------------------------------------------------------------------------------
+AddEventHandler("arena:Respawn",function()
+	if Death then
+		Death = false
+		DeathTimer = 300
+
+		local Ped = PlayerPedId()
+		ClearPedTasks(Ped)
+		NetworkSetFriendlyFireOption(true)
+		ClearPedBloodDamage(Ped)
+		SetEntityHealth(Ped,200)
+		SetEntityInvincible(Ped,false)
+		SetPedArmour(Ped,99)
+
+		SendNUIMessage({ Action = "Display", Mode = "none" })
+	end
+end)
+-----------------------------------------------------------------------------------------------------------------------------------------
+-- ARENA:RESETSTREEK
+-----------------------------------------------------------------------------------------------------------------------------------------
+AddEventHandler("arena:ResetStreek",function()
+end)
