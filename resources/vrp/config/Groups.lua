@@ -6,7 +6,8 @@ Groups = {
 		["Parent"] = {
 			["Admin"] = true
 		},
-		["Hierarchy"] = { "Administrador","Moderador","Suporte" },
+		-- Admin 1 = Coordenacao | Admin 2 = Head Staff | Admin 3 = Staff | Admin 4 = Suporte
+		["Hierarchy"] = { "Administrador","HeadStaff","Staff","Suporte" },
 		["Service"] = {}
 	},
 
@@ -14,7 +15,7 @@ Groups = {
 		["Parent"] = {
 			["Administrador"] = true
 		},
-		["Hierarchy"] = { "Administrador","Moderador","Suporte" },
+		["Hierarchy"] = { "Administrador","HeadStaff","Staff","Suporte" },
 		["Service"] = {}
 	},
 	

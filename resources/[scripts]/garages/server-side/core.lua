@@ -776,7 +776,7 @@ end)
 -----------------------------------------------------------------------------------------------------------------------------------------
 RegisterCommand("dv",function(source)
 	local Passport = vRP.Passport(source)
-	if Passport and vRP.HasGroup(Passport,"Admin") then
+	if Passport and vRP.HasGroup(Passport,"Admin",4) then
 		TriggerClientEvent("garages:Delete",source)
 	end
 end)
