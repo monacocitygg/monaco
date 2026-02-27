@@ -478,20 +478,7 @@ function removeTattooInteract(tattooId)
     activeTattooInteracts[tattooId] = nil
 end
 
--- Blips nativos para todas as lojas de tatuagem
-CreateThread(function()
-    for i, v in ipairs(tattooShops) do
-        local blip = AddBlipForCoord(v.coords.x, v.coords.y, v.coords.z)
-        SetBlipSprite(blip, 75)
-        SetBlipDisplay(blip, 4)
-        SetBlipScale(blip, 0.8)
-        SetBlipColour(blip, 47)
-        SetBlipAsShortRange(blip, true)
-        BeginTextCommandSetBlipName("STRING")
-        AddTextComponentString("Tatuagem")
-        EndTextCommandSetBlipName(blip)
-    end
-end)
+
 
 mainThread = function()
     while true do
