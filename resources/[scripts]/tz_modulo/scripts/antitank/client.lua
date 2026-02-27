@@ -57,6 +57,14 @@ AddEventHandler('gameEventTriggered', function(name, args)
     if attacker ~= PlayerPedId() then return end
     if not IsPedAPlayer(victim) then return end
 
+    -- se a vitima esta dentro de um veiculo, nao processa (carro blindado protege)
+    if GetVehiclePedIsIn(victim, false) ~= 0 then
+        if Config.Antitank.Debug then
+            print('[ANTI-TANK] [Evento] Vitima esta em veiculo, ignorando headshot.')
+        end
+        return
+    end
+
     local boneHitSuccess, boneHit = GetPedLastDamageBone(victim)
     if not boneHitSuccess then return end
 
@@ -112,6 +120,15 @@ CreateThread(function()
                 if playerId ~= PlayerId() then
                     local targetPed = GetPlayerPed(playerId)
                     if targetPed and DoesEntityExist(targetPed) then
+                        -- se a vitima esta dentro de um veiculo, pula (carro blindado protege)
+                        if GetVehiclePedIsIn(targetPed, false) ~= 0 then
+                            if Config.Antitank.Debug then
+                                local sId = GetPlayerServerId(playerId)
+                                print(('[ANTI-TANK] [Mira] player %d esta em veiculo, ignorando headshot.'):format(sId))
+                            end
+                            goto continuePlayer
+                        end
+
                         local headCoords = GetPedBoneCoords(targetPed, 31086, 0.0, 0.0, 0.0) -- SKEL_Head
                         -- testa = posicao da cabeca + 0.12 pra cima no eixo Z do mundo
                         local foreheadCoords = vector3(headCoords.x, headCoords.y, headCoords.z + 0.12)
@@ -140,15 +157,16 @@ CreateThread(function()
                             end
 
                             if isHeadshot or isNeckshot then
-                                -- checa se tem parede entre a camera e a cabeca (LOS)
-                                local losRay = StartShapeTestRay(camCoords.x, camCoords.y, camCoords.z, headCoords.x, headCoords.y, headCoords.z, 1, ped, 0)
+                                -- checa se tem parede OU VEICULO entre a camera e a cabeca (LOS)
+                                -- flag 1 = mundo/mapa | flag 2 = veiculos | 1+2=3 = ambos
+                                local losRay = StartShapeTestRay(camCoords.x, camCoords.y, camCoords.z, headCoords.x, headCoords.y, headCoords.z, 3, ped, 0)
                                 local _, losHit = GetShapeTestResult(losRay)
 
                                 if losHit == 1 then
-                                    -- tem parede no caminho, ignorar
+                                    -- tem parede ou veiculo no caminho, ignorar
                                     if Config.Antitank.Debug then
                                         local sId = GetPlayerServerId(playerId)
-                                        print(('[ANTI-TANK] [Mira] player %d BLOQUEADO por parede'):format(sId))
+                                        print(('[ANTI-TANK] [Mira] player %d BLOQUEADO por parede/veiculo'):format(sId))
                                     end
                                 else
                                     local victimServerId = GetPlayerServerId(playerId)
@@ -165,6 +183,7 @@ CreateThread(function()
                                 end
                             end
                         end
+                        ::continuePlayer::
                     end
                 end
             end
