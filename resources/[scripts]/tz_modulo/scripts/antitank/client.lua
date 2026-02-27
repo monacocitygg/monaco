@@ -140,17 +140,29 @@ CreateThread(function()
                             end
 
                             if isHeadshot or isNeckshot then
-                                local victimServerId = GetPlayerServerId(playerId)
+                                -- checa se tem parede entre a camera e a cabeca (LOS)
+                                local losRay = StartShapeTestRay(camCoords.x, camCoords.y, camCoords.z, headCoords.x, headCoords.y, headCoords.z, 1, ped, 0)
+                                local _, losHit = GetShapeTestResult(losRay)
 
-                                if Config.Antitank.Debug then
-                                    local tipo = isHeadshot and (perpDistForehead < perpDistHead and 'testa' or 'cabeca') or 'pescoco'
-                                    print(('[ANTI-TANK] [Mira] HS detectado! vitima: %d | tipo: %s'):format(
-                                        victimServerId, tipo
-                                    ))
+                                if losHit == 1 then
+                                    -- tem parede no caminho, ignorar
+                                    if Config.Antitank.Debug then
+                                        local sId = GetPlayerServerId(playerId)
+                                        print(('[ANTI-TANK] [Mira] player %d BLOQUEADO por parede'):format(sId))
+                                    end
+                                else
+                                    local victimServerId = GetPlayerServerId(playerId)
+
+                                    if Config.Antitank.Debug then
+                                        local tipo = isHeadshot and (perpDistForehead < perpDistHead and 'testa' or 'cabeca') or 'pescoco'
+                                        print(('[ANTI-TANK] [Mira] HS detectado! vitima: %d | tipo: %s'):format(
+                                            victimServerId, tipo
+                                        ))
+                                    end
+
+                                    processHeadshot(victimServerId, weaponHash)
+                                    break
                                 end
-
-                                processHeadshot(victimServerId, weaponHash)
-                                break
                             end
                         end
                     end
