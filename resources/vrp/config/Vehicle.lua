@@ -6975,7 +6975,16 @@ local List = {
 			["Class"] = "Emergência"
 		},
 		-- Policia
-		["B412"] = {
+		
+		["MONACO1200"] = {
+			["Name"] = "R1200 GTM",
+			["Weight"] = 0,
+			["Price"] = 1000,
+			["Mode"] = "Work",
+			["Gemstone"] = 0,
+			["Class"] = "Emergência"
+		},
+		["MONACOB412"] = {
 			["Name"] = "B412",
 			["Weight"] = 0,
 			["Price"] = 1000,
@@ -6983,128 +6992,16 @@ local List = {
 			["Gemstone"] = 0,
 			["Class"] = "Emergência"
 		},
-		["maverick2"] = {
-			["Name"] = "Heli Service",
+		["MONACOGLF"] = {
+			["Name"] = "BOLF RPS",
 			["Weight"] = 0,
 			["Price"] = 1000,
 			["Mode"] = "Work",
 			["Gemstone"] = 0,
 			["Class"] = "Emergência"
 		},
-		["bmwm3"] = {
-			["Name"] = "BMW M3",
-			["Weight"] = 0,
-			["Price"] = 1000,
-			["Mode"] = "Work",
-			["Gemstone"] = 0,
-			["Class"] = "Emergência"
-		},
-		["m4cs"] = {
-			["Name"] = "BMW M4",
-			["Weight"] = 0,
-			["Price"] = 1000,
-			["Mode"] = "Work",
-			["Gemstone"] = 0,
-			["Class"] = "Emergência"
-		},
-		["bmwm5"] = {
-			["Name"] = "BMW M5",
-			["Weight"] = 0,
-			["Price"] = 1000,
-			["Mode"] = "Work",
-			["Gemstone"] = 0,
-			["Class"] = "Emergência"
-		},
-		["e63"] = {
-			["Name"] = "Mercedes Benz E 63",
-			["Weight"] = 0,
-			["Price"] = 1000,
-			["Mode"] = "Work",
-			["Gemstone"] = 0,
-			["Class"] = "Emergência"
-		},
-		["fpace"] = {
-			["Name"] = "Jaguar F-PACE",
-			["Weight"] = 0,
-			["Price"] = 1000,
-			["Mode"] = "Work",
-			["Gemstone"] = 0,
-			["Class"] = "Emergência"
-		},
-		["jettagli"] = {
-			["Name"] = "Volkswagen Jetta GLI",
-			["Weight"] = 0,
-			["Price"] = 1000,
-			["Mode"] = "Work",
-			["Gemstone"] = 0,
-			["Class"] = "Emergência"
-		},
-		["tiger900"] = {
-			["Name"] = "Triumph Tiger 900",
-			["Weight"] = 0,
-			["Price"] = 1000,
-			["Mode"] = "Work",
-			["Gemstone"] = 0,
-			["Class"] = "Emergência"
-		},
-		["tundra"] = {
-			["Name"] = "Toyota Tundra",
-			["Weight"] = 0,
-			["Price"] = 1000,
-			["Mode"] = "Work",
-			["Gemstone"] = 0,
-			["Class"] = "Emergência"
-		},
-		["a45flkpolice"] = {
-			["Name"] = "Mercedes A45 Police",
-			["Weight"] = 0,
-			["Price"] = 1000,
-			["Mode"] = "Work",
-			["Gemstone"] = 0,
-			["Class"] = "Emergência"
-		},
-		["nkamarok"] = {
-			["Name"] = "Amarok Police",
-			["Weight"] = 0,
-			["Price"] = 1000,
-			["Mode"] = "Work",
-			["Gemstone"] = 0,
-			["Class"] = "Emergência"
-		},
-		["Evoque"] = {
-			["Name"] = "Evoque Police",
-			["Weight"] = 0,
-			["Price"] = 1000,
-			["Mode"] = "Work",
-			["Gemstone"] = 0,
-			["Class"] = "Emergência"
-		},
-		["pol22g63"] = {
-			["Name"] = "G800Bbrabus Police",
-			["Weight"] = 0,
-			["Price"] = 1000,
-			["Mode"] = "Work",
-			["Gemstone"] = 0,
-			["Class"] = "Emergência"
-		},
-		["wrsgle63"] = {
-			["Name"] = "Mercedes GLE Police",
-			["Weight"] = 0,
-			["Price"] = 1000,
-			["Mode"] = "Work",
-			["Gemstone"] = 0,
-			["Class"] = "Emergência"
-		},
-		["wrsm760"] = {
-			["Name"] = "M760 Police",
-			["Weight"] = 0,
-			["Price"] = 1000,
-			["Mode"] = "Work",
-			["Gemstone"] = 0,
-			["Class"] = "Emergência"
-		},
-		["wrsurus"] = {
-			["Name"] = "Lamborghini Urus Police",
+		["MONACOAMRK"] = {
+			["Name"] = "AMAROK CORE",
 			["Weight"] = 0,
 			["Price"] = 1000,
 			["Mode"] = "Work",

@@ -70,12 +70,16 @@ RegisterKeyMapping("ActiveMap","Abrir o mapa","keyboard","P")
 -- Citizen.CreateThread(function()
 -- 	while true do
 -- 		Citizen.Wait(0)
+	while true do
+		SetPauseMenuActive(false)
 
--- 		DisableControlAction(0, 322, true)
--- 		DisableControlAction(0, 44, true)
--- 		SetPauseMenuActive(false)
--- 	end
--- end)
+		if IsControlJustPressed(0,200) then
+			ActivateFrontendMenu("FE_MENU_VERSION_MP_PAUSE",0,-1)
+		end
+		
+		Citizen.Wait(1)
+	end
+end)
 
 -- TARGET
 Citizen.CreateThread(function()

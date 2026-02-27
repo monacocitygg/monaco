@@ -290,15 +290,10 @@ local Works = {
 		"maverick2"
 	},
 	["Police"] = {
-		"bmwm3",
-		"m4cs",
-		"bmwm5",
-		"e63",
-		"fpace",
-		"jettagli",
-		"tiger900",
-		"nkmurus20",
-		"nkamarok"
+		"MONACO1200",
+		"MONACOB412",
+		"MONACOGLF",
+		"MONACOAMRK",
 	},
 	["heliPolice"] = {
 		"b412", 

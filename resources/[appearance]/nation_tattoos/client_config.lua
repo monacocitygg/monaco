@@ -54,7 +54,7 @@ resetCloths = function()
             ["bags"] = { 0,0,0 },
             ["ears"] = { -1,0 },
             ["decals"] = { 0,0,0 },
-            ["legs"] = { 29, 0, 2 },
+            ["legs"] = { 61, 0, 2 },
             ["watches"] = { -1,0 },
             ["glasses"] = { -1,0 },
         },
@@ -66,7 +66,7 @@ resetCloths = function()
             ["accessories"] = { -1, 0, 2 },
             ["hats"] = { -1,0 },
             ["masks"] = { 0,0,0 },
-            ["undershirts"] = { 15, 0, 2 },
+            ["undershirts"] = { 14, 0, 2 },
             ["shoes"] = { 35, 0, 2 },
             ["bracelets"] = { -1,0 },
             ["tops"] = { 15, 0, 2 },
@@ -206,90 +206,30 @@ end
 
 
 local tattooShops = {
-	[1] = { coords = vec3(1324.45,-1653.32,52.28), h = 35.24, perm = nil },
-	[2] = { coords = vec3(-2882.57,1367.65,76.26), h = 33.89 },
-	[3] = { coords = vec3(322.35,182.74,103.59), h = 151.48 },
-	[4] = { coords = vec3(-3172.1,1075.78,20.83), h = 246.71 },
-	[5] = { coords = vec3(1862.99,3746.9,33.04), h = 296.08 },
-	[6] = { coords = vec3(-292.59,6200.98,31.49), h = 144.56 },
-	[7] = { coords = vec3(-3216.79,777.96,14.07), h = 272.13 },
-	[8] = { coords = vec3(173.9,1713.08,227.39), h = 294.81 },
-	[9] = { coords = vec3(-1125.83,360.18,74.96), h = 28.35 },
-	[10] = { coords = vec3(1449.42,-816.77,115.12), h = 42.52 },  -- Alemanha
-	[11] = { coords = vec3(1543.09,1838.62,104.18), h = 0.0 },  -- Armas03
-	[12] = { coords = vec3(743.75,3408.82,62.68), h = 14.18 },  -- Mansao12
-	[13] = { coords = vec3(336.18,4841.32,-59.01), h = 334.49 },  -- bunkerg
-	[14] = { coords = vec3(1246.44,-108.38,71.38), h = 294.81 },  -- Barragem
-	[15] = { coords = vec3(-1508.16,850.95,181.59), h = 204.1 },  -- Mansao20
-	[16] = { coords = vec3(-3079.71,2572.82,9.82), h = 155.91 },  -- Mansao21
-	[17] = { coords = vec3(2149.43,-1167.98,168.45), h = 187.09 },  -- Favela14
-	[18] = { coords = vec3(-333.32,7188.72,6.47), h = 187.09 },  -- Roxwood
-	[19] = { coords = vec3(-833.12,7173.38,96.2), h = 144.57 },  -- Mansao22
-	[20] = { coords = vec3(-1.06,-1810.74,25.34), h = 87.88 },  -- Gueto04
-	[21] = { coords = vec3(1050.98,891.95,220.34), h = 136.07 },  -- Favela06
-	[22] = { coords = vec3(598.9,889.46,233.82), h = 320.32 },  -- DoadorF12
-	[23] = { coords = vec3(-344.07,1861.86,194.48), h = 343.0 },  -- Favela8
-	[24] = { coords = vec3(2596.58,3336.52,56.65), h = 243.78 },  -- DoadorF07
-	[25] = { coords = vec3(2018.77,3365.36,51.59), h = 354.34 },  -- Mansao26
-	[26] = { coords = vec3(795.39,3412.63,62.68), h = 311.38 },  -- Tatuagem Datreze
-	[27] = { coords = vec3(-2595.82,1914.18,163.71), h = 102.05 },  -- Mansao28
-	[28] = { coords = vec3(-1454.84,2560.07,11.19), h = 5.32 },
-	[29] = { coords = vec3(-2793.79,3036.31,10.16), h = 147.41 },  -- Mafia02
-	[30] = { coords = vec3(-8.8,531.66,170.62), h = 280.63 },  -- Tidinha
-	[31] = { coords = vec3(-2010.25,737.11,164.12), h = 48.19 },
-	[32] = { coords = vec3(-971.22,962.84,226.36), h = 153.08 },  -- Fox2
-	[33] = { coords = vec3(45.58,3476.18,60.42), h = 246.23 },  -- 
-	[34] = { coords = vec3(-1672.81,1020.0,177.6), h = 201.26 },  -- Favela09
-	[35] = { coords = vec3(1902.61,514.94,176.08), h = 257.96 },
-	[36] = { coords = vec3(2704.78,-354.97,-55.18), h = 178.59 },  -- bunkerp
-	[37] = { coords = vec3(-1157.1,-1740.13,5.19), h = 138.9 },
-	[38] = { coords = vec3(-2556.92,-1767.04,9.42), h = 289.14 },  -- Mansao31
-	[39] = { coords = vec3(-3295.75,1477.52,11.05), h = 34.02 },
-	[40] = { coords = vec3(975.68,-1807.39,35.67), h = 283.47 },
-	[41] = { coords = vec3(2648.67,3358.36,56.92), h = 257.96 },
-	[42] = { coords = vec3(-772.06,990.23,249.23), h = 25.52 },
-	[43] = { coords = vec3(2534.31,2548.41,50.84), h = 274.97 },
-	[44] = { coords = vec3(-1545.24,96.31,56.75), h = 306.15 },
-	[45] = { coords = vec3(-1672.45,1019.7,177.6), h = 221.11 },
-	[46] = { coords = vec3(1086.11,-1998.56,30.87), h = 328.82 },
-	[47] = { coords = vec3(1592.22,1919.28,100.71), h = 45.36 },
-	[48] = { coords = vec3(1065.95,-1994.79,31.0), h = 337.33 },
-	[49] = { coords = vec3(2404.29,2437.07,61.52), h = 306.15 },
-	[50] = { coords = vec3(-576.42,286.79,79.18), h = 286.3 },
-	[51] = { coords = vec3(2661.71,1815.18,36.97), h = 167.25 },
-	[52] = { coords = vec3(-604.74,-1616.79,33.01), h = 263.63 },
-	[53] = { coords = vec3(2462.5,-539.89,78.64), h = 19.85 },
-	[54] = { coords = vec3(-49.13,2661.28,76.48), h = 82.21 },
-	[55] = { coords = vec3(2176.52,5.1,243.85), h = 221.11 },
-	[56] = { coords = vec3(-422.16,1604.99,360.62), h = 345.83 },
-	[57] = { coords = vec3(-183.49,1535.24,337.45), h = 11.34 },
-	[58] = { coords = vec3(2823.66,2950.55,66.35), h = 201.26 },
-	[59] = { coords = vec3(-271.6,1940.43,163.51), h = 99.97 },
-	[60] = { coords = vec3(-1879.51,2066.08,145.57), h = 340.16 },  -- Facplus Mafia
-	[61] = { coords = vec3(980.72,-98.14,74.85), h = 39.69 },
-	[62] = { coords = vec3(751.73,-1125.96,23.76), h = 85.94 },  -- Desmanche02
-	[63] = { coords = vec3(768.35,399.75,139.68), h = 147.41 },  -- Desmanche02
-	[64] = { coords = vec3(-1641.0,935.46,177.58), h = 93.55 },
-	[65] = { coords = vec3(-2422.8,-269.19,16.68), h = 36.86 },
-	[66] = { coords = vec3(891.34,-3225.34,-98.23), h = 297.64 },
-	[67] = { coords = vec3(-154.72,-1611.57,33.65), h = 153.08 },
-	[68] = { coords = vec3(-2010.15,736.55,164.12), h = 28.35 },
-	[69] = { coords = vec3(-1578.36,-237.37,54.81), h = 246.62 },
-	[70] = { coords = vec3(-1814.86,30.08,94.59), h = 93.55 },
-	[71] = { coords = vec3(1278.55,-1433.96,67.37), h = 198.43 },
-	[72] = { coords = vec3(-463.37,-2829.04,6.0), h = 226.78 },
-	[73] = { coords = vec3(1400.52,1141.42,114.33), h = 85.04 },
-	[74] = { coords = vec3(2286.02,4562.01,37.66), h = 323.15 },
-	[75] = { coords = vec3(-3897.62,-3225.12,13.33), h = 70.87 },
-	[76] = { coords = vec3(-2987.74,57.55,11.61), h = 25.52 },
-	[77] = { coords = vec3(-1153.58,-1426.81,4.95), h = 181.42 },
-	[78] = { coords = vec3(-66.07,988.45,239.5), h = 48.42 },
-	[79] = { coords = vec3(-238.4,-1366.03,31.26), h = 272.13 },
-	[80] = { coords = vec3(478.05,-1310.82,29.23), h = 314.65 },
-	[81] = { coords = vec3(146.58,1263.05,253.93), h = 308.98 },
-	[82] = { coords = vec3(-1694.61,-106.7,85.66), h = 161.58 },
+    [1] = { coords = vec3(1324.45,-1653.32,52.28), h = 35.24, perm = nil },
+    [2] = { coords = vec3(-1152.46,-1426.97,4.96), h = 33.89 },
+    [3] = { coords = vec3(322.35,182.74,103.59), h = 151.48 },
+    [4] = { coords = vec3(-3172.1,1075.78,20.83), h = 246.71 },
+    [5] = { coords = vec3(1862.99,3746.9,33.04), h = 296.08 },
+    [6] = { coords = vec3(-292.59,6200.98,31.49), h = 144.56 },
+}
 
-} 
+function addBlips()
+    for _, v in pairs(tattooShops) do
+        if v.blip ~= false then
+            local blip = AddBlipForCoord(v.coords)
+            SetBlipSprite(blip, v.id or 75)
+            SetBlipColour(blip, v.color or 13)
+            SetBlipScale(blip, 0.5)
+            SetBlipAsShortRange(blip, true)
+            BeginTextCommandSetBlipName("STRING")
+            AddTextComponentString(v.name or "Loja de Tattoos")
+            EndTextCommandSetBlipName(blip)
+        end
+    end
+end
+
+
 
 local defaultPrices = {
     ["torso"] = 150,
@@ -434,7 +374,6 @@ end
 function drawMarkers()
     if not tattooId then return end
     local x,y,z = table.unpack(nearestTattooShop.coords)
-	
     DrawMarker(1,x,y,z-0.9,0,0,0,0,0,0,0.75,0.75,1.75,90, 135, 242,50,0,1,1,1)
 end
 
@@ -466,33 +405,14 @@ function nearTattooShop()
 end
 
 
-local activeTattooInteracts = {}
-
-function createTattooInteract(tattooId, coords)
-    if activeTattooInteracts[tattooId] then return end
-    activeTattooInteracts[tattooId] = true
-    CreateThread(nearTattooShop)
-end
-
-function removeTattooInteract(tattooId)
-    activeTattooInteracts[tattooId] = nil
-end
-
-
-
 mainThread = function()
+    addBlips() -- comentar caso nao queria os blips no mapa
     while true do
         local idle = 500
         if not inMenu then
             tattooId, nearestTattooShop = getNearestTattooShop()
-            if tattooId and nearestTattooShop and GetEntityHealth(PlayerPedId()) > 101 then
-                createTattooInteract(tattooId, { x = nearestTattooShop.coords.x, y = nearestTattooShop.coords.y, z = nearestTattooShop.coords.z })
-            else
-                if tattooId then
-                    removeTattooInteract(tattooId)
-                end
-                tattooId = nil
-                nearestTattooShop = nil
+            if tattooId then
+                nearTattooShop()
             end
         end
         Wait(idle)
@@ -500,7 +420,6 @@ mainThread = function()
 end
 
 CreateThread(mainThread)
-
 
 function setPlayersVisible(bool)
     local ped = PlayerPedId()
@@ -529,8 +448,8 @@ function setPlayersVisible(bool)
 end
 
 function initTattooShop()
-    -- DoScreenFadeOut(1000)
-    -- Wait(1000)
+    DoScreenFadeOut(1000)
+    Wait(1000)
     TriggerEvent('nation_hud:updateHud', false)
     local ped = PlayerPedId()
     myClothes = getMyClothes()
@@ -542,7 +461,7 @@ function initTattooShop()
     end
     freezeAnim("move_f@multiplayer", "idle")
     SetFacialIdleAnimOverride(ped, "pose_normal_1", 0)
-    -- DoScreenFadeIn(2500)
+    DoScreenFadeIn(2500)
 end
 
 function finishTattooShop()
@@ -1958,7 +1877,7 @@ end
 
 
 RegisterCommand("tattoos", function() -- abrir menu do tattooshop (admin)
-    if func.checkPermission({"Cupula", "mod.permissao", "Admin"}) then
+    if func.checkPermission({"admin.permissao", "mod.permissao", "Admin"}) then
         startTattoos("admin")
     end
 end)
@@ -1995,7 +1914,7 @@ CreateThread(function()
             reloadTattoos()
         end
         oldPed = currentPed
-        Wait(500)
+        Wait(0)
     end
 end)
 

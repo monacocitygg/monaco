@@ -1,4 +1,4 @@
-const imgDir = "http://45.141.214.72/nation_tattoos/"; // DIRETÓRIO DAS IMAGENS
+const imgDir = "http://127.0.0.1/nation_tattoos/"; // DIRETÓRIO DAS IMAGENS
 
 const pt_BR = {
     back: "voltar",

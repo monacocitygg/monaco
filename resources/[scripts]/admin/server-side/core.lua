@@ -666,7 +666,7 @@ end)
 RegisterCommand("group", function(source, Message)
     local Passport = vRP.Passport(source)
     if Passport then
-        if vRP.HasGroup(Passport, "Admin", 2) then
+        if vRP.HasGroup(Passport, "Admin", 1) then
             if parseInt(Message[1]) > 0 and Message[2] then
                 TriggerClientEvent("Notify", source, "verde", "Adicionado <b>"..Message[2].."</b> ao passaporte <b>"..Message[1].."</b>.", 5000)
 				TriggerEvent("Discord","Group","**ID:** "..Passport.."\n**Setou:** "..Message[1].." \n**Grupo:** "..Message[2].." \n**Horário:** "..os.date("%H:%M:%S"),3092790)

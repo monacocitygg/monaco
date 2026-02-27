@@ -25,7 +25,7 @@ function func.saveChar(t)
     if Passport then
         local char = getUserChar(Passport)
         char.tattoos, char.overlay = t.tattoos, t.overlay
-        vRP._Query("playerdata/SetData",{ Passport = parseInt(Passport), dkey = "Tatuagens", dvalue = json.encode(char,{indent=false}), lastupdate = os.time() })
+        vRP.execute("playerdata/SetData",{ Passport = parseInt(Passport), dkey = "Tatuagens", dvalue = json.encode(char,{indent=false}) })
     end
 end
 
@@ -33,7 +33,7 @@ function func.tryPay(value)
     local source = source
     local Passport = vRP.Passport(source)
     if value >= 0 then
-        if vRP.PaymentBank(Passport, value) or value == 0 then
+        if vRP.PaymentFull(Passport, value) or value == 0 then
             return true
         end
     end
