@@ -558,9 +558,6 @@ AddEventHandler("Queue:Connecting", function(source, Identifiers, Deferrals)
         local Account = vRP.Account(Identity)
         if not Account then
             vRP.Query("accounts/newAccount", { license = Identity })
-        else
-            local currentTime = os.time()
-            vRP.Query("accounts/updateLastlogin", { lastlogin = currentTime, license = Identity })
         end
 
         if Maintenance then
@@ -653,10 +650,6 @@ AddEventHandler("Queue:Connecting", function(source, Identifiers, Deferrals)
             else
                 if Whitelisted then
                     Account = vRP.Account(Identity)
-                    local steamHex = vRP.GetSteamHex(source)
-                    if steamHex and not Account.steam then
-                        vRP.Query("accounts/UpdateSteam", { id = Account.id, steam = steamHex })
-                    end
                     if Account["whitelist"] then
                         if SyncCityCharacters then
                             local data = vRP.Query("characters/getCharacters", { license = Identity })
@@ -795,6 +788,7 @@ end)
 function vRP.CharacterChosen(source, Passport, Model)
     if source then
         local Consult = vRP.Query("characters/Person", { id = Passport })
+        if not Consult or not Consult[1] then return end
         local Identity = vRP.Identities(source)
         local Account = vRP.Account(Identity)
         if not Account or type(Account) ~= "table" then
@@ -871,36 +865,11 @@ function vRP.CharacterChosen(source, Passport, Model)
             TriggerEvent("Discord", "Connect",
                 "**Source:** " .. source .. "\n**Passaporte:** " .. Passport .. "\n**Ip:** " .. GetPlayerEndpoint(source),
                 3092790)
-            PerformHttpRequest(Discords["Login"], function(source, Passport, Model) end, "POST",
-                json.encode({
-                    username = ServerName,
-                    content = Account["discord"] ..
-                        " " .. Passport .. " " .. Consult[1]["name"] .. " " .. Consult[1]["name2"]
-                }),
-                { ["Content-Type"] = "application/json" })
         end
 
         TriggerEvent("CharacterChosen", Passport, source, true)
     end
 end
-
---- Envia um premio de 2 gemas para o jogador que possui o grupo "Booster" ou "Booster2" a cada 24 horas.
---- @param source number -- O ID do jogador que receberá o premio.
---- @param bonus number -- O timestamp do bonus, se for maior ou igual ao tempo atual, o jogador receberá o premio.
---- @param id number -- O ID da conta do jogador.
---- @return any -- Retorna nada, apenas executa a ação de dar o premio.
-RegisterNetEvent('vrp:bonusBooster', function(source, id)
-    if Characters[source] then
-        local Passport = Characters[source]["id"]
-        if not Passport then return end
-
-        if vRP.HasGroup(Passport, "Booster") or vRP.HasGroup(Passport, "Booster2") then
-            exports.oxmysql:execute_async([[ UPDATE `accounts` SET `bonus_booster` = ? WHERE `id` = ? ]],
-                { os.time() + 86400, id })
-            vRP.UpgradeGemstone(Passport, 2)
-        end
-    end
-end)
 
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- THREAD
