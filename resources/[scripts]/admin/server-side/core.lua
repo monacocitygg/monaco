@@ -22,7 +22,7 @@ function Creative.CarryPlayerAdmin()
 	local source = source
 	local Passport = vRP.Passport(source)
 	if Passport then
-		if vRP.HasGroup(Passport,"Admin",3) then
+		if vRP.HasGroup(Passport,"Admin",3) or vRP.HasGroup(Passport,"Police") or vRP.HasGroup(Passport,"Policia") or vRP.HasGroup(Passport,"Polícia") then
 			if not vRP.InsideVehicle(source) then
 				if playerCarryAdmin[Passport] then
 					TriggerClientEvent("player:playerCarryAdmin",playerCarryAdmin[Passport],source)
