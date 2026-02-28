@@ -3,7 +3,7 @@ local dict <const> = "swimming@first_person@diving"
 local function GetForwardPed()
     local plyCds = GetEntityCoords(ply)
     local targetCds = GetOffsetFromEntityInWorldCoords(ply, 0.0, 2.0, 0.0)
-    local shapeTest = StartShapeTestLosProbe(plyCds, targetCds, 4, ply, 7)
+    local shapeTest = StartShapeTestLosProbe(plyCds, targetCds, 12, ply, 7)
     local timeout = GetGameTimer() + 250
     local result, hit, entityCds, _, entity
     repeat
@@ -19,7 +19,7 @@ local function Tackle()
     plyVeh = GetVehiclePedIsIn(ply, false)
     plyInWorld = not IsPlayerSwitchInProgress() and not IsPedDeadOrDying(ply, true)
     while plyVeh == 0 and plyInWorld do
-        if IsControlPressed(0, 38) and (IsPedRunning(ply) or IsPedSprinting(ply)) and not IsPedSwimming(ply) then
+        if IsControlPressed(0, 21) and IsControlPressed(0, 38) and (IsPedRunning(ply) or IsPedSprinting(ply)) and not IsPedSwimming(ply) then
             local forwardPed = GetForwardPed()
             if forwardPed and IsEntityAPed(forwardPed) then
                 if IsPedAPlayer(forwardPed) then TriggerServerEvent("tackle:Update", GetPlayerServerId(NetworkGetPlayerIndexFromPed(forwardPed))) end
