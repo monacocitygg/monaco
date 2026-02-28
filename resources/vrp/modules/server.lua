@@ -59,24 +59,6 @@ function vRP.GetSteamHex(source)
     return Result
 end
 
-function SaveUserIds(source, user_identifier)
-    local source = source
-    if source ~= 0 then
-        local tokens = GetPlayerTokens(source)
-        for k, v in pairs(tokens) do
-            vRP.Query("vRP/AddUserIds", { user_id = user_identifier, ids = v })
-        end
-    end
-end
-
-function vRP.GetUserTokens(user_id)
-    local row = vRP.Query("vRP/GetUserIds", { user_id = user_id })
-    if row then
-        return row
-    else
-        return false
-    end
-end
 
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- ARCHIVE
@@ -552,7 +534,6 @@ AddEventHandler("Queue:Connecting", function(source, Identifiers, Deferrals)
     SetPlayerRoutingBucket(source, source)
 
     local Identity = vRP.Identities(source)
-    SaveUserIds(source, Identity)
 
     if Identity then
         local Account = vRP.Account(Identity)
