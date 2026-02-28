@@ -1092,6 +1092,10 @@ function TargetEnable()
 
 								Menu[#Menu + 1] = { event = "paramedic:Diagnostic", label = "Informações", tunnel = "paramedic" }
 								Menu[#Menu + 1] = { event = "paramedic:Bed", label = "Deitar Paciente", tunnel = "paramedic" }
+							elseif vSERVER.CheckAdmin() then
+								if GetEntityHealth(Entity) <= 100 then
+									Menu[#Menu + 1] = { event = "paramedic:Revive", label = "Reanimar", tunnel = "paramedic" }
+								end
 							end
 
 							if IsEntityPlayingAnim(Entity,"random@mugging3","handsup_standing_base",3) then
