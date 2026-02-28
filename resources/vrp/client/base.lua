@@ -107,7 +107,7 @@ function tvRP.BlipAdmin()
 		local Coords = GetEntityCoords(Ped)
 		
 		for Entity,v in pairs(CachedPlayers) do
-			if DoesEntityExist(Entity) and GlobalState["Players"][v] then
+			if DoesEntityExist(Entity) and GlobalState["Players"] and GlobalState["Players"][v] then
 				DrawText3D(GetEntityCoords(Entity),"~o~ID:~w~ "..GlobalState["Players"][v].."     ~g~H:~w~ "..GetEntityHealth(Entity).."     ~y~A:~w~ "..GetPedArmour(Entity),0.275)
 			end
 		end
