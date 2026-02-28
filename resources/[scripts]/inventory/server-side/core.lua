@@ -1364,6 +1364,7 @@ function Creative.UseItem(Slot,Amount)
 
 			if vCLIENT.returnWeapon(source) then
 				local Check,Ammo,Hash = vCLIENT.storeWeaponHands(source)
+				print("[INVENTORY] Guardando arma:", Hash, "Munição:", Ammo, "Passport:", Passport)
 
 				if Check then
 					local realHash = Hash
@@ -1389,6 +1390,7 @@ function Creative.UseItem(Slot,Amount)
 								Ammos[Passport][wHash] = nil
 							end
 						end
+						print("[INVENTORY] Munição salva:", wHash, Ammos[Passport][wHash])
 					end
 
 					TriggerClientEvent("itensNotify",source,{ "guardou",itemIndex(Hash),1,itemName(Hash) })
@@ -1408,6 +1410,7 @@ function Creative.UseItem(Slot,Amount)
 						Ammo = Ammos[Passport][wHash]
 					end
 				end
+				print("[INVENTORY] Equipando arma:", Item, "Munição carregada:", Ammo, "Passport:", Passport)
 
 				if not Attachs[Passport] then
 					Attachs[Passport] = {}
@@ -1847,23 +1850,24 @@ function Creative.VerifyObjects(Entity,Service)
 						local itemSelect = { "",1 }
 
 						if Service == "Lixeiro" then
-							local randItem = math.random(90)
-							if parseInt(randItem) >= 61 and parseInt(randItem) <= 70 then
-								itemSelect = { "aluminum",math.random(2) }
-							elseif parseInt(randItem) >= 51 and parseInt(randItem) <= 60 then
-								itemSelect = { "copper",math.random(2) }
-							elseif parseInt(randItem) >= 41 and parseInt(randItem) <= 50 then
-								itemSelect = { "rubber",math.random(2) }
-							elseif parseInt(randItem) >= 21 and parseInt(randItem) <= 40 then
-								itemSelect = { "plastic",math.random(2) }
-							elseif parseInt(randItem) <= 20 then
-								itemSelect = { "glass",math.random(2) }
+							local randItem = math.random(70)
+							if randItem <= 10 then
+								itemSelect = { "sheetmetal",math.random(2,3) }
+							elseif randItem > 10 and randItem <= 20 then
+								itemSelect = { "copper",math.random(2,3) }
+							elseif randItem > 20 and randItem <= 30 then
+								itemSelect = { "rubber",math.random(2,3) }
+							elseif randItem > 30 and randItem <= 50 then
+								itemSelect = { "plastic",math.random(2,3) }
+							elseif randItem > 50 then
+								itemSelect = { "glass",math.random(2,3) }
 							end
+
 							if itemSelect[1] ~= "" then
 								if vRP.HasGroup(Passport,"Painite") then
-									itemSelect[2] = math.max(1, math.floor(itemSelect[2] * 1.3))
+									itemSelect[2] = math.max(1, math.ceil(itemSelect[2] * 1.3))
 								elseif vRP.HasGroup(Passport,"Serendibite") then
-									itemSelect[2] = math.max(1, math.floor(itemSelect[2] * 1.2))
+									itemSelect[2] = math.max(1, math.ceil(itemSelect[2] * 1.2))
 								end
 							end
 						end

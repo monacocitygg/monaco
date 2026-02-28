@@ -576,7 +576,8 @@ Crafting = {
 
 	["Armapublic"] = {
 		["List"] = {
-		["WEAPON_PISTOL_MK2"] = {
+		
+			["WEAPON_PISTOL_MK2"] = {
 				["Time"] = 3,
 				["Amount"] = 1,
 				["Required"] = {
@@ -584,6 +585,17 @@ Crafting = {
 					["copper"] = 60,
 					["dollars2"] = 35000,
 					["rubber"] = 60
+				}
+			},
+			
+			["WEAPON_SNSPISTOL_MK2"] = { 
+				["Time"] = 3,
+				["Amount"] = 1,
+				["Required"] = {
+					["sheetmetal"] = 30,
+					["copper"] = 30,
+					["dollars2"] = 15000,
+					["rubber"] = 30
 				}
 			},
 			---sub

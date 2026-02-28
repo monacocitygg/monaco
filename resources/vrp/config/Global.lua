@@ -76,7 +76,7 @@ ForbiddenItens = {
 	["premiumplate"] = true, 
 	["premiumprata"] = true, 
 	["premiumouro"] = true, 
-	["premiumplatina"] = true, 
+	["vipbolso"] = true, 
 	["namechange"] = true, 
 	["verify"] = true
 }

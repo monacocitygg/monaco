@@ -219,8 +219,8 @@ RegisterCommand("+openMap",function()
 		isMapOpen = true
 	end
 end,false)
-RegisterCommand("-openMap",function() end,false)
-RegisterKeyMapping("+openMap","Abrir/Fechar Mapa","keyboard","F10")
+-- RegisterCommand("-openMap",function() end,false)
+-- RegisterKeyMapping("+openMap","Abrir/Fechar Mapa","keyboard","F10")
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- THREADTIMERS
 -----------------------------------------------------------------------------------------------------------------------------------------
@@ -739,58 +739,3 @@ CreateThread(function()
 		Wait(5)
 	end
 end)
-
------------------------------------------------------------------------------------------------------------------------------------------
--- CROUCHED
------------------------------------------------------------------------------------------------------------------------------------------
---local Crouched = false
---CreateThread(function()
---	while true do
---		local Ped = PlayerPedId()
---		DisableControlAction(0,36,true)
---
---		if not IsPedInAnyVehicle(Ped) then
---			RequestAnimSet("move_ped_crouched")
---			RequestAnimSet("move_ped_crouched_strafing")
---
---			if IsDisabledControlJustPressed(0,36) then
---				if Crouched then
---					ResetPedStrafeClipset(Ped)
---					ResetPedMovementClipset(Ped,0.25)
---					Crouched = false
---				else
---					SetPedStrafeClipset(Ped,"move_ped_crouched_strafing")
---					SetPedMovementClipset(Ped,"move_ped_crouched",0.25)
---					Crouched = true
---				end
---			end
---		end
---
---		Wait(1)
---	end
---end)
-
--- CreateThread(function()
---     while true do
---         local playerPed = PlayerPedId()
---         if IsPedUsingActionMode(playerPed) then
---             SetPedUsingActionMode(playerPed, false, -1, 0)
---         else
---             Wait(500)
---         end
---         Wait(0)
---     end
--- end)
-
--- -----------------------------------------------------------------------------------------------------------------------------------------
--- -- DO NOT SHOOT CROUCHED
--- -----------------------------------------------------------------------------------------------------------------------------------------
---Citizen.CreateThread(function()
---    while true do
---        Citizen.Wait(1)
---        local Player = PlayerId()
---        if Crouched then 
---            DisablePlayerFiring(Player,true)
---        end
---    end
---end)

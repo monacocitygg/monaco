@@ -510,3 +510,22 @@ main {
 .illegal-shop .total-row span:last-child {
     color: #4caf50;
 }
+
+.product-qty-input {
+    width: 40px;
+    background: transparent;
+    border: none;
+    color: white;
+    text-align: center;
+    font-size: 12px;
+    font-weight: 600;
+    outline: none;
+    /* Remove arrows/spinners */
+    -moz-appearance: textfield;
+}
+
+.product-qty-input::-webkit-outer-spin-button,
+.product-qty-input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}

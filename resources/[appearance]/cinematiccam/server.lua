@@ -22,7 +22,7 @@ function src.checkPermission(permission)
     local source = source
     local Passport = vRP.Passport(source)
     if Passport then
-        if vRP.HasGroup(Passport, 'Cam',1) or vRP.HasGroup(Passport, 'Admin',1)  then
+        if vRP.HasGroup(Passport, 'Cam',1) or vRP.HasGroup(Passport, 'Admin',2)  then
             return true
         else
             return

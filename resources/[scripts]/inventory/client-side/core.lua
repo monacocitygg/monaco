@@ -701,7 +701,9 @@ function Creative.putWeaponHands(Name,Ammo,Components,Type)
 
 			Weapon = Name
 			TriggerEvent("inventory:RemoveWeapon",Name)
-			GiveWeaponToPed(Ped,Name,Ammo,false,true)
+			RemoveWeaponFromPed(Ped,GetHashKey(Name))
+			GiveWeaponToPed(Ped,Name,0,false,true)
+			SetPedAmmo(Ped,GetHashKey(Name),Ammo)
 
 			Wait(300)
 
@@ -709,7 +711,9 @@ function Creative.putWeaponHands(Name,Ammo,Components,Type)
 		else
 			Weapon = Name
 			TriggerEvent("inventory:RemoveWeapon",Name)
-			GiveWeaponToPed(Ped,Name,Ammo,false,true)
+			RemoveWeaponFromPed(Ped,GetHashKey(Name))
+			GiveWeaponToPed(Ped,Name,0,false,true)
+			SetPedAmmo(Ped,GetHashKey(Name),Ammo)
 		end
 
 		if Components then

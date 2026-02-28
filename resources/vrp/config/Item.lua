@@ -552,7 +552,7 @@ local List = {
 		["Name"] = "C4",
 		["Type"] = "Usável",
 		["Weight"] = 2.75,
-		["Max"] = 1,
+		["Max"] = 5,
 		["Economy"] = 625
 	},
 	["geode"] = {

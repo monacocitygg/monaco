@@ -621,6 +621,25 @@ RegisterCommand("anuncio", function(source, args)
         end
     end
 end)
+
+RegisterCommand("anuncioilegal", function(source, args)
+    local source = source
+    local Passport = vRP.Passport(source)
+    if Passport then
+        local identity = vRP.Identity(source)
+        if vRP.HasGroup(Passport, "Admin",3) then
+            local message = vKEYBOARD.keyArea(source, "Mensagem:")
+            if message and message[1] then
+                local finalMessage = message[1] .. "<br></br>Enviada Por: Anônimo"
+                TriggerClientEvent("Notify", -1, "ilegal", finalMessage .. "</b>", 45000)
+            else
+                TriggerClientEvent("Notify", source, "vermelho", "A mensagem não pode estar vazia.", 5000)
+            end
+        else
+            TriggerClientEvent("Notify", source, "vermelho", "Você não tem permissões para isso.", 5000)
+        end
+    end
+end)
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- CDS
 -----------------------------------------------------------------------------------------------------------------------------------------

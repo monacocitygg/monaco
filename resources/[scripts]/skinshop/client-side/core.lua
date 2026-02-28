@@ -107,7 +107,7 @@ local Locations = {
 	vec3(-3173.28,1046.04,20.86),
 	vec3(-1108.61,2709.59,19.11),
 	vec3(429.67,-800.14,29.49),
-	vec3(604.58,-6.35,87.92), -- Departamento Policial
+	vec3(-952.02,-2047.97,13.4), -- Departamento Policial
 	vec3(603.29,-9.65,87.89), -- Departamento Policial
 	vec3(1140.2,-1539.59,35.03), -- Hospital Los Santos
 	vec3(1244.23,-354.01,69.08), -- Hornys

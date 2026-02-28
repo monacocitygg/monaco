@@ -133,14 +133,6 @@ Groups = {
 		["Service"] = {1000},
 		["Type"] = "Work"
 	},
-	["BeanMachine"] = {
-		["Parent"] = {
-			["BeanMachine"] = true
-		},
-		["Hierarchy"] = { "Chefe","Sub-Chefe","Gerente","Conselheiro","Membro" },
-		["Service"] = {},
-		["Type"] = "Work"
-	},
 	["Cam"] = {
 		["Parent"] = {
 			["Cam"] = true

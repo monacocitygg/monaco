@@ -162,7 +162,7 @@ function renderProducts(category = "all", searchQuery = "") {
                 
                 <div class="product-controls">
                     <button class="qty-btn minus" onclick="adjustQty('${item.key}', -1)">-</button>
-                    <span class="product-qty" id="qty-${item.key}">1</span>
+                    <input type="number" class="product-qty-input" id="qty-${item.key}" value="${tempQtys[item.key] || 1}" min="1" oninput="updateQty('${item.key}', this.value)">
                     <button class="qty-btn plus" onclick="adjustQty('${item.key}', 1)">+</button>
                 </div>
                 
@@ -182,7 +182,13 @@ window.adjustQty = function(itemKey, delta) {
     if (!tempQtys[itemKey]) tempQtys[itemKey] = 1;
     tempQtys[itemKey] += delta;
     if (tempQtys[itemKey] < 1) tempQtys[itemKey] = 1;
-    $(`#qty-${itemKey}`).text(tempQtys[itemKey]);
+    $(`#qty-${itemKey}`).val(tempQtys[itemKey]);
+}
+
+window.updateQty = function(itemKey, value) {
+    let val = parseInt(value);
+    if (isNaN(val) || val < 1) val = 1;
+    tempQtys[itemKey] = val;
 }
 
 window.addToCart = function(itemKey) {
@@ -204,7 +210,7 @@ window.addToCart = function(itemKey) {
 
     // Reset temp qty
     tempQtys[itemKey] = 1;
-    $(`#qty-${itemKey}`).text(1);
+    $(`#qty-${itemKey}`).val(1);
 
     updateCartUI();
 }
