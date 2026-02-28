@@ -51,6 +51,7 @@ end)
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- PLAYER:ROPECARRY
 -----------------------------------------------------------------------------------------------------------------------------------------
+local ropeCooldown = 0
 RegisterNetEvent("player:ropeCarry")
 AddEventHandler("player:ropeCarry",function(Entity)
 	if LocalPlayer["state"]["Rope"] then
@@ -58,6 +59,7 @@ AddEventHandler("player:ropeCarry",function(Entity)
 		LocalPlayer["state"]:set("Rope",false,true)
 	else
 		LocalPlayer["state"]:set("Rope",true,true)
+		ropeCooldown = GetGameTimer() + 2000
 		AttachEntityToEntity(PlayerPedId(),GetPlayerPed(GetPlayerFromServerId(Entity)),0,0.20,0.12,0.63,0.5,0.5,0.0,false,false,false,false,2,false)
 	end
 end)
@@ -71,7 +73,7 @@ CreateThread(function()
 			TimeDistance = 1
 			local Ped = PlayerPedId()
 
-			if IsPedInAnyVehicle(Ped) or not IsEntityAttachedToAnyEntity(Ped) then
+			if GetGameTimer() > ropeCooldown and (IsPedInAnyVehicle(Ped) or not IsEntityAttachedToAnyEntity(Ped)) then
 				DetachEntity(Ped,false,false)
 				LocalPlayer["state"]:set("Rope",false,true)
 				TriggerServerEvent("inventory:ropeClean")
