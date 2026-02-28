@@ -4610,7 +4610,7 @@ vRP.Revive(ClosestPed,101)
 					TriggerClientEvent("player:Residuals",source,"Resíduo de Explosivo.")
 					TriggerClientEvent("objects:Remover",-1,tostring(Number))
 					TriggerClientEvent("vRP:Explosion",source,Coords)
-					TriggerEvent("Wanted",source,Passport,600)
+					TriggerEvent("Wanted",source,Passport,180)
 					TriggerEvent("blipsystem:Enter",source,"Ladrão")
 				end
 			else
@@ -4641,7 +4641,7 @@ vRP.Revive(ClosestPed,101)
 					TriggerClientEvent("player:Residuals",source,"Resíduo de Explosivo.")
 					TriggerClientEvent("objects:Remover",-1,tostring(Number))
 					TriggerClientEvent("vRP:Explosion",-1,Coords) -- Envia para todos para o cargo_theft pegar
-					TriggerEvent("Wanted",source,Passport,600)
+					TriggerEvent("Wanted",source,Passport,180)
 					TriggerEvent("blipsystem:Enter",source,"Criminoso")
 				end
 			end

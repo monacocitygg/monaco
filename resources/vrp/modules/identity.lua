@@ -48,7 +48,7 @@ function vRP.UpdatePrison(Passport, Amount)
         if Characters[source] then
             Characters[source].Prison = Characters[source].Prison - parseInt(Amount)
             if 0 == Characters[source].Prison then
-                exports.markers:Exit(source)
+                TriggerEvent("blipsystem:Exit", source)
                 Characters[source].Prison = 0
                 TriggerClientEvent("police:Prisioner", source, false)
                 vRP.Teleport(source, BackPrison.x, BackPrison.y, BackPrison.z)
@@ -160,17 +160,14 @@ end]]
 end ]]
 
 function vRP.PassportPlate(Plate)
-  local vehData = exports['garages']:GetVehicleData(Plate)
-  if vehData then
-    vehData.Passport = vehData.user
-    return vehData
-  end
-
-  return false
+    return vRP.Query("vehicles/plateVehicles", { plate = Plate })[1] or false
 end
 
 function vRP.getVehiclePlate(plate)
-    return exports['garages']:GetVehicleData(plate).user
+    local row = vRP.Query("vehicles/plateVehicles", { plate = plate })[1]
+    if row then
+        return row.Passport
+    end
 end
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- USERPHONE

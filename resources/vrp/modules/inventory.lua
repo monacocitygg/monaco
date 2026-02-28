@@ -192,7 +192,7 @@ function vRP.GiveItem(Passport, Item, Amount, Notify, Slot)
                 Inventory[tostring(newSlot)]["amount"] = Inventory[tostring(newSlot)]["amount"] + parseInt(Amount)
             end
             if Notify and itemBody(Item) then
-                TriggerClientEvent("NotifyItens", source, { "+", itemIndex(Item), parseFormat(Amount), itemName(Item) })
+                TriggerClientEvent("itensNotify", source, { "+", itemIndex(Item), parseFormat(Amount), itemName(Item) })
             end
         else
             Slot = tostring(Slot)
@@ -207,7 +207,7 @@ function vRP.GiveItem(Passport, Item, Amount, Notify, Slot)
                 end
             end
             if Notify and itemBody(Item) then
-                TriggerClientEvent("NotifyItens", source, { "+", itemIndex(Item), parseFormat(Amount), itemName(Item) })
+                TriggerClientEvent("itensNotify", source, { "+", itemIndex(Item), parseFormat(Amount), itemName(Item) })
             end
         end
     end
@@ -240,7 +240,7 @@ function vRP.GenerateItem(Passport, Item, Amount, Notify, Slot)
                 Inventory[tostring(newSlot)]["amount"] = Inventory[tostring(newSlot)]["amount"] + parseInt(Amount)
             end
             if Notify and itemBody(Item) then
-                TriggerClientEvent("NotifyItens", source, { "+", itemIndex(Item), parseFormat(Amount), itemName(Item) })
+                TriggerClientEvent("itensNotify", source, { "+", itemIndex(Item), parseFormat(Amount), itemName(Item) })
             end
         else
             Slot = tostring(Slot)
@@ -255,7 +255,7 @@ function vRP.GenerateItem(Passport, Item, Amount, Notify, Slot)
                 end
             end
             if Notify and itemBody(Item) then
-                TriggerClientEvent("NotifyItens", source, { "+", itemIndex(Item), parseFormat(Amount), itemName(Item) })
+                TriggerClientEvent("itensNotify", source, { "+", itemIndex(Item), parseFormat(Amount), itemName(Item) })
             end
         end
     end
@@ -299,7 +299,7 @@ function vRP.TakeItem(Passport, Item, Amount, Notify, Slot)
                     end
 
                     if Notify and itemBody(Item) then
-                        TriggerClientEvent("NotifyItens", source,
+                        TriggerClientEvent("itensNotify", source,
                             { "-", itemIndex(Item), parseFormat(Amount), itemName(Item) })
                     end
 
@@ -318,7 +318,7 @@ function vRP.TakeItem(Passport, Item, Amount, Notify, Slot)
                 Inventory[tostring(Slot)] = nil
             end
             if Notify and itemBody(Item) then
-                TriggerClientEvent("NotifyItens", source, { "-", itemIndex(Item), parseFormat(Amount), itemName(Item) })
+                TriggerClientEvent("itensNotify", source, { "-", itemIndex(Item), parseFormat(Amount), itemName(Item) })
             end
             take = true
         end

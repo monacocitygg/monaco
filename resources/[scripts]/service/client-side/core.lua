@@ -30,12 +30,14 @@ CreateThread(function()
 			heading = 3374176
 		},{
 			shop = k,
+			service = v[4],
 			Distance = v[5],
 			options = {
 				{
 					label = "Entrar em Serviço",
 					event = "service:Toggle",
-					tunnel = "shop"
+					tunnel = "proserver",
+					service = v[4]
 				}
 			}
 		})

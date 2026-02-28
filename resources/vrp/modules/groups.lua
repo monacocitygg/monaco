@@ -110,7 +110,7 @@ function vRP.ServiceEnter(Source, Passport, Permission, Silenced)
             TriggerClientEvent("service:Label", Source, Permission, "Sair de Serviço")
         end
         if GroupBlips[Permission] then
-            exports.markers:Enter(Source, Permission)
+            TriggerEvent("blipsystem:Enter", Source, Permission, true)
         end
         if Groups[Permission] and Groups[Permission].Salary then
             TriggerEvent("Salary:Add", tostring(Passport), Permission)
@@ -133,7 +133,7 @@ function vRP.ServiceLeave(Source, Passport, Permission, Silenced)
             TriggerClientEvent("service:Label", Source, Permission, "Entrar em Serviço")
         end
         if GroupBlips[Permission] then
-            exports.markers:Exit(Source)
+            TriggerEvent("blipsystem:Exit", Source)
             TriggerClientEvent("radio:RadioClean", Source)
         end
         if Groups[Permission] and Groups[Permission].Salary then
@@ -321,7 +321,7 @@ end
 function vRP.HasService(Passport,Permission)
     if Groups[Permission] then
         for k, v in pairs(Groups[Permission].Parent) do
-            if Groups[k]["Service"][tostring(Passport)] then
+            if Groups[k] and Groups[k]["Service"] and Groups[k]["Service"][tostring(Passport)] then
                 return true
             end
         end
@@ -345,7 +345,7 @@ AddEventHandler("Disconnect", function(Passport,Source)
     for k, v in pairs(Groups) do
         if Groups[k]["Service"][tostring(Passport)] then
             if GroupBlips[k] then
-                exports.markers:Exit(Source)
+                TriggerEvent("blipsystem:Exit",Source)
             end
             Groups[k]["Service"][tostring(Passport)] = false
         end
