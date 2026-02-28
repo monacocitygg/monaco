@@ -360,19 +360,16 @@ RegisterCommand("blips", function(source)
     if Passport then
         if vRP.HasGroup(Passport, "Admin") or vRP.HasGroup(Passport, "allowlist") or vRP.HasGroup(Passport, "Caster") or vRP.HasGroup(Passport, "Developer") then
             local Text = ""
-            local PlayerName = requestCharacterName(Passport)
 
             if not Blips[Passport] then
                 Blips[Passport] = true
-                BlipData[Passport] = { name = PlayerName, id = Passport }
                 Text = "[ATIVOU BLIPS]"
             else
                 Blips[Passport] = nil
-                BlipData[Passport] = nil
                 Text = "[DESATIVOU O BLIPS]"
             end
 
-            vRPC._BlipAdmin(source)
+            vRPC.BlipAdmin(source)
             exports["vrp"]:Embed("Admin", "**Passaporte:** " .. Passport .. "\n**Comando:** " .. Text, 0xa3c846)
         end
     end
