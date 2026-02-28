@@ -1,32 +1,100 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 	<head>
 		<meta charset="UTF-8">
-		
+		<title>Creative Network</title>
 		<link href="css.css" rel="stylesheet" type="text/css"/>
 		<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 		<script src="https://code.jquery.com/ui/1.13.0/jquery-ui.min.js"></script>
-		<link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+		<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.0/themes/base/jquery-ui.min.css">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 	</head>
 	<body>
 		<div class="inventory">
+			<div class="logo">monaco</div>
+			
 			<div class="innerInventory">
-				<div id="weight">
-					<div id="weightTextLeft"></div>
-					<div id="weightTextRight"></div>
-					<div id="weightBarLeft"></div>
-					<div id="weightBarRight"></div>
+				<!-- Left Column: Player Inventory -->
+				<div class="column left-col">
+
+					<div class="header">
+						<div class="header-icon">
+							<div class="hexagon backpack-hex">
+								<svg viewBox="0 0 16 16" fill="white" style="width: 60%; height: 60%;">
+									<path d="M4.04 7.43a4 4 0 0 1 7.92 0 .5.5 0 1 1-.99.14 3 3 0 0 0-5.94 0 .5.5 0 1 1-.99-.14M4 9.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-.5.5h-7a.5.5 0 0 1-.5-.5zm1 .5v3h6v-3h-1v.5a.5.5 0 0 1-1 0V10z"/>
+									<path d="M6 2.341V2a2 2 0 1 1 4 0v.341c2.33.824 4 3.047 4 5.659v5.5a2.5 2.5 0 0 1-2.5 2.5h-7A2.5 2.5 0 0 1 2 13.5V8a6 6 0 0 1 4-5.659M7 2v.083a6 6 0 0 1 2 0V2a1 1 0 0 0-2 0m1 1a5 5 0 0 0-5 5v5.5A1.5 1.5 0 0 0 4.5 15h7a1.5 1.5 0 0 0 1.5-1.5V8a5 5 0 0 0-5-5"/>
+								</svg>
+							</div>
+						</div>
+						<div class="header-info">
+							<div class="top-info">
+								<span class="player-id">#</span>
+								<span class="player-name">Inventário</span>
+							</div>
+							<div class="bottom-info">
+								<div id="weightTextLeft"></div>
+								<div id="weightBarLeft"></div>
+							</div>
+						</div>
+					</div>
+					
+					<div class="inventory-grid-container">
+						<div class="invHotbar"></div>
+						<div class="invLeft"></div>
+					</div>
+					
+					<div class="skins-container" style="display:none;"></div>
 				</div>
 
-				<div class="sections">
-					<div class="invLeft"></div>
-					<div class="invMiddle">
-						<input class="amount" type="number" onKeyPress="if(this.value.length==9) return false;" placeholder="QTD" maxlength="9" />
+				<!-- Middle Column: Actions -->
+				<div class="column middle-col">
+					<div class="actions">
+						<div class="action-btn qtd-btn">
+							<input class="amount" placeholder="Qtd." type="number" onKeyPress="if(this.value.length==9) return false;" maxlength="9" />
+						</div>
+						
+						<div class="action-btn use">
+							<i class="fas fa-hand-pointer"></i>
+						</div>
+						
+						<div class="action-btn send">
+							<i class="fas fa-box-open"></i>
+						</div>
+						
+						<!-- Hidden but functional if needed by logic -->
+						<div class="deliver" style="display:none;">ENTREGAR</div>
+						<div class="destroy" style="display:none;">LIXO</div>
 					</div>
-					<div class="invRight"></div>
+				</div>
+
+				<!-- Right Column: Secondary Inventory -->
+				<div class="column right-col">
+					<div class="header">
+						<div class="header-icon">
+							<div class="hexagon">
+								<svg viewBox="0 0 448 512" fill="white" style="width: 50%; height: 50%;">
+									<path d="M112 16c17.7 0 32 14.3 32 32v32H112 96 64V48c0-17.7 14.3-32 32-32h16zm48 64h32H384c17.7 0 32 14.3 32 32V464c0 17.7-14.3 32-32 32H64c-17.7 0-32-14.3-32-32V112c0-17.7 14.3-32 32-32H112 160zM128 208c0-8.8 7.2-16 16-16h96c8.8 0 16 7.2 16 16v64c0 8.8-7.2 16-16 16H144c-8.8 0-16-7.2-16-16V208z"/>
+								</svg>
+							</div>
+						</div>
+						<div class="header-info">
+							<div class="top-info">
+								<span class="player-name">Baú</span>
+							</div>
+							<div class="bottom-info">
+								<div id="weightTextRight"></div>
+								<div id="weightBarRight"></div>
+							</div>
+						</div>
+					</div>
+					
+					<div class="inventory-grid-container">
+						<div class="invRight"></div>
+					</div>
 				</div>
 			</div>
 		</div>
+
 		<script src="jquery.js"></script>
 	</body>
 </html>

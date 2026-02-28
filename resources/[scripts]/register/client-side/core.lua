@@ -100,7 +100,7 @@ CreateThread(function()
 				{
 					event = "register:openSystem",
 					label = "Roubar",
-					tunnel = "shop"
+					tunnel = "client"
 				}
 			}
 		})

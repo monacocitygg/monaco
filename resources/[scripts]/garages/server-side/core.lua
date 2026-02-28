@@ -244,6 +244,8 @@ local Garages = {
 	["170"] = { name = "Garage", payment = false }, ----catcafe
 
 	["171"] = { name = "Garage", payment = false }, ----hospital
+
+	["172"] = { name = "Bike", payment = false }, ----hospital
 	
 }
 -----------------------------------------------------------------------------------------------------------------------------------------
@@ -291,12 +293,11 @@ local Works = {
 	},
 	["Police"] = {
 		"MONACO1200",
-		"MONACOB412",
 		"MONACOGLF",
 		"MONACOAMRK",
 	},
 	["heliPolice"] = {
-		"b412", 
+		"MONACOB412",
 		"bmheli",  
 	},
 	["busPolice"] = {
@@ -305,6 +306,9 @@ local Works = {
 	},
 	["Driver"] = {
 		"bus"
+	},
+	["Bike"] = {
+		"bmx"
 	},
 	["Boats"] = {
 		"dinghy",
@@ -563,6 +567,10 @@ AddEventHandler("garages:Spawn",function(Table,Number)
 	local Passport = vRP.Passport(source)
 	if Passport then
 		local Name = Table
+		local isWorkGarage = false
+		if Garages[Number] and Works[Garages[Number]["name"]] then
+			isWorkGarage = true
+		end
 
 		local Gemstone = VehicleGems(Name)
 		local vehicle = vRP.Query("vehicles/selectVehicles",{ Passport = Passport, vehicle = Name })
@@ -584,17 +592,19 @@ AddEventHandler("garages:Spawn",function(Table,Number)
 			else
 				local VehiclePrice = VehiclePrice(Name)
 				if parseInt(VehiclePrice) > 0 then
-					local Capacity = GarageSlots(Passport)
-					local Owned = 0
-					local All = vRP.Query("vehicles/UserVehicles",{ Passport = Passport })
-					for _,v in pairs(All) do
-						if v["work"] == "false" then
-							Owned = Owned + 1
+					if not isWorkGarage then
+						local Capacity = GarageSlots(Passport)
+						local Owned = 0
+						local All = vRP.Query("vehicles/UserVehicles",{ Passport = Passport })
+						for _,v in pairs(All) do
+							if v["work"] == "false" then
+								Owned = Owned + 1
+							end
 						end
-					end
-					if Owned >= Capacity then
-						TriggerClientEvent("Notify",source,"amarelo","Limite de vagas da garagem atingido.",5000)
-						return
+						if Owned >= Capacity then
+							TriggerClientEvent("Notify",source,"amarelo","Limite de vagas da garagem atingido.",5000)
+							return
+						end
 					end
 					if vRP.Request(source,"Comprar <b>"..VehicleName(Name).."</b> por <b>$"..parseFormat(VehiclePrice).."</b> dólares?","Sim, concluír pagamento","Não, mudei de ideia") then
 						if vRP.PaymentFull(Passport,VehiclePrice) then
@@ -607,17 +617,19 @@ AddEventHandler("garages:Spawn",function(Table,Number)
 						return
 					end
 				else
-					local Capacity = GarageSlots(Passport)
-					local Owned = 0
-					local All = vRP.Query("vehicles/UserVehicles",{ Passport = Passport })
-					for _,v in pairs(All) do
-						if v["work"] == "false" then
-							Owned = Owned + 1
+					if not isWorkGarage then
+						local Capacity = GarageSlots(Passport)
+						local Owned = 0
+						local All = vRP.Query("vehicles/UserVehicles",{ Passport = Passport })
+						for _,v in pairs(All) do
+							if v["work"] == "false" then
+								Owned = Owned + 1
+							end
 						end
-					end
-					if Owned >= Capacity then
-						TriggerClientEvent("Notify",source,"amarelo","Limite de vagas da garagem atingido.",5000)
-						return
+						if Owned >= Capacity then
+							TriggerClientEvent("Notify",source,"amarelo","Limite de vagas da garagem atingido.",5000)
+							return
+						end
 					end
 					vRP.Query("vehicles/addVehicles",{ Passport = Passport, vehicle = Name, plate = vRP.GeneratePlate(), work = "true" })
 					vehicle = vRP.Query("vehicles/selectVehicles",{ Passport = Passport, vehicle = Name })

@@ -21,15 +21,16 @@ function Creative.ApplyTimers(boxId)
 	local source = source
 	local Passport = vRP.Passport(source)
 	if Passport then
-		if boxTimers[boxId] then
-			if GetGameTimer() < boxTimers[boxId] then
-				TriggerClientEvent("Notify",source,"amarelo","Sistema indisponível no momento.",5000)
-				return false
-			end
-		else
-			StartBox(boxId,source)
-			return true
+		local now = GetGameTimer()
+		local expiry = boxTimers[boxId]
+
+		if expiry and now < expiry then
+			TriggerClientEvent("Notify",source,"amarelo","Sistema indisponível no momento.",5000)
+			return false
 		end
+
+		StartBox(boxId,source)
+		return true
 	end
 
 	return false

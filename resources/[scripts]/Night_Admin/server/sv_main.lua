@@ -55,7 +55,7 @@ function NightRP.checkPermission()
     local user_id = vRP.Passport(source)
     if user_id then
         for k, v in pairs(config.permissions) do
-            if vRP.HasGroup(user_id,k) then
+            if vRP.HasGroup(user_id,k,1) then
                 staffperms[user_id] = v
                 return true
             end

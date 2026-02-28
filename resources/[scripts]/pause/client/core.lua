@@ -67,9 +67,7 @@ end)
 -----------------------------------------------------------------------------------------------------------------------------------------
 RegisterKeyMapping("ActiveMap","Abrir o mapa","keyboard","P")
 
--- Citizen.CreateThread(function()
--- 	while true do
--- 		Citizen.Wait(0)
+Citizen.CreateThread(function()
 	while true do
 		SetPauseMenuActive(false)
 
