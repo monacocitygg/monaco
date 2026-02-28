@@ -390,7 +390,7 @@ function Disconnect(source, Health, Armour, Coords, Reason)
     local Passport = vRP.Passport(source)
     local Datatable = vRP.Datatable(Passport)
     if Passport then
-        exports["vrp"]:Embed("Disconnect",
+        TriggerEvent("Discord", "Disconnect",
             "**Source:** " ..
             source ..
             "\n**Passaporte:** " ..
@@ -876,7 +876,7 @@ function vRP.CharacterChosen(source, Passport, Model)
                 TriggerEvent("vrp:bonusBooster", source, Account["id"])
             end
 
-            exports["vrp"]:Embed("Connect",
+            TriggerEvent("Discord", "Connect",
                 "**Source:** " .. source .. "\n**Passaporte:** " .. Passport .. "\n**Ip:** " .. GetPlayerEndpoint(source),
                 3092790)
             PerformHttpRequest(Discords["Login"], function(source, Passport, Model) end, "POST",
