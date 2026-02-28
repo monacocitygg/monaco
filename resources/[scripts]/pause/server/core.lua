@@ -202,7 +202,8 @@ function Creative.OpenLootbox(Key)
             local CurrentBoxes = {}
             
             if Query and Query[1] and Query[1].boxes then
-                CurrentBoxes = json.decode(Query[1].boxes) or {}
+                CurrentBoxes = json.decode(Query[1].boxes)
+                if type(CurrentBoxes) ~= "table" then CurrentBoxes = {} end
             end
             
             table.insert(CurrentBoxes, Key)
@@ -229,7 +230,8 @@ function Creative.GetMyBoxes()
         local myBoxes = {}
         
         if Query and Query[1] and Query[1].boxes then
-            local dbBoxes = json.decode(Query[1].boxes) or {}
+            local dbBoxes = json.decode(Query[1].boxes)
+            if type(dbBoxes) ~= "table" then dbBoxes = {} end
             
             -- Count the boxes
             local boxCounts = {}
@@ -273,7 +275,8 @@ function Creative.OpenMyBox(Key)
     local Query = vRP.Query("skins/GetBoxes", { identifier = Passport })
     if not Query or not Query[1] or not Query[1].boxes then return false end
     
-    local dbBoxes = json.decode(Query[1].boxes) or {}
+    local dbBoxes = json.decode(Query[1].boxes)
+    if type(dbBoxes) ~= "table" then dbBoxes = {} end
     local boxIndex = -1
     
     -- Find and remove the box
@@ -320,7 +323,8 @@ function Creative.OpenMyBox(Key)
         local SkinQuery = vRP.Query("skins/GetSkins", { identifier = Passport })
         local currentSkins = {}
         if SkinQuery and SkinQuery[1] and SkinQuery[1].skins then
-            currentSkins = json.decode(SkinQuery[1].skins) or {}
+            currentSkins = json.decode(SkinQuery[1].skins)
+            if type(currentSkins) ~= "table" then currentSkins = {} end
         end
 
         local hasSkin = false
