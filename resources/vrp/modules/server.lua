@@ -796,7 +796,7 @@ function vRP.CharacterChosen(source, Passport, Model)
     if source then
         local Consult = vRP.Query("characters/Person", { id = Passport })
         local Identity = vRP.Identities(source)
-        local Account = vRP.Account(Identity)
+        local Account = vRP.Account(Identity) or {}
         Sources[Passport] = source
         if not Characters[source] then
             Characters[source] = {}
