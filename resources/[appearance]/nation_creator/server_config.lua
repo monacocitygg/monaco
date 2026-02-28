@@ -224,6 +224,9 @@ end
 function getUserMaxChars(source)
     local steam = getPlayerSteam(source)
     local Account = vRP.Account(steam)
+    if not Account or type(Account) ~= "table" then
+        return 1
+    end
     local amountCharacters = parseInt(Account["chars"])
     --[[ if vRP.LicensePremium(steam) then
         amountCharacters = amountCharacters + 2
