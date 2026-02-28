@@ -417,7 +417,7 @@ AddEventHandler("SaveServer", function(Silenced)
     end
 
     if not Silenced then
-        print("Powered by @LadoLeste")
+        print("Powered by @Monaco")
         print("Save no banco de dados terminou.")
     end
 end)
