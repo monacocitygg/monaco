@@ -2727,8 +2727,37 @@ AddEventHandler("Disconnect",function(Passport)
 		Carry[Passport] = nil
 	end
 
+	local carrySource = vRP.Source(Passport)
+	for k,v in pairs(Carry) do
+		if v == carrySource then
+			local carrierSource = vRP.Source(k)
+			if carrierSource then
+				vRPC.removeObjects(carrierSource)
+			end
+			Carry[k] = nil
+			break
+		end
+	end
+
 	if Drugs[Passport] then
 		Drugs[Passport] = nil
+	end
+end)
+-----------------------------------------------------------------------------------------------------------------------------------------
+-- INVENTORY:ROPECLEAN
+-----------------------------------------------------------------------------------------------------------------------------------------
+RegisterServerEvent("inventory:ropeClean")
+AddEventHandler("inventory:ropeClean",function()
+	local source = source
+	for k,v in pairs(Carry) do
+		if v == source then
+			local carrierSource = vRP.Source(k)
+			if carrierSource then
+				vRPC.removeObjects(carrierSource)
+			end
+			Carry[k] = nil
+			break
+		end
 	end
 end)
 -----------------------------------------------------------------------------------------------------------------------------------------

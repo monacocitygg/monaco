@@ -28,6 +28,12 @@ CreateThread(function()
 				if not Death then
 					Death = true
 
+					if LocalPlayer["state"]["Rope"] then
+						DetachEntity(Ped,false,false)
+						LocalPlayer["state"]:set("Rope",false,true)
+						TriggerServerEvent("inventory:ropeClean")
+					end
+
 					local Coords = GetEntityCoords(Ped)
 					NetworkResurrectLocalPlayer(Coords,0.0)
 
@@ -135,6 +141,12 @@ function Creative.Respawn()
 	SetEntityHealth(PlayerPedId(),200)
 	SetEntityInvincible(PlayerPedId(),false)
 
+	if LocalPlayer["state"]["Rope"] then
+		DetachEntity(PlayerPedId(),false,false)
+		LocalPlayer["state"]:set("Rope",false,true)
+		TriggerServerEvent("inventory:ropeClean")
+	end
+
 	TriggerEvent("paramedic:Reset")
 	TriggerEvent("inventory:CleanWeapons")
 	LocalPlayer["state"]["Handcuff"] = false
@@ -157,6 +169,12 @@ exports("Revive",function(Health,Arena)
 
 	if Arena then
 		SetPedArmour(Ped,99)
+	end
+
+	if LocalPlayer["state"]["Rope"] then
+		DetachEntity(Ped,false,false)
+		LocalPlayer["state"]:set("Rope",false,true)
+		TriggerServerEvent("inventory:ropeClean")
 	end
 
 	if Death then
