@@ -796,7 +796,10 @@ function vRP.CharacterChosen(source, Passport, Model)
     if source then
         local Consult = vRP.Query("characters/Person", { id = Passport })
         local Identity = vRP.Identities(source)
-        local Account = vRP.Account(Identity) or {}
+        local Account = vRP.Account(Identity)
+        if not Account or type(Account) ~= "table" then
+            Account = { gems = 0, rolepass = 0, premium = 0, discord = "", chars = 1, id = 0, whitelist = 0 }
+        end
         Sources[Passport] = source
         if not Characters[source] then
             Characters[source] = {}
@@ -816,7 +819,6 @@ function vRP.CharacterChosen(source, Passport, Model)
             Characters[source]["premium"] = Account["premium"]
             Characters[source]["discord"] = Account["discord"]
             Characters[source]["chars"] = Account["chars"]
-            Characters[source]["last_login"] = Account["lastLogin"]
             Characters[source]["table"] = vRP.UserData(Passport, "Datatable")
 
             Players[source] = Passport
@@ -864,16 +866,6 @@ function vRP.CharacterChosen(source, Passport, Model)
 
             if 0 < Account["gems"] then
                 TriggerClientEvent("hud:AddGems", source, Account["gems"])
-            end
-
-            local boosterDelta = Account["bonus_booster"]
-            if boosterDelta and (boosterDelta >= os.time() or boosterDelta == 0) then
-                if not Account or not Account["id"] then
-                    print("Erro ao dar o bonus booster, conta não encontrada.")
-                    return
-                end
-
-                TriggerEvent("vrp:bonusBooster", source, Account["id"])
             end
 
             TriggerEvent("Discord", "Connect",
