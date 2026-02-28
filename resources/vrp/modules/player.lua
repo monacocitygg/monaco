@@ -22,7 +22,7 @@ AddEventHandler("CharacterChosen", function(Passport, source)
         if not Datatable.Inventory then
             Datatable.Inventory = {}
         end
-        if not Datatable.Health then
+        if not Datatable.Health or Datatable.Health <= 0 then
             Datatable.Health = 200
         end
         if not Datatable.Armour then
@@ -31,10 +31,10 @@ AddEventHandler("CharacterChosen", function(Passport, source)
         if not Datatable.Stress then
             Datatable.Stress = 0
         end
-        if not Datatable.Hunger then
+        if not Datatable.Hunger or Datatable.Hunger <= 0 then
             Datatable.Hunger = 100
         end
-        if not Datatable.Thirst then
+        if not Datatable.Thirst or Datatable.Thirst <= 0 then
             Datatable.Thirst = 100
         end
         if not Datatable.Weight then
@@ -42,8 +42,6 @@ AddEventHandler("CharacterChosen", function(Passport, source)
         end
 
         SetPlayerRoutingBucket(source, 0)
-
-        exports["check"]:createConnect(Passport)
 
         vRPC.Skin(source, Datatable.Skin)
         vRP.Teleport(source, Datatable.Pos.x, Datatable.Pos.y, Datatable.Pos.z)
