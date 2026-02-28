@@ -53,14 +53,19 @@ end)
 -----------------------------------------------------------------------------------------------------------------------------------------
 local ropeCooldown = 0
 RegisterNetEvent("player:ropeCarry")
-AddEventHandler("player:ropeCarry",function(Entity)
-	if LocalPlayer["state"]["Rope"] then
-		DetachEntity(PlayerPedId(),false,false)
-		LocalPlayer["state"]:set("Rope",false,true)
+AddEventHandler("player:ropeCarry",function(Entity,Mode)
+	local Ped = PlayerPedId()
+	if Mode == "attach" then
+		if not LocalPlayer["state"]["Rope"] then
+			LocalPlayer["state"]:set("Rope",true,true)
+			ropeCooldown = GetGameTimer() + 2000
+			AttachEntityToEntity(Ped,GetPlayerPed(GetPlayerFromServerId(Entity)),0,0.20,0.12,0.63,0.5,0.5,0.0,false,false,false,false,2,false)
+		end
 	else
-		LocalPlayer["state"]:set("Rope",true,true)
-		ropeCooldown = GetGameTimer() + 2000
-		AttachEntityToEntity(PlayerPedId(),GetPlayerPed(GetPlayerFromServerId(Entity)),0,0.20,0.12,0.63,0.5,0.5,0.0,false,false,false,false,2,false)
+		if LocalPlayer["state"]["Rope"] then
+			DetachEntity(Ped,false,false)
+			LocalPlayer["state"]:set("Rope",false,true)
+		end
 	end
 end)
 -----------------------------------------------------------------------------------------------------------------------------------------

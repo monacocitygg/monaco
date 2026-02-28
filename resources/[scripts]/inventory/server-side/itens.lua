@@ -5324,7 +5324,7 @@ vRP.Revive(ClosestPed,101)
 					if vRP.GetHealth(ClosestPed) <= 100 or Player(ClosestPed)["state"]["Handcuff"] then
 						Carry[Passport] = ClosestPed
 
-						TriggerClientEvent("player:ropeCarry",Carry[Passport],source)
+						TriggerClientEvent("player:ropeCarry",Carry[Passport],source,"attach")
 						TriggerClientEvent("player:Commands",Carry[Passport],true)
 						TriggerClientEvent("inventory:Close",Carry[Passport])
 
