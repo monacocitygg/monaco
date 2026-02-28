@@ -38,7 +38,7 @@ CreateThread(function()
 					NetworkResurrectLocalPlayer(Coords,0.0)
 
 					NetworkSetFriendlyFireOption(true)
-					SetEntityInvincible(Ped,false)
+					SetEntityInvincible(Ped,true)
 					SetEntityHealth(Ped,100)
 
 					if LocalPlayer["state"]["Route"] < 900000 then
