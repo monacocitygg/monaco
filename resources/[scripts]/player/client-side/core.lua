@@ -73,7 +73,7 @@ CreateThread(function()
 			TimeDistance = 1
 			local Ped = PlayerPedId()
 
-			if GetGameTimer() > ropeCooldown and (IsPedInAnyVehicle(Ped) or not IsEntityAttachedToAnyEntity(Ped)) then
+			if GetGameTimer() > ropeCooldown and (IsPedInAnyVehicle(Ped) or not IsEntityAttached(Ped)) then
 				DetachEntity(Ped,false,false)
 				LocalPlayer["state"]:set("Rope",false,true)
 				TriggerServerEvent("inventory:ropeClean")
