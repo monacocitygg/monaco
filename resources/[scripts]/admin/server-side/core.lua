@@ -346,35 +346,38 @@ RegisterCommand("algemar", function(source, Message)
         TriggerClientEvent("Notify", source, "vermelho", "Você não possui um passaporte válido para usar este comando.", 5000)
     end
 end, false)
+
 -----------------------------------------------------------------------------------------------------------------------------------------
--- BLIPS
+-- LOCAL BLIPS
 -----------------------------------------------------------------------------------------------------------------------------------------
 local Blips = {}
 
+-----------------------------------------------------------------------------------------------------------------------------------------
+-- BLIPS
+-----------------------------------------------------------------------------------------------------------------------------------------
 RegisterCommand("blips", function(source)
     local Passport = vRP.Passport(source)
     if Passport then
-        if vRP.HasGroup(Passport, "Admin", 3) then
+        if vRP.HasGroup(Passport, "Admin") or vRP.HasGroup(Passport, "allowlist") or vRP.HasGroup(Passport, "Caster") or vRP.HasGroup(Passport, "Developer") then
             local Text = ""
+            local PlayerName = requestCharacterName(Passport)
 
             if not Blips[Passport] then
                 Blips[Passport] = true
-                Text = "Ativado"
-				TriggerEvent("Discord", "Blips", "**blips**\n\n**Passaporte:** " .. Passport .. "\n**Situação:** " .. Text .. " \n**Horário:** " .. os.date("%H:%M:%S"), 3553599)
+                BlipData[Passport] = { name = PlayerName, id = Passport }
+                Text = "[ATIVOU BLIPS]"
             else
                 Blips[Passport] = nil
-                Text = "Desativado"
-				TriggerEvent("Discord", "Blips", "**blips**\n\n**Passaporte:** " .. Passport .. "\n**Situação:** " .. Text .. " \n**Horário:** " .. os.date("%H:%M:%S"), 3553599)
+                BlipData[Passport] = nil
+                Text = "[DESATIVOU O BLIPS]"
             end
 
-            vRPC.BlipAdmin(source)
-
-            if Blips[Passport] then
-            else
-            end
+            vRPC._BlipAdmin(source)
+            exports["vrp"]:Embed("Admin", "**Passaporte:** " .. Passport .. "\n**Comando:** " .. Text, 0xa3c846)
         end
     end
 end)
+
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- GOD
 -----------------------------------------------------------------------------------------------------------------------------------------
