@@ -3449,7 +3449,7 @@ Citizen.CreateThread(function()
 				Citizen.Wait(1)
 			end
 
-			local cam = CreateCam("DEFAULT_SCRIPTED_FLY_CAMERA",true)
+			local cam = CreateCam("DEFAULT_SCRIPTED_CAMERA",true)
 			AttachCamToEntity(cam,ped,0.0,0.0,1.0,true)
 			SetCamRot(cam,0.0,0.0,GetEntityHeading(ped))
 			SetCamFov(cam,fov)

@@ -74,7 +74,7 @@ if Config.BinocularsEnabled then
                 Wait(10)
             end
 
-            cam = CreateCam("DEFAULT_SCRIPTED_FLY_CAMERA", true)
+            cam = CreateCam("DEFAULT_SCRIPTED_CAMERA", true)
 
             AttachCamToEntity(cam, PlayerPedId(), 0.0, 0.0, 1.2, true)
             SetCamRot(cam, 0.0, 0.0, GetEntityHeading(PlayerPedId()))
