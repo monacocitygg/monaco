@@ -476,6 +476,7 @@ local shops = {
 			["barrier"] = 1,
 			["handcuff"] = 1,
 			["WEAPON_SMG"] = 1,
+			["WEAPON_SMG_MK2"] = 1,
 			-- ["WEAPON_PUMPSHOTGUN"] = 111,
 			-- ["WEAPON_CARBINERIFLE"] = 1,
 			-- ["WEAPON_CARBINERIFLE_MK2"] = 1,
