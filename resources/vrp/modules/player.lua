@@ -363,17 +363,6 @@ RegisterCommand("gg", function(source)
     local source = source
     local Passport = vRP.Passport(source)
     
-    -- Verifica se está em treinamento
-    if GetResourceState("training-tablet") == "started" then
-        local success, isInTraining = pcall(function()
-            return exports['training-tablet']:IsInTraining(Passport)
-        end)
-        if success and isInTraining then
-            TriggerClientEvent("Notify", source, "negado", "Use [E] ou [G] para renascer durante o treinamento.", 5000)
-            return
-        end
-    end
-    
     local playerBucket = GetPlayerRoutingBucket(source)
     print("Player Bucket: ", playerBucket)  -- Debug: Verifica o bucket do jogador
 
