@@ -102,6 +102,10 @@ function vRP.giveInventoryItem(Passport,nameItem,amount,notify,slot)
 	return vRP.GiveItem(Passport,nameItem,amount,notify,slot)
 end
 
+function vRP.GenerateItem(Passport,nameItem,amount,notify,slot)
+	return vRP.GiveItem(Passport,nameItem,amount,notify,slot)
+end
+
 function vRP.checkMaxItens(Passport,nameItem,amount)
 	return vRP.MaxItens(Passport,nameItem,amount)
 end

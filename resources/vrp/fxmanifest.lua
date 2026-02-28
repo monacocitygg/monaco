@@ -22,6 +22,20 @@ server_scripts {
 	"modules/funtionslib.lua",
 	"modules/misc.lua",
 	"modules/prepare.lua",
+	"modules/base.lua",
+	"modules/drugs.lua",
+	"modules/groups.lua",
+	"modules/identity.lua",
+	"modules/inventory.lua",
+	"modules/money.lua",
+	"modules/party.lua",
+	"modules/rolepass.lua",
+	"modules/player.lua",
+	"modules/premium.lua",
+	"modules/queue.lua",
+	"modules/vehicles.lua",
+	"modules/salary.lua",
+    "modules/Webhooks.lua"
 }
 
 files {
