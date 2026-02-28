@@ -278,7 +278,12 @@ AddEventHandler("player:cvFunctions",function(Mode)
 				if parseInt(Door) <= 1 then
 					if Mode == "rv" then
 						vCLIENT.removeVehicle(ClosestPed)
+						exports["inventory"]:CarryClean(Passport)
+						TriggerClientEvent("player:Commands",ClosestPed,false)
 					elseif Mode == "cv" then
+						TriggerClientEvent("player:ropeCarry",ClosestPed,source)
+						TriggerClientEvent("player:Commands",ClosestPed,false)
+						exports["inventory"]:CarryClean(Passport)
 						vCLIENT.putVehicle(ClosestPed,Network)
 					end
 				end

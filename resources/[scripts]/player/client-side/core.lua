@@ -70,11 +70,18 @@ CreateThread(function()
 		if LocalPlayer["state"]["Rope"] then
 			TimeDistance = 1
 			local Ped = PlayerPedId()
-			if not IsEntityPlayingAnim(Ped,"nm","firemans_carry",3) then
-				vRP.playAnim(false,{"nm","firemans_carry"},true)
-			end
 
-			DisableControlAction(0,23,true)
+			if IsPedInAnyVehicle(Ped) or not IsEntityAttachedToAnyEntity(Ped) then
+				DetachEntity(Ped,false,false)
+				LocalPlayer["state"]:set("Rope",false,true)
+				TriggerServerEvent("inventory:ropeClean")
+			else
+				if not IsEntityPlayingAnim(Ped,"nm","firemans_carry",3) then
+					vRP.playAnim(false,{"nm","firemans_carry"},true)
+				end
+
+				DisableControlAction(0,23,true)
+			end
 		end
 
 		Wait(TimeDistance)
