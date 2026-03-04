@@ -95,7 +95,18 @@ AddEventHandler("dynamic:Tencode",function(Code)
 		local Ped = GetPlayerPed(source)
 		local Coords = GetEntityCoords(Ped)
 		local Identity = vRP.Identity(Passport)
-		local Service = vRP.NumPermission("Police")
+		local Service = {}
+		local Groups = { "Police","Gtm","Graer","Speed","Core" }
+
+		for _,v in pairs(Groups) do
+			local Consult = vRP.NumPermission(v)
+			for k,v in pairs(Consult) do
+				if not Service[k] then
+					Service[k] = v
+				end
+			end
+		end
+
 		for Passports,Sources in pairs(Service) do
 			async(function()
 				if Code ~= 4 then
@@ -103,7 +114,6 @@ AddEventHandler("dynamic:Tencode",function(Code)
 				end
 
 				TriggerClientEvent("NotifyPush",Sources,{ code = Tencodes[parseInt(Code)]["tag"], title = Tencodes[parseInt(Code)]["text"], x = Coords["x"], y = Coords["y"], z = Coords["z"], name = Identity["name"].." "..Identity["name2"], time = "Recebido às "..os.date("%H:%M"), blipColor = Tencodes[parseInt(Code)]["blip"] })
-				TriggerClientEvent("dynamic:PoliceNotify",Sources,{ code = Tencodes[parseInt(Code)]["tag"], title = Tencodes[parseInt(Code)]["text"], x = Coords["x"], y = Coords["y"], z = Coords["z"], name = Identity["name"].." "..Identity["name2"] })
 			end)
 		end
 	end
@@ -118,7 +128,7 @@ AddEventHandler("dynamic:EmergencyAnnounce",function()
 	local Passport = vRP.Passport(source)
 	if Passport then
 		local Identity = vRP.Identity(Passport)
-		if vRP.HasGroup(Passport,"Police") or vRP.HasGroup(Passport,"Paramedic") then
+		if vRP.HasGroup(Passport,"Police") or vRP.HasGroup(Passport,"Gtm") or vRP.HasGroup(Passport,"Graer") or vRP.HasGroup(Passport,"Speed") or vRP.HasGroup(Passport,"Core") or vRP.HasGroup(Passport,"Paramedic") then
 			TriggerClientEvent("dynamic:closeSystem",source)
 			local Keyboard = vKEYBOARD.keyDouble(source,"Mensagem:","Título:")
 			if Keyboard then
@@ -135,7 +145,7 @@ AddEventHandler("dynamic:PoliceAnuncio", function()
     local Passport = vRP.Passport(source)
     if Passport then
         local Identity = vRP.Identity(Passport)
-        if vRP.HasGroup(Passport, "Police") then
+        if vRP.HasGroup(Passport,"Police") or vRP.HasGroup(Passport,"Gtm") or vRP.HasGroup(Passport,"Graer") or vRP.HasGroup(Passport,"Speed") or vRP.HasGroup(Passport,"Core") then
             TriggerClientEvent("dynamic:closeSystem", source)
             local Keyboard = vKEYBOARD.keyArea(source,"Nome da Ação:")
 			if Keyboard then
@@ -152,30 +162,41 @@ AddEventHandler("dynamic:PoliceAnuncio2", function()
     local Passport = vRP.Passport(source)
     if Passport then
         local Identity = vRP.Identity(Passport)
-        if vRP.HasGroup(Passport, "Police") then
+        if vRP.HasGroup(Passport,"Police") or vRP.HasGroup(Passport,"Gtm") or vRP.HasGroup(Passport,"Graer") or vRP.HasGroup(Passport,"Speed") or vRP.HasGroup(Passport,"Core") then
             TriggerClientEvent("dynamic:closeSystem", source)
             local Keyboard = vKEYBOARD.keyArea(source,"Nome da Ação:")
 			if Keyboard then
                 local Nomeperimetro = Keyboard[1]
                 local finalMessage = "A <b>POLÍCIA</b> informa perimetro: <br> "..Nomeperimetro.." está sob código 5, evitem passar próximo, risco de ser alvejado. Mantenham distância!!! <div style='font-size: 9px; margin-top: 5px; white-space: nowrap; color: #aaa;'>ENVIADA POR: "..Identity["name"].." "..Identity["name2"].."</div>"
                 TriggerClientEvent("Notify", -1, "police", finalMessage.."</b>",30000)
+                
+                -- Adicionar Blip
+                local Ped = GetPlayerPed(source)
+                local Coords = GetEntityCoords(Ped)
+                TriggerClientEvent("dynamic:AddRadiusBlip", -1, Coords.x, Coords.y, Coords.z)
             end
         end
     end
 end)
+
 RegisterServerEvent("dynamic:PoliceAnuncio3")
 AddEventHandler("dynamic:PoliceAnuncio3", function()
     local source = source
     local Passport = vRP.Passport(source)
     if Passport then
         local Identity = vRP.Identity(Passport)
-        if vRP.HasGroup(Passport, "Police") then
+        if vRP.HasGroup(Passport,"Police") or vRP.HasGroup(Passport,"Gtm") or vRP.HasGroup(Passport,"Graer") or vRP.HasGroup(Passport,"Speed") or vRP.HasGroup(Passport,"Core") then
             TriggerClientEvent("dynamic:closeSystem", source)
             local Keyboard = vKEYBOARD.keyArea(source,"Nome da Ação:")
 			if Keyboard then
                 local Nomeperimetro2 = Keyboard[1]
                 local finalMessage = "A <b>POLÍCIA</b> informa perimetro: <br> "..Nomeperimetro2.." está aberto novamente para trafegar <div style='font-size: 9px; margin-top: 5px; white-space: nowrap; color: #aaa;'>ENVIADA POR: "..Identity["name"].." "..Identity["name2"].."</div>"
                 TriggerClientEvent("Notify", -1, "police", finalMessage.."</b>",30000)
+
+                -- Remover Blip Próximo
+                local Ped = GetPlayerPed(source)
+                local Coords = GetEntityCoords(Ped)
+                TriggerClientEvent("dynamic:RemoveRadiusBlip", -1, Coords.x, Coords.y, Coords.z)
             end
         end
     end
@@ -187,7 +208,7 @@ AddEventHandler("dynamic:EmergencyAnnounce2", function()
     local Passport = vRP.Passport(source)
     if Passport then
         local Identity = vRP.Identity(Passport)
-        if vRP.HasGroup(Passport, "Police") then
+        if vRP.HasGroup(Passport,"Police") or vRP.HasGroup(Passport,"Gtm") or vRP.HasGroup(Passport,"Graer") or vRP.HasGroup(Passport,"Speed") or vRP.HasGroup(Passport,"Core") then
             TriggerClientEvent("dynamic:closeSystem", source)
             local Keyboard = vKEYBOARD.keyArea(source,"Mensagem:")
 			if Keyboard then

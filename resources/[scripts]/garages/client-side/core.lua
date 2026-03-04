@@ -23,6 +23,8 @@ local Hotwired = false
 local DeleteTime = GetGameTimer()
 local Anim = "machinic_loop_mechandplayer"
 local Dict = "anim@amb@clubhouse@tutorial@bkr_tut_ig3@"
+local cachedPlateValid = false
+local cachedPlateText = ""
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- VARIAVEIS
 -----------------------------------------------------------------------------------------------------------------------------------------
@@ -423,13 +425,17 @@ local Garages = {
 		["2"] = { -582.47,-1104.73,21.92,90.71}
 	},
 
-	["171"] = { x = 1154.87, y = -1486.39, z = 34.85, 
-		["1"] = {1156.51,-1482.87,34.42,87.88},
-		["2"] = {1156.26,-1477.85,34.42,90.71}
+	["171"] = { x = -2758.08, y = -47.88, z = 18.6, 
+		["1"] = {-2754.77,-49.64,18.35,144.57},
+		["2"] = {-2752.35,-51.53,18.35,144.57}
 	},
- 
+	
 	["172"] = { x = -794.83, y = -91.68, z = 37.71, 
 		["1"] = {-791.1,-93.15,36.99,195.6},
+	},
+	
+	["173"] = { x = 1305.45, y = -390.18, z = 82.16, 
+		["1"] = {1302.23,-394.78,81.74,277.8},
 	}
 	
 }
@@ -581,6 +587,10 @@ function Creative.CreateVehicle(Model,Network,Engine,Health,Customize,Windows,Ty
 
 			SetVehicleEngineHealth(Vehicle,Engine + 0.0)
 			SetEntityHealth(Vehicle,Health)
+			SetVehicleEngineOn(Vehicle,true,true,false)
+
+			cachedPlateText = GetVehicleNumberPlateText(Vehicle)
+			cachedPlateValid = true
 
 			if Windows then
 				local Windows = json.decode(Windows)
@@ -721,9 +731,6 @@ end
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- LOOPHOTWIRED
 -----------------------------------------------------------------------------------------------------------------------------------------
-local cachedPlateValid = false
-local cachedPlateText = ""
-
 CreateThread(function()
 	while true do
 		if LocalPlayer["state"]["Route"] == 0 then

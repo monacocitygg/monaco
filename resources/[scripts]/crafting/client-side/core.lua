@@ -72,11 +72,56 @@ CreateThread(function()
                         event = "crafting:openSystem",
                         label = "Abrir Crafting",
                         tunnel = "shop",
-                        service = v[2] -- Passing the craft type name (e.g. "Lixeiro")
+                        service = v[2]
                     }
                 }
             })
         end
+	end
+end)
+-----------------------------------------------------------------------------------------------------------------------------------------
+-- HOVERFY
+-----------------------------------------------------------------------------------------------------------------------------------------
+CreateThread(function()
+	Wait(1000)
+	local Table = {}
+	for Number,v in pairs(Crafting) do
+        if v[1] and type(v[1]) == "vector3" then
+		    Table[#Table + 1] = { v[1].x,v[1].y,v[1].z,2.0,"E","Crafting","Abrir" }
+        end
+	end
+
+	TriggerEvent("hoverfy:Insert",Table)
+end)
+-----------------------------------------------------------------------------------------------------------------------------------------
+-- OPEN
+-----------------------------------------------------------------------------------------------------------------------------------------
+CreateThread(function()
+	while true do
+		local TimeDistance = 1000
+		local Ped = PlayerPedId()
+		local Coords = GetEntityCoords(Ped)
+
+		for Number,v in pairs(Crafting) do
+            if v[1] and type(v[1]) == "vector3" then
+                local Distance = #(Coords - v[1])
+                if Distance <= 2.0 then
+                    TimeDistance = 4
+
+                    if IsControlJustPressed(1,38) then
+                        local craftType = v[2]
+                        if vSERVER.checkPermission(craftType) then
+                            if LocalPlayer["state"]["Route"] < 900000 then
+                                SetNuiFocus(true,true)
+                                SendNUIMessage({ action = "showNUI", name = craftType })
+                            end
+                        end
+                    end
+                end
+            end
+		end
+
+		Wait(TimeDistance)
 	end
 end)
 

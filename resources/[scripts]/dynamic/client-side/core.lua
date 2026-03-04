@@ -19,7 +19,7 @@ local Dynamic = false
 local HashAnimal = nil
 local SpawnAnimal = false
 local FollowAnimal = false
---------------------------------------------------------------------------------------port---------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------------------------
 -- ADDBUTTON
 -----------------------------------------------------------------------------------------------------------------------------------------
 exports("AddButton",function(title,description,trigger,par,id,server)
@@ -159,14 +159,27 @@ AddEventHandler("dynamic:RemoverRoupasPreset",function()
 		SetPedComponentVariation(Ped,3,15,0,0)
 	end
 end)
+
+-----------------------------------------------------------------------------------------------------------------------------------------
+-- CV
+-----------------------------------------------------------------------------------------------------------------------------------------
+RegisterCommand("cv",function(source,args)
+	TriggerServerEvent("player:cvFunctions","cv")
+end)
+-----------------------------------------------------------------------------------------------------------------------------------------
+-- RV
+-----------------------------------------------------------------------------------------------------------------------------------------
+RegisterCommand("rv",function(source,args)
+	TriggerServerEvent("player:cvFunctions","rv")
+end)
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- TENCODEFUNCTIONS
 -----------------------------------------------------------------------------------------------------------------------------------------
 RegisterCommand("tencodeFunctions",function()
-	if (LocalPlayer["state"]["Police"]) and not IsPauseMenuActive() then
+	if (LocalPlayer["state"]["Police"] or LocalPlayer["state"]["Gtm"] or LocalPlayer["state"]["Graer"] or LocalPlayer["state"]["Speed"] or LocalPlayer["state"]["Core"]) and not IsPauseMenuActive() then
 		if not LocalPlayer["state"]["Commands"] and not LocalPlayer["state"]["Handcuff"] and not menuOpen and LocalPlayer["state"]["Route"] < 900000 then
 
-			if LocalPlayer["state"]["Police"] then
+			if LocalPlayer["state"]["Police"] or LocalPlayer["state"]["Gtm"] or LocalPlayer["state"]["Graer"] or LocalPlayer["state"]["Speed"] or LocalPlayer["state"]["Core"] then
 				exports["dynamic"]:AddButton("QTI","Deslocamento.","dynamic:Tencode","1",false,true)
 				exports["dynamic"]:AddButton("QTH","Localização.","dynamic:Tencode","2",false,true)
 				exports["dynamic"]:AddButton("QRR","Apoio com prioridade.","dynamic:Tencode","3",false,true)
@@ -181,10 +194,10 @@ end)
 -- EMERGENCYFUNCTIONS
 -----------------------------------------------------------------------------------------------------------------------------------------
 RegisterCommand("emergencyFunctions",function()
-	if (LocalPlayer["state"]["Police"] or LocalPlayer["state"]["Paramedic"]) and not IsPauseMenuActive() then
+	if (LocalPlayer["state"]["Police"] or LocalPlayer["state"]["Gtm"] or LocalPlayer["state"]["Graer"] or LocalPlayer["state"]["Speed"] or LocalPlayer["state"]["Core"] or LocalPlayer["state"]["Paramedic"]) and not IsPauseMenuActive() then
 		if not LocalPlayer["state"]["Commands"] and not LocalPlayer["state"]["Handcuff"] and not Dynamic and MumbleIsConnected() then
 			local Ped = PlayerPedId()
-			if LocalPlayer["state"]["Police"] then
+			if LocalPlayer["state"]["Police"] or LocalPlayer["state"]["Gtm"] or LocalPlayer["state"]["Graer"] or LocalPlayer["state"]["Speed"] or LocalPlayer["state"]["Core"] then
 				if GetEntityHealth(Ped) > 100 and not IsPedInAnyVehicle(Ped) then
 					exports["dynamic"]:AddButton("Carregar","Carregar a pessoa mais próxima.","player:carryPlayer","","player",true)
 					exports["dynamic"]:AddButton("Colocar no Veículo","Colocar no veículo mais próximo.","player:cvFunctions","cv","player",true)
@@ -314,4 +327,49 @@ AddEventHandler("dynamic:animalFunctions",function(functions)
 			HashAnimal = nil
 		end
 	end
+end)
+-----------------------------------------------------------------------------------------------------------------------------------------
+-- RADIUS BLIP (PERÍMETRO)
+-----------------------------------------------------------------------------------------------------------------------------------------
+local radiusBlip = nil
+local centerBlip = nil
+
+RegisterNetEvent("dynamic:AddRadiusBlip")
+AddEventHandler("dynamic:AddRadiusBlip", function(x, y, z)
+    if radiusBlip then
+        RemoveBlip(radiusBlip)
+        radiusBlip = nil
+    end
+    if centerBlip then
+        RemoveBlip(centerBlip)
+        centerBlip = nil
+    end
+
+    -- Cria o círculo vermelho (raio)
+    radiusBlip = AddBlipForRadius(x, y, z, 200.0) -- Raio de 200 metros
+    SetBlipColour(radiusBlip, 1) -- Cor Vermelha
+    SetBlipAlpha(radiusBlip, 128) -- Transparência (50%)
+
+    -- Cria o ícone no centro para identificar melhor
+    centerBlip = AddBlipForCoord(x, y, z)
+    SetBlipSprite(centerBlip, 161) -- Ícone de alvo/perímetro
+    SetBlipColour(centerBlip, 1) -- Cor Vermelha
+    SetBlipScale(centerBlip, 1.0)
+    SetBlipAsShortRange(centerBlip, true)
+
+    BeginTextCommandSetBlipName("STRING")
+    AddTextComponentString("Perímetro Fechado")
+    EndTextCommandSetBlipName(centerBlip)
+end)
+
+RegisterNetEvent("dynamic:RemoveRadiusBlip")
+AddEventHandler("dynamic:RemoveRadiusBlip", function()
+    if radiusBlip then
+        RemoveBlip(radiusBlip)
+        radiusBlip = nil
+    end
+    if centerBlip then
+        RemoveBlip(centerBlip)
+        centerBlip = nil
+    end
 end)

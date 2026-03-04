@@ -47,6 +47,7 @@ end)
 -- TAKEITEM
 -----------------------------------------------------------------------------------------------------------------------------------------
 RegisterNUICallback("takeItem",function(Data,Callback)
+    print("DEBUG CLIENT: takeItem NUI Callback reached", json.encode(Data))
 	vSERVER.takeItem(Data["item"],Data["slot"],Data["target"],Data["amount"])
 
 	Callback("Ok")

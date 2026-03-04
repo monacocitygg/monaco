@@ -269,7 +269,7 @@ AddEventHandler("player:cvFunctions",function(Mode)
 	if ClosestPed then
 		local Passport = vRP.Passport(source)
 		local Consult = vRP.InventoryItemAmount(Passport,"rope")
-		if vRP.HasService(Passport,"Emergency") or Consult[1] >= 1 then
+		if vRP.HasGroup(Passport,"Police") or vRP.HasGroup(Passport,"Gtm") or vRP.HasGroup(Passport,"Graer") or vRP.HasGroup(Passport,"Speed") or vRP.HasGroup(Passport,"Core") or vRP.HasGroup(Passport,"Paramedic") or Consult[1] >= 1 then
 			local Vehicle,Network = vRPC.VehicleList(source,5)
 			if Vehicle then
 				local Networked = NetworkGetEntityFromNetworkId(Network)
@@ -288,9 +288,12 @@ AddEventHandler("player:cvFunctions",function(Mode)
 					end
 				end
 			end
+		else
+			TriggerClientEvent("Notify",source,"vermelho","Você precisa de uma corda.",5000)
 		end
 	end
 end)
+--------
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- PRESET
 -----------------------------------------------------------------------------------------------------------------------------------------
@@ -902,21 +905,24 @@ AddEventHandler("player:Death",function(nsource)
 	if Passport and source ~= nsource then
 		local OtherPassport = vRP.Passport(nsource)
 		if OtherPassport then
+            local Identity = vRP.Identity(Passport)
+            local nIdentity = vRP.Identity(OtherPassport)
+
+            local Name = "Individuo Indigente"
+            local Name2 = "Individuo Indigente"
+
+            if Identity then
+                Name = Identity["name"].." "..Identity["name2"]
+            end
+            if nIdentity then
+                Name2 = nIdentity["name"].." "..nIdentity["name2"]
+            end
+
 			if GetPlayerRoutingBucket(source) < 900000 then
-				TriggerEvent("Discord","Deaths","**Matou:** "..Passport.."\n**Morreu:** "..OtherPassport,3092790)
+				TriggerEvent("Discord","Deaths","**O player:** "..Name.." ("..Passport..")\n**Matou o player:** "..Name2.." ("..OtherPassport..")",3092790)
 			else
-				local Name = "Individuo Indigente"
-				local Name2 = "Individuo Indigente"
-				local Identity = vRP.Identity(Passport)
-				local nIdentity = vRP.Identity(OtherPassport)
-
-				if Identity and nIdentity then
-					Name = Identity["name"].." "..Identity["name2"]
-					Name2 = nIdentity["name"].." "..nIdentity["name2"]
-
-					TriggerClientEvent("Notify",source,"amarelo","<b>"..Name.."</b> matou <b>"..Name2.."</b>",10000)
-					TriggerClientEvent("Notify",nsource,"amarelo","<b>"..Name.."</b> matou <b>"..Name2.."</b>",10000)
-				end
+				TriggerClientEvent("Notify",source,"amarelo","<b>"..Name.."</b> matou <b>"..Name2.."</b>",10000)
+				TriggerClientEvent("Notify",nsource,"amarelo","<b>"..Name.."</b> matou <b>"..Name2.."</b>",10000)
 			end
 		end
 	end

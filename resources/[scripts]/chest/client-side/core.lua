@@ -34,11 +34,12 @@ local Chests = {
 	{ ["Name"] = "Gueto02", ["Coords"] = vec3(-619.85,-1617.73,33.01), ["Mode"] = "2" },
 	{ ["Name"] = "Gueto03", ["Coords"] = vec3(-571.64,289.1,79.18), ["Mode"] = "2" },
 	{ ["Name"] = "Gueto04", ["Coords"] = vec3(1972.77,3819.43,33.43), ["Mode"] = "2" },
-	---guetos
+	---guetos 
 	---Favelas
-	{ ["Name"] = "Favela01", ["Coords"] = vec3(1356.12,-256.53,152.0), ["Mode"] = "2" }, --barragem
+	{ ["Name"] = "Flawless", ["Coords"] = vec3(1521.18,-764.9,106.34), ["Mode"] = "2" }, --barragem
+
 	{ ["Name"] = "Favela02", ["Coords"] = vec3(3174.78,5145.09,31.48), ["Mode"] = "2" }, --farol
-	{ ["Name"] = "Favela03", ["Coords"] = vec3(405.22,754.92,194.58), ["Mode"] = "2" }, --Parque
+	{ ["Name"] = "Peixes", ["Coords"] = vec3(1295.52,-384.63,82.56), ["Mode"] = "2" }, --Parque
 	{ ["Name"] = "Favela04", ["Coords"] = vec3(1546.49,-2454.71,80.33), ["Mode"] = "2" }, --ponte caio perigo
 	{ ["Name"] = "Favela05", ["Coords"] = vec3(-3129.12,1704.1,41.2), ["Mode"] = "2" }, --praia 2
 	--Attachs
@@ -202,16 +203,9 @@ end)
 -- CHEST:OPEN
 -----------------------------------------------------------------------------------------------------------------------------------------
 AddEventHandler("chest:Open",function(Name,Init)
-	print("CHEST_DEBUG: Evento chest:Open acionado.")
-	print("CHEST_DEBUG: Name = " .. tostring(Name))
-	print("CHEST_DEBUG: Init = " .. tostring(Init))
-
 	if vSERVER.Permissions(Name,Init) then
-		print("CHEST_DEBUG: Permissão concedida pelo servidor.")
 		SetNuiFocus(true,true)
 		SendNUIMessage({ Action = "Open" })
-	else
-		print("CHEST_DEBUG: Permissão negada pelo servidor.")
 	end
 end)
 -----------------------------------------------------------------------------------------------------------------------------------------
@@ -235,6 +229,7 @@ end)
 -- STORE
 -----------------------------------------------------------------------------------------------------------------------------------------
 RegisterNUICallback("Store",function(Data,Callback)
+    print("DEBUG CLIENT STORE: Item="..tostring(Data["item"]).." Slot="..tostring(Data["slot"]).." Amount="..tostring(Data["amount"]).." Target="..tostring(Data["target"]))
 	vSERVER.Store(Data["item"],Data["slot"],Data["amount"],Data["target"])
 
 	Callback("Ok")

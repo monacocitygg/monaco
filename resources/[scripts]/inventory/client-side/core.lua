@@ -714,6 +714,9 @@ function Creative.putWeaponHands(Name,Ammo,Components,Type)
 			RemoveWeaponFromPed(Ped,GetHashKey(Name))
 			GiveWeaponToPed(Ped,Name,0,false,true)
 			SetPedAmmo(Ped,GetHashKey(Name),Ammo)
+			SetCurrentPedWeapon(Ped,GetHashKey(Name),true)
+			SetPlayerCanDoDriveBy(PlayerId(),true)
+			
 		end
 
 		if Components then
@@ -1071,7 +1074,7 @@ RegisterNUICallback("requestInventory",function(Data,Callback)
 
 		for Index,v in pairs(Drops) do
 			local Distance = #(vec3(Coords["x"],Coords["y"],Z) - vec3(v["Coords"][1],v["Coords"][2],v["Coords"][3]))
-			if Distance <= 0.9 then
+			if Distance <= 2.0 then
 				local Number = #Items + 1
 
 				Items[Number] = v
@@ -1572,21 +1575,25 @@ local StealTimer = GetGameTimer()
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- THREADSTEALNPCS
 -----------------------------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------------------------
+-- THREADNPCS
+-----------------------------------------------------------------------------------------------------------------------------------------
 CreateThread(function()
 	while true do
 		local TimeDistance = 999
 		local Ped = PlayerPedId()
 
-		if not IsPedInAnyVehicle(Ped) and IsPedArmed(Ped,7) then
+		if not IsPedInAnyVehicle(Ped) then
 			local Handler,Selected = FindFirstPed()
 
 			repeat
-				if not IsEntityDead(Selected) and not StealPeds[Selected] and not IsPedDeadOrDying(Selected) and GetPedArmour(Selected) <= 0 and not IsPedAPlayer(Selected) and not IsPedInAnyVehicle(Selected) and GetPedType(Selected) ~= 28 then
+				if not IsEntityDead(Selected) and not IsPedAPlayer(Selected) and not IsPedInAnyVehicle(Selected) and GetPedType(Selected) ~= 28 and not IsPedDeadOrDying(Selected) and GetPedArmour(Selected) <= 0 then
 					local Coords = GetEntityCoords(Ped)
 					local pCoords = GetEntityCoords(Selected)
 					local Distance = #(Coords - pCoords)
 
-					if Distance <= 5 then
+					-- STEAL
+					if Distance <= 5 and IsPedArmed(Ped,7) and not StealPeds[Selected] then
 						TimeDistance = 100
 
 						local Pid = PlayerId()
@@ -1662,33 +1669,9 @@ CreateThread(function()
 							end
 						end
 					end
-				end
 
-				Success,Selected = FindNextPed(Handler)
-			until not Success EndFindPed(Handler)
-		end
-
-		Wait(TimeDistance)
-	end
-end)
------------------------------------------------------------------------------------------------------------------------------------------
--- THREADDRUGSPEDS
------------------------------------------------------------------------------------------------------------------------------------------
-CreateThread(function()
-	while true do
-		local TimeDistance = 999
-		local Ped = PlayerPedId()
-
-		if not IsPedInAnyVehicle(Ped) then
-			local Handler,Selected = FindFirstPed()
-
-			repeat
-				if not IsEntityDead(Selected) and not DrugsPeds[Selected] and not IsPedDeadOrDying(Selected) and GetPedArmour(Selected) <= 0 and not IsPedAPlayer(Selected) and not IsPedInAnyVehicle(Selected) and GetPedType(Selected) ~= 28 then
-					local Coords = GetEntityCoords(Ped)
-					local pCoords = GetEntityCoords(Selected)
-					local Distance = #(Coords - pCoords)
-
-					if Distance <= 1 then
+					-- DRUGS
+					if Distance <= 1 and not DrugsPeds[Selected] then
 						TimeDistance = 1
 
 						if IsControlJustPressed(1,38) and GetGameTimer() >= DrugsTimer and vSERVER.AmountDrugs() then

@@ -110,13 +110,13 @@ local List = {
 	-- { -172.89,6381.32,31.48,"Farmacia",false },
 	-- { 1690.07,3581.68,35.62,"Farmacia",false },
 	-- { 318.18,-1077.71,30.45,"Farmacia",false },
-	{ 1147.03,-1551.4,35.38,"Farmacia",false }, 
+	{ -2815.84,-57.44,18.6,"Farmacia",false }, 
 	{ 304.07,-600.83,43.29,"Paramedic",false },
 	{ -254.64,6326.95,32.82,"Paramedic",false },
 	{ 82.98,-1553.55,29.59,"Recycle",false }, 
 	{ 287.77,2843.9,44.7,"Recycle",false },
 	{ -413.97,6171.58,31.48,"Recycle",false },
-	-- { -2038.33,-495.77,12.11,"Mecanica",false}, -- mecanica
+	{-2067.94,-510.47,12.11,"Mecanica",false}, -- mecanica
 	{ -947.94,-2040.35,9.4,"Police",false }, --1 BPM 
 	{ 364.62,-1604.05,25.44,"Police",false },-- DIB
 	{ 851.2,-1313.31,26.49,"Police",false },-- CORE ,181.42

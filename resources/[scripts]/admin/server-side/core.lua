@@ -369,7 +369,18 @@ RegisterCommand("blips", function(source)
                 Text = "[DESATIVOU O BLIPS]"
             end
 
-            vRPC.BlipAdmin(source)
+            local Players = {}
+            if Blips[Passport] then
+                local List = vRP.Players()
+                for OtherPassport,OtherSource in pairs(List) do
+                    local Identity = vRP.Identity(OtherPassport)
+                    if Identity then
+                        Players[OtherSource] = { fullName = Identity["name"].." "..Identity["name2"], passport = OtherPassport }
+                    end
+                end
+            end
+
+            TriggerClientEvent("admin:blips",source,Players)
             exports["vrp"]:Embed("Admin", "**Passaporte:** " .. Passport .. "\n**Comando:** " .. Text, 0xa3c846)
         end
     end
@@ -655,6 +666,7 @@ RegisterCommand("cds",function(source)
 		end
 	end
 end)
+
 RegisterCommand("cds2",function(source)
 	local Passport = vRP.Passport(source)
 	if Passport then
@@ -667,6 +679,7 @@ RegisterCommand("cds2",function(source)
 		end
 	end
 end)
+
 RegisterCommand("cds3",function(source)
 	local Passport = vRP.Passport(source)
 	if Passport then
@@ -1060,4 +1073,28 @@ RegisterCommand("wl",function(source,args)
 			end
 		end
 	end
+end)
+-----------------------------------------------------------------------------------------------------------------------------------------
+-- BLIP CAMINHAO
+-----------------------------------------------------------------------------------------------------------------------------------------
+RegisterCommand("blipcaminhao",function(source)
+    local Passport = vRP.Passport(source)
+    if Passport then
+        if vRP.HasGroup(Passport,"Admin") then
+            local Ped = GetPlayerPed(source)
+            local Coords = GetEntityCoords(Ped)
+            TriggerClientEvent("admin:blipcaminhao",-1,Coords)
+            TriggerClientEvent("Notify",source,"verde","Blip de caminhão criado.",5000)
+        end
+    end
+end)
+
+RegisterCommand("remblipcaminhao",function(source)
+    local Passport = vRP.Passport(source)
+    if Passport then
+        if vRP.HasGroup(Passport,"Admin") then
+            TriggerClientEvent("admin:remblipcaminhao",-1)
+            TriggerClientEvent("Notify",source,"verde","Blip de caminhão removido.",5000)
+        end
+    end
 end)

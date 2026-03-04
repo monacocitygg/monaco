@@ -174,28 +174,41 @@ const updateDrag = () => {
 
 			updateDrag();
 
-			if ((origin === "invLeft" || origin === "invHotbar") && (tInv === "invLeft" || tInv === "invHotbar")){
+            console.log("DEBUG JS: Drop Event Triggered");
+            console.log("DEBUG JS: Origin: " + origin);
+            console.log("DEBUG JS: TargetInv: " + tInv);
+
+			const isOriginInventory = origin.includes("invLeft") || origin.includes("invHotbar");
+			const isTargetInventory = tInv.includes("invLeft") || tInv.includes("invHotbar");
+			const isOriginChest = origin.includes("invRight");
+			const isTargetChest = tInv.includes("invRight");
+
+			if (isOriginInventory && isTargetInventory){
+                console.log("DEBUG JS: UpdateSlot");
 				$.post("http://inventory/updateSlot",JSON.stringify({
 					item: itemData.key,
 					slot: itemData.slot,
 					target: target,
 					amount: parseInt(amount)
 				}));
-			} else if (origin === "invRight" && (tInv === "invLeft" || tInv === "invHotbar")){
+			} else if (isOriginChest && isTargetInventory){
+                console.log("DEBUG JS: Take");
 				$.post("http://chest/Take",JSON.stringify({
 					item: itemData.key,
 					slot: itemData.slot,
 					target: target,
 					amount: parseInt(amount)
 				}));
-			} else if ((origin === "invLeft" || origin === "invHotbar") && tInv === "invRight"){
+			} else if (isOriginInventory && isTargetChest){
+                console.log("DEBUG JS: Store - Sending POST");
 				$.post("http://chest/Store",JSON.stringify({
 					item: itemData.key,
 					slot: itemData.slot,
 					target: target,
 					amount: parseInt(amount)
 				}));
-			} else if (origin === "invRight" && tInv === "invRight"){
+			} else if (isOriginChest && isTargetChest){
+                console.log("DEBUG JS: Update");
 				$.post("http://chest/Update",JSON.stringify({
 					item: itemData.key,
 					slot: itemData.slot,
@@ -280,28 +293,41 @@ const updateDrag = () => {
 
 			updateDrag();
 
-			if ((origin === "invLeft" || origin === "invHotbar") && (tInv === "invLeft" || tInv === "invHotbar")) {
+            console.log("DEBUG JS: Drop Event Triggered");
+            console.log("DEBUG JS: Origin: " + origin);
+            console.log("DEBUG JS: TargetInv: " + tInv);
+
+			const isOriginInventory = origin.includes("invLeft") || origin.includes("invHotbar");
+			const isTargetInventory = tInv.includes("invLeft") || tInv.includes("invHotbar");
+			const isOriginChest = origin.includes("invRight");
+			const isTargetChest = tInv.includes("invRight");
+
+			if (isOriginInventory && isTargetInventory){
+                console.log("DEBUG JS: UpdateSlot");
 				$.post("http://inventory/updateSlot",JSON.stringify({
 					item: itemData.key,
 					slot: itemData.slot,
 					target: target,
 					amount: parseInt(amount)
 				}));
-			} else if (origin === "invRight" && (tInv === "invLeft" || tInv === "invHotbar")){
+			} else if (isOriginChest && isTargetInventory){
+                console.log("DEBUG JS: Take");
 				$.post("http://chest/Take",JSON.stringify({
 					item: itemData.key,
 					slot: itemData.slot,
 					target: target,
 					amount: parseInt(amount)
 				}));
-			} else if ((origin === "invLeft" || origin === "invHotbar") && tInv === "invRight"){
+			} else if (isOriginInventory && isTargetChest){
+                console.log("DEBUG JS: Store - Sending POST");
 				$.post("http://chest/Store",JSON.stringify({
 					item: itemData.key,
 					slot: itemData.slot,
 					target: target,
 					amount: parseInt(amount)
 				}));
-			} else if (origin === "invRight" && tInv === "invRight"){
+			} else if (isOriginChest && isTargetChest){
+                console.log("DEBUG JS: Update");
 				$.post("http://chest/Update",JSON.stringify({
 					item: itemData.key,
 					slot: itemData.slot,

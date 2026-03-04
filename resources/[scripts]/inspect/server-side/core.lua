@@ -24,7 +24,7 @@ AddEventHandler("police:runInspect",function(Entity)
 	local Passport = vRP.Passport(source)
 	if Passport and vRP.GetHealth(source) > 100 then
 		-- Check if player is police to bypass request
-		if vRP.HasGroup(Passport,"Police") then
+		if vRP.HasGroup(Passport,"Police") or vRP.HasGroup(Passport,"Gtm") or vRP.HasGroup(Passport,"Graer") or vRP.HasGroup(Passport,"Speed") or vRP.HasGroup(Passport,"Core") then
 			openSource[Passport] = Entity[1]
 			openPlayer[Passport] = vRP.Passport(Entity[1])
 
@@ -196,17 +196,21 @@ end
 -- TAKEITEM
 -----------------------------------------------------------------------------------------------------------------------------------------
 function Creative.takeItem(Item,Slot,Target,Amount)
+    print("DEBUG SERVER: takeItem tunnel function reached", Item, Slot, Target, Amount)
 	local source = source
 	local Passport = vRP.Passport(source)
 	if Passport then
 		-- Restrict taking items for non-police
-		if not vRP.HasGroup(Passport,"Police") then
+		if not vRP.HasGroup(Passport,"Police") and not vRP.HasGroup(Passport,"Gtm") and not vRP.HasGroup(Passport,"Graer") and not vRP.HasGroup(Passport,"Speed") and not vRP.HasGroup(Passport,"Core") then
+            print("DEBUG SERVER: Permission denied for Passport", Passport)
 			TriggerClientEvent("Notify",source,"vermelho","Você não pode pegar itens.",5000)
 			return
 		end
 
 		if openSource[Passport] then
+            print("DEBUG SERVER: openSource exists", openSource[Passport])
 			if DoesEntityExist(GetPlayerPed(openSource[Passport])) then
+                print("DEBUG SERVER: Target entity exists")
 				if (tostring(Target) == "4" or tostring(Target) == "5") and not vRP.HasGroup(Passport,"Bolso") then
 					TriggerClientEvent("Notify",source,"negado","Você não possui a mochila.",5000)
 					TriggerClientEvent("inspect:Update",source,"requestChest")
@@ -227,17 +231,34 @@ function Creative.takeItem(Item,Slot,Target,Amount)
 					return
 				end
 
+                print("DEBUG SERVER: Weight check", vRP.InventoryWeight(Passport) + (itemWeight(Item) * Amount), vRP.GetWeight(Passport))
 				if (vRP.InventoryWeight(Passport) + (itemWeight(Item) * Amount)) <= vRP.GetWeight(Passport) then
-					if vRP.TakeItem(openPlayer[Passport],Item,Amount,true,Slot) then
-						vRP.GiveItem(Passport,Item,Amount,false,Target)
-						TriggerClientEvent("inspect:Update",source,"requestChest")
-					end
+                    -- DEBUG: Check suspect inventory content at slot
+                    local suspectInv = vRP.Inventory(openPlayer[Passport])
+                    local itemAtSlot = suspectInv[tostring(Slot)]
+                    
+                    if itemAtSlot then
+                        print("DEBUG SERVER: Suspect has item at slot " .. tostring(Slot) .. ": " .. json.encode(itemAtSlot))
+                        print("DEBUG SERVER: Trying to take " .. tostring(Amount) .. " of " .. tostring(Item))
+                        
+                        -- Ensure item match
+                        if itemAtSlot.item == Item then
+                             if vRP.TakeItem(openPlayer[Passport],Item,Amount,true,Slot) then
+                                vRP.GiveItem(Passport,Item,Amount,false,Target)
+                                TriggerClientEvent("inspect:Update",source,"requestChest")
+                            end
+                        end
+                    else
+                        print("DEBUG SERVER: Suspect slot " .. tostring(Slot) .. " is empty or nil!")
+                    end
 				else
 					TriggerClientEvent("Notify",source,"vermelho","Mochila cheia.",5000)
 					TriggerClientEvent("inspect:Update",source,"requestChest")
 				end
 			end
-		end
+		else
+            print("DEBUG SERVER: openSource is nil")
+        end
 	end
 end
 -----------------------------------------------------------------------------------------------------------------------------------------

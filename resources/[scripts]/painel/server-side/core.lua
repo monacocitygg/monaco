@@ -14,35 +14,54 @@ vCLIENT = Tunnel.getInterface("painel")
 -- VARIABLES
 -----------------------------------------------------------------------------------------------------------------------------------------
 local Panel = {}
+local function maxLevelForGroup(group)
+	if group == "Police" then
+		return 3
+	end
+	if group == "Speed" or group == "Gtm" or group == "Graer" or group == "Core" then
+		return 3
+	end
+	return 1
+end
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- PAINEL
 -----------------------------------------------------------------------------------------------------------------------------------------
 RegisterCommand("painel",function(source,Message)
 	local Passport = vRP.Passport(source)
 	if Passport and Message[1] and Message[1] ~= "Premium" then
-		if vRP.HasPermission(Passport,Message[1],1) then
+		if vRP.HasPermission(Passport,Message[1],maxLevelForGroup(Message[1])) then
 			Panel[Passport] = Message[1]
 
 			local Members = {}
 			local Sources = vRP.Players()
 			local Entitys = vRP.DataGroups(Panel[Passport])
 			local Hierarchy = vRP.Hierarchy(Panel[Passport])
+			local OnlineCount = 0
+			local TotalCount = 0
 
 			for Number,v in pairs(Entitys) do
+				TotalCount = TotalCount + 1
 				local Number = parseInt(Number)
 				local Identity = vRP.Identity(Number)
 				if Identity then
+					local isOnline = Sources[Number] ~= nil
+					if isOnline then
+						OnlineCount = OnlineCount + 1
+					end
+
 					if vRP.HasPermission(Number,Panel[Passport],1) then
-						Members[#Members + 1] = { ["name"] = Identity["name"].." "..Identity["name2"], ["phone"] = Identity["phone"], ["online"] = Sources[Number], ["id"] = Number, ["role"] = Hierarchy[v] or Hierarchy, ["role_id"] = 1 }
+						Members[#Members + 1] = { ["name"] = Identity["name"].." "..Identity["name2"], ["phone"] = Identity["phone"], ["online"] = isOnline, ["id"] = Number, ["role"] = Hierarchy[v] or Hierarchy, ["role_id"] = 1 }
 					else
-						Members[#Members + 1] = { ["name"] = Identity["name"].." "..Identity["name2"], ["phone"] = Identity["phone"], ["online"] = Sources[Number], ["id"] = Number, ["role"] = Hierarchy[v] or Hierarchy }
+						Members[#Members + 1] = { ["name"] = Identity["name"].." "..Identity["name2"], ["phone"] = Identity["phone"], ["online"] = isOnline, ["id"] = Number, ["role"] = Hierarchy[v] or Hierarchy }
 					end
 				end
 			end
 			
 			local Data = {
 				groupName = Panel[Passport],
-				members = Members
+				members = Members,
+				onlineCount = OnlineCount,
+				totalCount = TotalCount
 			}
 
 			vCLIENT.Open(source,Data)
@@ -57,7 +76,7 @@ function Creative.Dismiss(Number)
 	local Number = parseInt(Number)
 	local Passport = vRP.Passport(source)
 	if Passport and Panel[Passport] and Number >= 1 and Passport ~= Number then
-		if vRP.HasPermission(Passport,Panel[Passport],1) then
+		if vRP.HasPermission(Passport,Panel[Passport],maxLevelForGroup(Panel[Passport])) then
 			vRP.RemovePermission(Number,Panel[Passport])
 
 			TriggerClientEvent("Notify",source,"verde","Passaporte removido.",5000)
@@ -74,7 +93,7 @@ function Creative.Invite(Number)
 	local Passport = vRP.Passport(source)
 	
 	if Passport and Panel[Passport] and Number >= 1 and Passport ~= Number and vRP.Identity(Number) then
-		if vRP.HasPermission(Passport,Panel[Passport],1) then
+		if vRP.HasPermission(Passport,Panel[Passport],maxLevelForGroup(Panel[Passport])) then
 			CreateThread(function()
 				local OtherSource = vRP.Source(Number)
 
@@ -104,7 +123,7 @@ function Creative.Hierarchy(OtherPassport,Mode)
 	local source = source
 	local Passport = vRP.Passport(source)
 	if Passport and Panel[Passport] and OtherPassport >= 1 and Passport ~= OtherPassport and vRP.Identity(OtherPassport) then
-		if vRP.HasPermission(Passport,Panel[Passport],1) then
+		if vRP.HasPermission(Passport,Panel[Passport],maxLevelForGroup(Panel[Passport])) then
 			if not vRP.HasPermission(OtherPassport,Panel[Passport],2) or Mode == "Demote" then
 				vRP.SetPermission(OtherPassport,Panel[Passport],nil,Mode)
 

@@ -136,6 +136,9 @@ Ammos = {}
 Loots = {}
 Boxes = {}
 Active = {}
+-- Locks e cooldowns para operações com armas
+WeaponTransfer = {}
+WeaponCooldown = {}
 Trashs = {}
 Armors = {}
 Plates = {}
@@ -1346,7 +1349,7 @@ function Creative.UseItem(Slot,Amount)
 			-- Bloqueio de fuzil: só quem tem group com Type "Ilegal" ou Polícia pode equipar rifles
 			local wAmmoType = itemAmmo(Item)
 			if wAmmoType == "WEAPON_RIFLE_AMMO" and not string.find(Full,"-police") then
-				if not hasIlegalGroup(Passport) and not vRP.HasService(Passport,"Police") then
+				if not hasIlegalGroup(Passport) and not vRP.HasService(Passport,"Police") and not vRP.HasService(Passport,"Gtm") and not vRP.HasService(Passport,"Graer") and not vRP.HasService(Passport,"Speed") and not vRP.HasService(Passport,"Core") then
 					TriggerClientEvent("Notify",source,"negado","Você não pode utilizar esta armamento.",5000)
 					return
 				end
@@ -1363,8 +1366,20 @@ function Creative.UseItem(Slot,Amount)
 			end
 
 			if vCLIENT.returnWeapon(source) then
+				-- Debounce para evitar chamadas duplicadas
+				if WeaponCooldown[Passport] and WeaponCooldown[Passport] > os.time() then
+					return
+				end
+				WeaponCooldown[Passport] = os.time() + 1
+
+				-- Lock de transferência
+				if WeaponTransfer[Passport] then
+					TriggerClientEvent("Notify",source,"amarelo","Aguarde concluir a operação atual.",3000)
+					return
+				end
+				WeaponTransfer[Passport] = true
+
 				local Check,Ammo,Hash = vCLIENT.storeWeaponHands(source)
-				print("[INVENTORY] Guardando arma:", Hash, "Munição:", Ammo, "Passport:", Passport)
 
 				if Check then
 					local realHash = Hash
@@ -1390,13 +1405,23 @@ function Creative.UseItem(Slot,Amount)
 								Ammos[Passport][wHash] = nil
 							end
 						end
-						print("[INVENTORY] Munição salva:", wHash, Ammos[Passport][wHash])
+						
 					end
 
 					TriggerClientEvent("itensNotify",source,{ "guardou",itemIndex(Hash),1,itemName(Hash) })
 					exports["inventory"]:CleanWeapons(Passport,false)
 				end
+				WeaponTransfer[Passport] = nil
 			else
+				if WeaponCooldown[Passport] and WeaponCooldown[Passport] > os.time() then
+					return
+				end
+				WeaponCooldown[Passport] = os.time() + 1
+				if WeaponTransfer[Passport] then
+					TriggerClientEvent("Notify",source,"amarelo","Aguarde concluir a operação atual.",3000)
+					return
+				end
+				WeaponTransfer[Passport] = true
 				Ammo = 0
 				local wHash = itemAmmo(Item)
 				if wHash then
@@ -1410,7 +1435,7 @@ function Creative.UseItem(Slot,Amount)
 						Ammo = Ammos[Passport][wHash]
 					end
 				end
-				print("[INVENTORY] Equipando arma:", Item, "Munição carregada:", Ammo, "Passport:", Passport)
+				
 
 				if not Attachs[Passport] then
 					Attachs[Passport] = {}
@@ -1437,6 +1462,7 @@ function Creative.UseItem(Slot,Amount)
 				if vCLIENT.putWeaponHands(source,weaponSkin,Ammo,Attachs[Passport][Item]) then
 					TriggerClientEvent("itensNotify",source,{ "equipou",itemIndex(Full),1,itemName(Full) })
 				end
+				WeaponTransfer[Passport] = nil
 			end
 		elseif itemType(Full) == "Munição" then
 			if string.find(Full,"-police") and not vRP.HasService(Passport,"Police") then
@@ -1474,6 +1500,16 @@ function Creative.UseItem(Slot,Amount)
 			end
 		elseif itemType(Full) == "Throwing" then
 			if vCLIENT.returnWeapon(source) then
+				if WeaponCooldown[Passport] and WeaponCooldown[Passport] > os.time() then
+					return
+				end
+				WeaponCooldown[Passport] = os.time() + 1
+				if WeaponTransfer[Passport] then
+					TriggerClientEvent("Notify",source,"amarelo","Aguarde concluir a operação atual.",3000)
+					return
+				end
+				WeaponTransfer[Passport] = true
+
 				local Check,Ammo,Hash = vCLIENT.storeWeaponHands(source)
 
 				if Check then
@@ -1505,10 +1541,22 @@ function Creative.UseItem(Slot,Amount)
 					TriggerClientEvent("itensNotify",source,{ "guardou",itemIndex(Hash),1,itemName(Hash) })
 					exports["inventory"]:CleanWeapons(Passport,false)
 				end
+				WeaponTransfer[Passport] = nil
 			else
+				if WeaponCooldown[Passport] and WeaponCooldown[Passport] > os.time() then
+					return
+				end
+				WeaponCooldown[Passport] = os.time() + 1
+				if WeaponTransfer[Passport] then
+					TriggerClientEvent("Notify",source,"amarelo","Aguarde concluir a operação atual.",3000)
+					return
+				end
+				WeaponTransfer[Passport] = true
+
 				if vCLIENT.putWeaponHands(source,Item,1,nil,Full) then
 					TriggerClientEvent("itensNotify",source,{ "equipou",itemIndex(Full),1,itemName(Full) })
 				end
+				WeaponTransfer[Passport] = nil
 			end
 		elseif Item == "attachsFlashlight" or Item == "attachsCrosshair" or Item == "ATTACH_MUZZLE_FAT" or Item == "attachsSilencer" or Item == "attachsMagazine" or Item == "attachsGrip" then
 			local Weapon = vCLIENT.returnWeapon(source)
@@ -1670,6 +1718,10 @@ end
 function Creative.verifyWeapon(Item,Ammo)
 	local source = source
 	local Passport = vRP.Passport(source)
+	-- Não executar verificação corretiva durante transferência atômica
+	if WeaponTransfer[Passport] then
+		return true
+	end
 	if Passport and not vRP.ConsultItem(Passport,Item,1) then
 		local checkItem = Item
 		if string.find(checkItem,"wbody|") then

@@ -984,6 +984,25 @@ local Robberys = {
 		["payment"] = {
 			{ ["item"] = "dollars2", ["min"] = 3000000, ["max"] = 3500000 }
 		}
+	},
+
+		["67"] = {
+		["Coords"] = vec3(3553.75,3657.25,28.12),
+		["name"] = "Niobio",
+		["type"] = "nibios",
+		["cooldown"] = 7200,
+		["duration"] = 300,
+		["group"] = "Police",
+		["population"] = 10,
+		["avaiable"] = false,
+		["timavaiable"] = 0,
+		["need"] = {
+			["item"] = "card05",
+			["amount"] = 1
+		},
+		["payment"] = {
+			{ ["item"] = "dollars2", ["min"] = 2000000, ["max"] = 2500000 }
+		}
 	}
 }
 
@@ -995,14 +1014,14 @@ AddEventHandler("robberys:Init",function(Number)
 	local source = source
 	local Passport = vRP.Passport(source)
 
-	if vRP.HasGroup(Passport, "Police") then
-		TriggerClientEvent("Notify", source, "vermelho", "Você é Police e não pode Fazer Ação.", 5000)
+	if vRP.HasGroup(Passport,"Police") or vRP.HasGroup(Passport,"Gtm") or vRP.HasGroup(Passport,"Graer") or vRP.HasGroup(Passport,"Speed") or vRP.HasGroup(Passport,"Core") then
+		TriggerClientEvent("Notify",source,"vermelho","Você é Policial e não pode Fazer Ação.",5000)
 		return false
-	elseif vRP.HasGroup(Passport, "Mechanic") then
-		TriggerClientEvent("Notify", source, "vermelho", "Você é Mechanic e não pode Fazer Ação.", 5000)
+	elseif vRP.HasGroup(Passport,"Mechanic") then
+		TriggerClientEvent("Notify",source,"vermelho","Você é Mechanic e não pode Fazer Ação.",5000)
 		return false
-	elseif vRP.HasGroup(Passport, "Paramedic") then
-		TriggerClientEvent("Notify", source, "vermelho", "Você é Paramedico e não pode Fazer Ação.", 5000)
+	elseif vRP.HasGroup(Passport,"Paramedic") then
+		TriggerClientEvent("Notify",source,"vermelho","Você é Paramedico e não pode Fazer Ação.",5000)
 		return false
 	end
 	
@@ -1014,7 +1033,26 @@ AddEventHandler("robberys:Init",function(Number)
 				end
 
 				if os.time() >= Robberype[Robberys[Number]["type"]] then
-					local Service,Total = vRP.NumPermission(Robberys[Number]["group"])
+					local Service = {}
+					local Total = 0
+
+					if Robberys[Number]["group"] == "Police" then
+						local Groups = { "Police","Gtm","Graer","Speed","Core" }
+						for _,v in pairs(Groups) do
+							local Consult,Amount = vRP.NumPermission(v)
+							if Amount > 0 then
+								for k,v in pairs(Consult) do
+									if not Service[k] then
+										Service[k] = v
+										Total = Total + 1
+									end
+								end
+							end
+						end
+					else
+						Service,Total = vRP.NumPermission(Robberys[Number]["group"])
+					end
+
 					if Total >= Robberys[Number]["population"] then
 						local Consult = vRP.InventoryItemAmount(Passport,Robberys[Number]["need"]["item"])
 						if Consult[1] >= Robberys[Number]["need"]["amount"] then

@@ -20,23 +20,66 @@ SURVIVAL = Tunnel.getInterface("survival")
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- GG
 -----------------------------------------------------------------------------------------------------------------------------------------
+local RespawnGroups = {
+    ["Police"] = vec3(-900.23,-2030.92,9.4),
+    ["Core"] = vec3(-900.23,-2030.92,9.4),
+    ["Gtm"] = vec3(-900.23,-2030.92,9.4),
+    ["Graer"] = vec3(-900.23,-2030.92,9.4),
+    ["Speed"] = vec3(-900.23,-2030.92,9.4)
+}
+
 RegisterCommand("gg",function(source)
 	if GetPlayerRoutingBucket(source) < 900000 then
 		local Passport = vRP.Passport(source)
 		if Passport and SURVIVAL.CheckDeath(source) then
+            local InventoryLog = vRP.GetInventoryLog(Passport)
+
+            if vRP.UserPremium(Passport) then
+                if ClearInventoryPremium then
+                    vRP.ClearInventory(Passport, InventoryLog)
+                end
+            elseif CleanDeathInventory then
+                vRP.ClearInventory(Passport, InventoryLog)
+            end
+
 			local Datatable = vRP.Datatable(Passport)
 			if Datatable and Datatable["Weight"] then
 				Datatable["Weight"] = BackpackWeightDefault
 			end
 
-			vRP.ClearInventory(Passport)
 			vRP.UpgradeThirst(Passport,100)
 			vRP.UpgradeHunger(Passport,100)
 			vRP.DowngradeStress(Passport,100)
 
-			TriggerEvent("Discord","Airport","**Source:** "..source.."\n**Passaporte:** "..Passport.."\n**Address:** "..GetPlayerEndpoint(source),3092790)
+            if InventoryLog == "" then
+                InventoryLog = "Nenhum item no inventário."
+            end
 
-			SURVIVAL.Respawn(source)
+            local webhookMessage = "**Source:** " .. source ..
+                "\n**Passaporte:** " .. Passport ..
+                "\n**IP:** " .. GetPlayerEndpoint(source) ..
+                "\n**Itens Removidos:**\n" .. InventoryLog
+
+			TriggerEvent("Discord","Airport", webhookMessage, 3092790)
+
+			local PlayerGroup = nil
+			for Permission, Coords in pairs(RespawnGroups) do
+                local hasGroup = vRP.HasGroup(Passport, Permission)
+                print("DEBUG GG: Checking group", Permission, "for Passport", Passport, "Result:", hasGroup)
+				if hasGroup then
+					PlayerGroup = Permission
+					break
+				end
+			end
+
+            print("DEBUG GG: PlayerGroup selected:", PlayerGroup)
+            if PlayerGroup then
+                print("DEBUG GG: Respawning at custom coords:", RespawnGroups[PlayerGroup])
+				SURVIVAL.Respawn(source, RespawnGroups[PlayerGroup])
+			else
+                print("DEBUG GG: Respawning at default coords")
+				SURVIVAL.Respawn(source)
+			end
 		end
 	end
 end)

@@ -15,6 +15,7 @@ Tunnel.bindInterface("survival",Creative)
 local Death = false
 local DeathTimer = 250
 local Cooldown = GetGameTimer()
+local DeathUIVisible = false
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- THREADSYSTEM
 -----------------------------------------------------------------------------------------------------------------------------------------
@@ -42,7 +43,11 @@ CreateThread(function()
 					SetEntityHealth(Ped,100)
 
 					if LocalPlayer["state"]["Route"] < 900000 then
-						DeathTimer = 250
+						if LocalPlayer["state"]["Vippolice"] then
+							DeathTimer = 125
+						else
+							DeathTimer = 250
+						end
 
 						TriggerEvent("hud:RemoveHood")
 						TriggerEvent("hud:ScubaRemove")
@@ -56,7 +61,12 @@ CreateThread(function()
 					end
 
 					SendNUIMessage({ Action = "Display", Mode = "block" })
-					TriggerEvent("inventory:preventWeapon",false)
+					if not LocalPlayer["state"]["Spectate"] then
+						SendNUIMessage({ Action = "Display", Mode = "block" })
+						DeathUIVisible = true
+					else
+						DeathUIVisible = false
+					end
 					vRP.playAnim(false,{"dead","dead_a"},true)
 					TriggerEvent("inventory:Close")
 				else
@@ -64,10 +74,23 @@ CreateThread(function()
 					SetEntityHealth(Ped,100)
 
 					DisableControlAction(1,18,true)
+					if LocalPlayer["state"]["Spectate"] then
+						if DeathUIVisible then
+							SendNUIMessage({ Action = "Display", Mode = "none" })
+							DeathUIVisible = false
+						end
+					else
+						if not DeathUIVisible then
+							SendNUIMessage({ Action = "Display", Mode = "block" })
+							DeathUIVisible = true
+						end
+					end
+
 					DisableControlAction(1,22,true)
 					DisableControlAction(1,24,true)
 					DisableControlAction(1,25,true)
 					DisableControlAction(1,68,true)
+					DisableControlAction(1,70,true)
 					DisableControlAction(1,70,true)
 					DisableControlAction(1,91,true)
 					DisableControlAction(1,69,true)
@@ -128,10 +151,48 @@ function Creative.CheckDeath()
 
 	return false
 end
+RegisterNetEvent("survival:ForceDeath")
+AddEventHandler("survival:ForceDeath",function()
+	local Ped = PlayerPedId()
+	Death = true
+	if LocalPlayer["state"]["Route"] < 900000 then
+		if LocalPlayer["state"]["Vippolice"] then
+			DeathTimer = 125
+		else
+			DeathTimer = 250
+		end
+	else
+		DeathTimer = 5
+	end
+	SetEntityInvincible(Ped,true)
+	SetEntityHealth(Ped,100)
+	if not LocalPlayer["state"]["Spectate"] then
+		SendNUIMessage({ Action = "Display", Mode = "block" })
+		DeathUIVisible = true
+	else
+		DeathUIVisible = false
+	end
+	vRP.playAnim(false,{"dead","dead_a"},true)
+	TriggerEvent("inventory:Close")
+end)
+-----------------------------------------------------------------------------------------------------------------------------------------
+-- FORCEALIVE
+-----------------------------------------------------------------------------------------------------------------------------------------
+RegisterNetEvent("survival:ForceAlive")
+AddEventHandler("survival:ForceAlive",function()
+    Death = false
+    DeathUIVisible = false
+    SendNUIMessage({ Action = "Display", Mode = "none" })
+    local Ped = PlayerPedId()
+    if GetEntityHealth(Ped) <= 100 then
+        SetEntityHealth(Ped,200)
+    end
+end)
+
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- RESPAWN
 -----------------------------------------------------------------------------------------------------------------------------------------
-function Creative.Respawn()
+function Creative.Respawn(Coords)
 	Death = false
 	DeathTimer = 300
 
@@ -153,8 +214,15 @@ function Creative.Respawn()
 	TriggerServerEvent("pma-voice:toggleMute",false)
 
 	DoScreenFadeOut(0)
-	SetEntityCoords(PlayerPedId(),271.77,-1204.14,29.28) 
+	
+	if Coords then
+		SetEntityCoords(PlayerPedId(),Coords["x"],Coords["y"],Coords["z"])
+	else
+		SetEntityCoords(PlayerPedId(),271.77,-1204.14,29.28)
+	end
+
 	SendNUIMessage({ Action = "Display", Mode = "none" })
+	DeathUIVisible = false
 	Wait(1000)
 	DoScreenFadeIn(1000)
 end
@@ -185,6 +253,7 @@ exports("Revive",function(Health,Arena)
 		NetworkSetFriendlyFireOption(true)
 
 		SendNUIMessage({ Action = "Display", Mode = "none" })
+		DeathUIVisible = false
 
 		if LocalPlayer["state"]["Route"] < 900000 then
 			TriggerEvent("paramedic:Reset")

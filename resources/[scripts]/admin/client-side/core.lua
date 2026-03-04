@@ -124,17 +124,59 @@ function Creative.teleportWay()
 	SetEntityCoordsNoOffset(Ped,x,y,z,false,false,false)
 end
 
+-----------------------------------------------------------------------------------------------------------------------------------------
+-- GETPLAYERS
+-----------------------------------------------------------------------------------------------------------------------------------------
+function GetPlayers()
+	local Players = {}
+	for _,v in ipairs(GetActivePlayers()) do
+		Players[GetPlayerPed(v)] = GetPlayerServerId(v)
+	end
+	return Players
+end
+
+-----------------------------------------------------------------------------------------------------------------------------------------
+-- DRAWTEXT3D
+-----------------------------------------------------------------------------------------------------------------------------------------
+function DrawText3D(Coords, text, scale)
+	local onScreen, _x, _y = World3dToScreen2d(Coords.x, Coords.y, Coords.z)
+	if onScreen then
+		SetTextScale(scale, scale)
+		SetTextFont(4)
+		SetTextProportional(1)
+		SetTextColour(255, 255, 255, 215)
+		SetTextEntry("STRING")
+		SetTextCentre(1)
+		AddTextComponentString(text)
+		DrawText(_x, _y)
+		local factor = (string.len(text)) / 370
+		DrawRect(_x, _y + 0.0125, 0.015 + factor, 0.03, 41, 11, 41, 68)
+	end
+end
+
 RegisterNetEvent("admin:blips")
 AddEventHandler("admin:blips",function(players)
     Blipmin = not Blipmin
 
     while Blipmin do
         for Entity, v in pairs(GetPlayers()) do
-            local playerID = GlobalState["Players"][v]
-            if playerID then
-                local fullName = players[playerID]["fullName"] -- FullName(Passport)
-                DrawText3D(GetEntityCoords(Entity), "~o~ID:~w~ " .. playerID .. "     ~g~Vida:~w~ " .. GetEntityHealth(Entity) .. "     ~y~Colete:~w~ " .. GetPedArmour(Entity).. "     ~b~Nome:~w~ " .. fullName, 0.425)
+            local playerID = v
+            local fullName = "N/A"
+            local sourceStr = tostring(v)
+
+            -- Check if player exists in the received list (indexed by source)
+            if players and (players[v] or players[sourceStr]) then
+                local data = players[v] or players[sourceStr]
+                fullName = data["fullName"]
+                if data["passport"] then
+                    playerID = data["passport"]
+                end
+            elseif GlobalState["Players"] and GlobalState["Players"][v] then
+                -- Fallback to GlobalState if not in list
+                playerID = GlobalState["Players"][v]
             end
+
+            DrawText3D(GetEntityCoords(Entity), "~o~ID:~w~ " .. playerID .. "     ~g~Vida:~w~ " .. GetEntityHealth(Entity) .. "     ~y~Colete:~w~ " .. GetPedArmour(Entity).. "     ~b~Nome:~w~ " .. fullName, 0.425)
         end
 
         Wait(0)
@@ -206,7 +248,6 @@ AddEventHandler("admin:initSpectate",function(source)
 	if not NetworkIsInSpectatorMode() then
 		local Pid = GetPlayerFromServerId(source)
 		local Ped = GetPlayerPed(Pid)
-
 		LocalPlayer["state"]["Spectate"] = true
 		NetworkSetInSpectatorMode(true,Ped)
 	end
@@ -219,6 +260,7 @@ AddEventHandler("admin:resetSpectate",function()
 	if NetworkIsInSpectatorMode() then
 		NetworkSetInSpectatorMode(false)
 		LocalPlayer["state"]["Spectate"] = false
+		SendNUIMessage({ Action = "Display", Mode = "none" })
 	end
 end)
 
@@ -414,3 +456,31 @@ RegisterCommand("appcor", function()
 
     TriggerEvent('chatMessage', "COR", {100, 255, 100}, "Cor aplicada ao veículo com sucesso!")
 end, false)
+
+-----------------------------------------------------------------------------------------------------------------------------------------
+-- BLIP CAMINHAO
+-----------------------------------------------------------------------------------------------------------------------------------------
+local TruckBlip = nil
+RegisterNetEvent("admin:blipcaminhao")
+AddEventHandler("admin:blipcaminhao",function(Coords)
+    if DoesBlipExist(TruckBlip) then
+        RemoveBlip(TruckBlip)
+    end
+
+    TruckBlip = AddBlipForCoord(Coords["x"],Coords["y"],Coords["z"])
+    SetBlipSprite(TruckBlip,477)
+    SetBlipColour(TruckBlip,5)
+    SetBlipScale(TruckBlip,0.8)
+    SetBlipAsShortRange(TruckBlip,false)
+    BeginTextCommandSetBlipName("STRING")
+    AddTextComponentString("Caminhão")
+    EndTextCommandSetBlipName(TruckBlip)
+end)
+
+RegisterNetEvent("admin:remblipcaminhao")
+AddEventHandler("admin:remblipcaminhao",function()
+    if DoesBlipExist(TruckBlip) then
+        RemoveBlip(TruckBlip)
+        TruckBlip = nil
+    end
+end)

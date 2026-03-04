@@ -237,6 +237,7 @@ local shops = {
 		["type"] = "Cash",
 		["List"] = {
 			["medkit"] = 575,
+			["adrenaline"] = 1000,
 			["bandage"] = 225,
 			["gauze"] = 100,
 			["analgesic"] = 125
@@ -477,21 +478,19 @@ local shops = {
 			["handcuff"] = 1,
 			["WEAPON_SMG"] = 1,
 			["WEAPON_SMG_MK2"] = 1,
-			-- ["WEAPON_PUMPSHOTGUN"] = 111,
-			-- ["WEAPON_CARBINERIFLE"] = 1,
-			-- ["WEAPON_CARBINERIFLE_MK2"] = 1,
-			-- ["WEAPON_STUNGUN"] = 111,
-			-- ["WEAPON_PARAFAL"] = 111,	
-			-- ["WEAPON_FNFAL"] = 111,
+			["WEAPON_STUNGUN"] = 1,
+			["WEAPON_PUMPSHOTGUN"] = 111,
+			["WEAPON_CARBINERIFLE"] = 1,
+			["WEAPON_CARBINERIFLE_MK2"] = 1,
 			["WEAPON_COMBATPISTOL"] = 1,
 			["WEAPON_HEAVYPISTOL"] = 1,
 			["WEAPON_NIGHTSTICK"] = 1,
 			["WEAPON_PISTOL_AMMO"] = 1,
 			["WEAPON_SMG_AMMO"] = 1,
 			["WEAPON_RIFLE_AMMO"] = 1,
-			--["WEAPON_SHOTGUN_AMMO"] = 5,
-			["badge11"] = 1,
+			["WEAPON_SHOTGUN_AMMO"] = 5,
 			["WEAPON_SMOKEGRENADE"] = 1,
+			["vest"] = 100,
 			["energetic"] = 1
 			-- ["megaphone"] = 100
 		}
@@ -590,8 +589,14 @@ function Creative.requestPerm(Type)
 		end
 
 		if shops[Type]["perm"] ~= nil then
-			if not vRP.HasService(Passport,shops[Type]["perm"]) then
-				print("[shops] requestPerm missing service",Type,shops[Type]["perm"])
+			local perm = shops[Type]["perm"]
+			if perm == "Police" then
+				if not (vRP.HasService(Passport,"Police") or vRP.HasService(Passport,"Gtm") or vRP.HasService(Passport,"Graer") or vRP.HasService(Passport,"Speed") or vRP.HasService(Passport,"Core")) then
+					print("[shops] requestPerm missing service",Type,perm)
+					return false
+				end
+			elseif not vRP.HasService(Passport,perm) then
+				print("[shops] requestPerm missing service",Type,perm)
 				return false
 			end
 		end

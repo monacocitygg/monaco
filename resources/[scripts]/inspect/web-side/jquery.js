@@ -32,8 +32,22 @@ $(document).ready(function(){
 });
 
 const updateDrag = () => {
+	// Try to destroy existing instances to prevent conflicts
+	try { $(".populated").draggable("destroy"); } catch(e){}
+	try { $(".empty").droppable("destroy"); } catch(e){}
+	try { $(".populated").droppable("destroy"); } catch(e){}
+
 	$(".populated").draggable({
-		helper: "clone"
+		helper: "clone",
+        appendTo: "body",
+        scroll: false,
+        revert: "invalid", 
+        start: function(event, ui) {
+            $(this).css("opacity", 0.5);
+        },
+        stop: function(event, ui) {
+            $(this).css("opacity", 1.0);
+        }
 	});
 
 	$('.empty').droppable({
@@ -49,7 +63,13 @@ const updateDrag = () => {
 			itemData = { key: ui.draggable.data('item-key'), slot: ui.draggable.data('slot') };
 			const target = $(this).data('slot');
 
-			if (itemData.key === undefined || target === undefined) return;
+            console.log("DEBUG JS updateDrag: itemData", JSON.stringify(itemData));
+            console.log("DEBUG JS updateDrag: target", target);
+
+			if (itemData.key === undefined || target === undefined) {
+                console.log("DEBUG JS updateDrag: Missing itemData.key or target");
+                return;
+            }
 
 			if (tInv === "invLeft" || tInv === "invHotbar") {
 				if (["4", "5"].includes(String(target)) && !window.myHasBolso) return;
@@ -74,68 +94,66 @@ const updateDrag = () => {
 			if(amount > itemAmount)
 				amount = itemAmount;
 
-			$('.populated, .empty').off("draggable droppable");
+			// Clean up previous instances to prevent memory leaks and double-binding
+			try { $(".populated").draggable("destroy"); } catch(e){}
+			try { $(".empty").droppable("destroy"); } catch(e){}
+			try { $(".populated").droppable("destroy"); } catch(e){}
 
-			let clone1 = ui.draggable.clone();
-			let slot2 = $(this).data("slot"); 
-
+			// Logic for updating UI immediately (optimistic update)
 			if(amount == itemAmount){
-				let clone2 = $(this).clone();
-				let slot1 = ui.draggable.data("slot");
+                // Moving full stack
+                if (ui.draggable.parent()[0] == $(this).parent()[0]) {
+                    // Same inventory: swap
+                    let clone1 = ui.draggable.clone();
+                    let clone2 = $(this).clone();
+                    
+                    let slot1 = ui.draggable.data("slot");
+                    let slot2 = $(this).data("slot");
 
-				$(this).replaceWith(clone1);
-				ui.draggable.replaceWith(clone2);
-
-				$(clone1).data("slot", slot2);
-				$(clone2).data("slot", slot1);
-			} else {
-				let newAmountOldItem = itemAmount - amount;
-				let weight = parseFloat(ui.draggable.data("peso"));
-				let newWeightClone1 = (amount*weight).toFixed(2);
-				let newWeightOldItem = (newAmountOldItem*weight).toFixed(2);
-
-				ui.draggable.data("amount",newAmountOldItem);
-
-				clone1.data("amount",amount);
-
-				$(this).replaceWith(clone1);
-				$(clone1).data("slot",slot2);
-
-				ui.draggable.children(".itemAmount").html("x" + formatarNumero(ui.draggable.data("amount")));
-				
-				$(clone1).children(".itemAmount").html("x" + formatarNumero(clone1.data("amount")));
+                    ui.draggable.replaceWith(clone2);
+                    $(this).replaceWith(clone1);
+                    
+                    $(clone1).data("slot", slot2);
+                    $(clone2).data("slot", slot1);
+                }
 			}
+            
+            // Re-init drag to capture new elements
+			updateDrag();
 
-				updateDrag();
+            const isOriginInventory = origin.includes("invLeft") || origin.includes("invHotbar");
+			const isTargetInventory = tInv.includes("invLeft") || tInv.includes("invHotbar");
+			const isOriginChest = origin.includes("invRight");
+			const isTargetChest = tInv.includes("invRight");
 
-			if ((origin === "invLeft" || origin === "invHotbar") && (tInv === "invLeft" || tInv === "invHotbar")){
+			if (isOriginInventory && isTargetInventory){
 				$.post("http://inventory/updateSlot",JSON.stringify({
 					item: itemData.key,
 					slot: itemData.slot,
 					target: target,
 					amount: parseInt(amount)
-				}));
-			} else if (origin === "invRight" && (tInv === "invLeft" || tInv === "invHotbar")){
+				}), (data) => { requestChest(); }); 
+			} else if (isOriginChest && isTargetInventory){
 				$.post("http://inspect/takeItem",JSON.stringify({
 					item: itemData.key,
 					slot: itemData.slot,
 					target: target,
 					amount: parseInt(amount)
-				}));
-			} else if ((origin === "invLeft" || origin === "invHotbar") && tInv === "invRight"){
+				}), (data) => { requestChest(); }); 
+			} else if (isOriginInventory && isTargetChest){
 				$.post("http://inspect/storeItem",JSON.stringify({
 					item: itemData.key,
 					slot: itemData.slot,
 					target: target,
 					amount: parseInt(amount)
-				}));
-			} else if (origin === "invRight" && tInv === "invRight"){
+				}), (data) => { requestChest(); }); 
+			} else if (isOriginChest && isTargetChest){
 				$.post("http://inspect/updateChest",JSON.stringify({
 					item: itemData.key,
 					slot: itemData.slot,
 					target: target,
 					amount: parseInt(amount)
-				}));
+				}), (data) => { requestChest(); }); 
 			}
 
 			$(".amount").val("");
@@ -155,7 +173,13 @@ const updateDrag = () => {
 			itemData = { key: ui.draggable.data('item-key'), slot: ui.draggable.data('slot') };
 			const target = $(this).data('slot');
 
-			if (itemData.key === undefined || target === undefined) return;
+            console.log("DEBUG JS updateDrag (populated): itemData", JSON.stringify(itemData));
+            console.log("DEBUG JS updateDrag (populated): target", target);
+
+			if (itemData.key === undefined || target === undefined) {
+                console.log("DEBUG JS updateDrag (populated): Missing itemData.key or target");
+                return;
+            }
 
 			if (tInv === "invLeft" || tInv === "invHotbar") {
 				if (["4", "5"].includes(String(target)) && !window.myHasBolso) return;
@@ -180,7 +204,10 @@ const updateDrag = () => {
 			if(amount > itemAmount)
 				amount = itemAmount;
 
-			$('.populated, .empty, .use').off("draggable droppable");
+			// Clean up previous instances
+			try { $(".populated").draggable("destroy"); } catch(e){}
+			try { $(".empty").droppable("destroy"); } catch(e){}
+			try { $(".populated").droppable("destroy"); } catch(e){}
 
 			if(ui.draggable.data('item-key') == $(this).data('item-key')){
 				let newSlotAmount = amount + parseInt($(this).data('amount'));
@@ -214,36 +241,42 @@ const updateDrag = () => {
 				$(clone2).data("slot",slot1);
 			}
 
+			// Re-init drag to capture new elements
 			updateDrag();
 
-			if ((origin === "invLeft" || origin === "invHotbar") && (tInv === "invLeft" || tInv === "invHotbar")) {
+            const isOriginInventory = origin.includes("invLeft") || origin.includes("invHotbar");
+			const isTargetInventory = tInv.includes("invLeft") || tInv.includes("invHotbar");
+			const isOriginChest = origin.includes("invRight");
+			const isTargetChest = tInv.includes("invRight");
+
+			if (isOriginInventory && isTargetInventory){
 				$.post("http://inventory/updateSlot",JSON.stringify({
 					item: itemData.key,
 					slot: itemData.slot,
 					target: target,
 					amount: parseInt(amount)
-				}));
-			} else if (origin === "invRight" && (tInv === "invLeft" || tInv === "invHotbar")){
+				}), (data) => { requestChest(); }); 
+			} else if (isOriginChest && isTargetInventory){
 				$.post("http://inspect/takeItem",JSON.stringify({
 					item: itemData.key,
 					slot: itemData.slot,
 					target: target,
 					amount: parseInt(amount)
-				}));
-			} else if ((origin === "invLeft" || origin === "invHotbar") && tInv === "invRight"){
+				}), (data) => { requestChest(); }); 
+			} else if (isOriginInventory && isTargetChest){
 				$.post("http://inspect/storeItem",JSON.stringify({
 					item: itemData.key,
 					slot: itemData.slot,
 					target: target,
 					amount: parseInt(amount)
-				}));
-			} else if (origin === "invRight" && tInv === "invRight"){
+				}), (data) => { requestChest(); }); 
+			} else if (isOriginChest && isTargetChest){
 				$.post("http://inspect/updateChest",JSON.stringify({
 					item: itemData.key,
 					slot: itemData.slot,
 					target: target,
 					amount: parseInt(amount)
-				}));
+				}), (data) => { requestChest(); }); 
 			}
 
 			$(".amount").val("");

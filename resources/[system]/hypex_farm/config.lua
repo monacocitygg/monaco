@@ -1,150 +1,58 @@
 Cfg = {}
 
 Cfg.FarmConfig = { 
-    ["Vagos"] = { 
-        ["StartCoord"] = {338.26,-1980.0,24.2}, -- Vagos:  
-        ["PermToAcess"] = "Vagos",
-        ["UpgradeValue"] = {20000,50000,100000, 480000, 890000},
-        ["Animation"] = {"amb@prop_human_parking_meter@female@idle_a","idle_a_female"},
-       ["AnimDuration"] = 12000,
-        ["ItemFarm"] = {     -- BASEADO
-            ["Seda"] = {
-                ["ItemSpawn"] = "seda",
-                ["ItemAmount"] = {
-                    ["Lvl0"] = {2,3},
-                    ["Lvl1"] = {4,5},
-                    ["Lvl2"] = {6,7},
-                    ["Lvl3"] = {8,9},
-                    ["Lvl4"] = {12,13},
-                    ["Lvl5"] = {14,16}
-                }
-            },
-            ["Maconha"] = {
-                ["ItemSpawn"] = "maconha",
-                ["ItemAmount"] = {
-                    ["Lvl0"] = {2,3},
-                    ["Lvl1"] = {3,4},
-                    ["Lvl2"] = {5,6},
-                    ["Lvl3"] = {8,9},
-                    ["Lvl4"] = {12,13},
-                    ["Lvl5"] = {14,16}
-                }
-            }
-        }
-    },
-    ["Ballas"] = { 
-        ["StartCoord"] = {58.69,-1944.06,15.67}, -- Ballas:  
-        ["PermToAcess"] = "Ballas",
-        ["UpgradeValue"] = {20000,50000,100000, 480000, 890000},
-        ["Animation"] = {"amb@prop_human_parking_meter@female@idle_a","idle_a_female"},
-       ["AnimDuration"] = 12000,
-        ["ItemFarm"] = {     -- Cocaina
-            ["Folha de Cocaina"] = {
-                ["ItemSpawn"] = "folhacoca",
-                ["ItemAmount"] = {
-                    ["Lvl0"] = {2,3},
-                    ["Lvl1"] = {4,5},
-                    ["Lvl2"] = {6,7},
-                    ["Lvl3"] = {8,9},
-                    ["Lvl4"] = {12,13},
-                    ["Lvl5"] = {14,16}
-                }
-            },
-            ["Pino"] = {
-                ["ItemSpawn"] = "pino",
-                ["ItemAmount"] = {
-                    ["Lvl0"] = {2,3},
-                    ["Lvl1"] = {3,4},
-                    ["Lvl2"] = {5,6},
-                    ["Lvl3"] = {8,9},
-                    ["Lvl4"] = {12,13},
-                    ["Lvl5"] = {14,16}
-                }
-            }
-        }
-    },
-    ["Famillies"] = { 
-        ["StartCoord"] = {-135.67,-1605.81,35.03}, -- Famillies:  
-        ["PermToAcess"] = "Famillies",
-        ["UpgradeValue"] = {20000,50000,100000, 480000, 890000},
-        ["Animation"] = {"amb@prop_human_parking_meter@female@idle_a","idle_a_female"},
-       ["AnimDuration"] = 12000,
-        ["ItemFarm"] = {     -- lean
-            ["Codeina"] = {
-                ["ItemSpawn"] = "codeine",
-                ["ItemAmount"] = {
-                    ["Lvl0"] = {2,3},
-                    ["Lvl1"] = {3,4},
-                    ["Lvl2"] = {5,6},
-                    ["Lvl3"] = {8,9},
-                    ["Lvl4"] = {12,13},
-                    ["Lvl5"] = {14,16}
-                }
-            },
-            ["Frasco"] = {
-                ["ItemSpawn"] = "bottle",
-                ["ItemAmount"] = {
-                    ["Lvl0"] = {2,3},
-                    ["Lvl1"] = {3,4},
-                    ["Lvl2"] = {5,6},
-                    ["Lvl3"] = {8,9},
-                    ["Lvl4"] = {12,13},
-                    ["Lvl5"] = {14,16}
-                }
-            }
-        }
-    },
-    ["Madrazzo"] = { 
-        ["StartCoord"] = {1406.87,1162.42,114.33}, -- Madrazzo:  
-        ["PermToAcess"] = "Madrazzo",
+    ["Flawless"] = { 
+        ["StartCoord"] = {1518.86,-760.15,106.34}, -- helipa:  
+        ["PermToAcess"] = "Flawless",
         ["UpgradeValue"] = {20000,50000,100000, 480000, 890000},
         ["Animation"] = {"amb@prop_human_parking_meter@female@idle_a","idle_a_female"},
        ["AnimDuration"] = 12000,
         ["ItemFarm"] = {     -- Armas
-            ["Parte da Arma"] = {
-                ["ItemSpawn"] = "partearma",
+            ["Placa de metal"] = {
+                ["ItemSpawn"] = "sheetmetal",
                 ["ItemAmount"] = {
-                    ["Lvl0"] = {1,2},
-                    ["Lvl1"] = {3,4},
-                    ["Lvl2"] = {5,6},
-                    ["Lvl3"] = {7,8},
-                    ["Lvl4"] = {9,10},
-                    ["Lvl5"] = {11,12}
+                    ["Lvl0"] = {2,2},
+                    ["Lvl1"] = {3,5},
+                    ["Lvl2"] = {6,7},
+                    ["Lvl3"] = {8,9},
+                    ["Lvl4"] = {10,11},
+                    ["Lvl5"] = {12,13}
                 }
             },
-            ["Gatilho"] = {
-                ["ItemSpawn"] = "gatilho",
+            ["Cobre"] = {
+                ["ItemSpawn"] = "copper",
                 ["ItemAmount"] = {
-                    ["Lvl0"] = {1,2},
-                    ["Lvl1"] = {3,4},
-                    ["Lvl2"] = {5,6},
-                    ["Lvl3"] = {7,8},
-                    ["Lvl4"] = {9,10},
-                    ["Lvl5"] = {11,12}
+                    ["Lvl0"] = {2,2},
+                    ["Lvl1"] = {3,5},
+                    ["Lvl2"] = {6,7},
+                    ["Lvl3"] = {8,9},
+                    ["Lvl4"] = {10,11},
+                    ["Lvl5"] = {12,13}
                 }
             },
-            ["Corpo de Pistola"] = {
-                ["ItemSpawn"] = "pistolbody",
+            ["Borracha"] = {
+                ["ItemSpawn"] = "rubber",
                 ["ItemAmount"] = {
-                    ["Lvl0"] = {1,2},
-                    ["Lvl1"] = {3,4},
-                    ["Lvl2"] = {5,6},
-                    ["Lvl3"] = {7,8},
-                    ["Lvl4"] = {9,10},
-                    ["Lvl5"] = {11,12}
+                    ["Lvl0"] = {2,2},
+                    ["Lvl1"] = {3,5},
+                    ["Lvl2"] = {6,7},
+                    ["Lvl3"] = {8,9},
+                    ["Lvl4"] = {10,11},
+                    ["Lvl5"] = {12,13}
                 }
             }
         }
     },
-    ["Arcade"] = { 
-        ["StartCoord"] = {731.31,-799.64,18.06}, -- Arcade:  
-        ["PermToAcess"] = "Arcade",
+
+    ["Peixes"] = { 
+        ["StartCoord"] = {1289.82,-379.55,82.56}, -- favela Barragem:  
+        ["PermToAcess"] = "Peixes",
         ["UpgradeValue"] = {20000,50000,100000, 480000, 890000},
         ["Animation"] = {"amb@prop_human_parking_meter@female@idle_a","idle_a_female"},
        ["AnimDuration"] = 12000,
-        ["ItemFarm"] = {     -- Armas
-            ["Parte da Arma"] = {
-                ["ItemSpawn"] = "partearma",
+        ["ItemFarm"] = {     -- Muni
+            ["Polvora"] = {
+                ["ItemSpawn"] = "polvora",
                 ["ItemAmount"] = {
                     ["Lvl0"] = {1,2},
                     ["Lvl1"] = {3,4},
@@ -154,19 +62,8 @@ Cfg.FarmConfig = {
                     ["Lvl5"] = {11,12}
                 }
             },
-            ["Gatilho"] = {
-                ["ItemSpawn"] = "gatilho",
-                ["ItemAmount"] = {
-                    ["Lvl0"] = {1,2},
-                    ["Lvl1"] = {3,4},
-                    ["Lvl2"] = {5,6},
-                    ["Lvl3"] = {7,8},
-                    ["Lvl4"] = {9,10},
-                    ["Lvl5"] = {11,12}
-                }
-            },
-            ["Corpo de Pistola"] = {
-                ["ItemSpawn"] = "pistolbody",
+            ["Placa de metal"] = {
+                ["ItemSpawn"] = "sheetmetal",
                 ["ItemAmount"] = {
                     ["Lvl0"] = {1,2},
                     ["Lvl1"] = {3,4},
@@ -209,37 +106,7 @@ Cfg.FarmConfig = {
             }
         }
     },
-    ["Favela03"] = { 
-        ["StartCoord"] = {402.82,754.03,194.58,232.45}, -- favela parque:  
-        ["PermToAcess"] = "Favela03",
-        ["UpgradeValue"] = {20000,50000,100000, 480000, 890000},
-        ["Animation"] = {"amb@prop_human_parking_meter@female@idle_a","idle_a_female"},
-       ["AnimDuration"] = 12000,
-        ["ItemFarm"] = {     -- Muni
-            ["Polvora"] = {
-                ["ItemSpawn"] = "polvora",
-                ["ItemAmount"] = {
-                    ["Lvl0"] = {1,2},
-                    ["Lvl1"] = {3,4},
-                    ["Lvl2"] = {5,6},
-                    ["Lvl3"] = {7,8},
-                    ["Lvl4"] = {9,10},
-                    ["Lvl5"] = {11,12}
-                }
-            },
-            ["Capsula"] = {
-                ["ItemSpawn"] = "capsula",
-                ["ItemAmount"] = {
-                    ["Lvl0"] = {1,2},
-                    ["Lvl1"] = {3,4},
-                    ["Lvl2"] = {5,6},
-                    ["Lvl3"] = {7,8},
-                    ["Lvl4"] = {9,10},
-                    ["Lvl5"] = {11,12}
-                }
-            }
-        }
-    },
+
     ["Playboy"] = { 
         ["StartCoord"] = {-1520.63,139.28,60.79}, -- Playboy:  
         ["PermToAcess"] = "Playboy",
@@ -617,7 +484,7 @@ Cfg.FarmConfig = {
 }
 
 Cfg.FarmCoords = { 
-    ["Vagos"] = { -- ok
+    ["Peixes"] = { -- ok
         { 486.07,-1295.86,29.61 },
         { 485.82,-1508.05,29.3 },
         { 539.37,-1907.35,25.06 },
@@ -649,7 +516,7 @@ Cfg.FarmCoords = {
         { 417.27,-1084.46,30.06 },
         { 416.81,-1108.93,30.05 }
     },
-    ["Favela01"] = { -- ok
+    ["Flawless"] = { -- ok
         { 486.07,-1295.86,29.61 },
         { 485.82,-1508.05,29.3 },
         { 539.37,-1907.35,25.06 },
@@ -994,7 +861,7 @@ Cfg.FarmCoords = {
         { 417.27,-1084.46,30.06 },
         { 416.81,-1108.93,30.05 }
     },
-    ["Favela03"] = {
+    ["Peixes"] = {
         { 486.07,-1295.86,29.61 },
         { 485.82,-1508.05,29.3 },
         { 539.37,-1907.35,25.06 },

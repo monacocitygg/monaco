@@ -246,6 +246,8 @@ local Garages = {
 	["171"] = { name = "Garage", payment = false }, ----hospital
 
 	["172"] = { name = "Bike", payment = false }, ----hospital
+
+	["173"] = { name = "Peixes", payment = false }, ----hospital
 	
 }
 -----------------------------------------------------------------------------------------------------------------------------------------
@@ -295,6 +297,7 @@ local Works = {
 		"MONACO1200",
 		"MONACOGLF",
 		"MONACOAMRK",
+		"MONACOM8"
 	},
 	["heliPolice"] = {
 		"MONACOB412",
@@ -365,7 +368,12 @@ function Creative.Vehicles(Garage)
 	local Passport = vRP.Passport(source)
 	if Passport  then
 		if Garages[Garage]["perm"] then
-			if not vRP.HasGroup(Passport,Garages[Garage]["perm"]) then
+			local perm = Garages[Garage]["perm"]
+			if perm == "Police" then
+				if not (vRP.HasGroup(Passport,"Police") or vRP.HasGroup(Passport,"Gtm") or vRP.HasGroup(Passport,"Graer") or vRP.HasGroup(Passport,"Speed") or vRP.HasGroup(Passport,"Core")) then
+					return false
+				end
+			elseif not vRP.HasGroup(Passport,perm) then
 				return false
 			end
 		end
@@ -567,6 +575,22 @@ AddEventHandler("garages:Spawn",function(Table,Number)
 	local Passport = vRP.Passport(source)
 	if Passport then
 		local Name = Table
+
+		if Name == "MONACOM8" and not vRP.HasGroup(Passport,"Speed") then
+			TriggerClientEvent("Notify",source,"vermelho","Apenas membros da <b>Speed</b> podem retirar este veículo.",5000)
+			return
+		end
+
+		if Name == "MONACOAMRK" and not vRP.HasGroup(Passport,"Core") then
+			TriggerClientEvent("Notify",source,"vermelho","Apenas membros da <b>Core</b> podem retirar este veículo.",5000)
+			return
+		end
+
+		if Name == "MONACO1200" and not vRP.HasGroup(Passport,"Gtm") then
+			TriggerClientEvent("Notify",source,"vermelho","Apenas membros do <b>Gtm</b> podem retirar este veículo.",5000)
+			return
+		end
+
 		local isWorkGarage = false
 		if Garages[Number] and Works[Garages[Number]["name"]] then
 			isWorkGarage = true

@@ -214,9 +214,18 @@ local OpenItens = {
 -- STORE
 -----------------------------------------------------------------------------------------------------------------------------------------
 function Creative.Store(Item,Slot,Amount,Target)
+    print("DEBUG CREATIVE.STORE: Function called. Item="..tostring(Item).." Slot="..tostring(Slot).." Amount="..tostring(Amount).." Target="..tostring(Target))
 	local source = source
 	local Amount = parseInt(Amount)
 	local Passport = vRP.Passport(source)
+
+    print("DEBUG CREATIVE.STORE: Passport="..tostring(Passport))
+    if Open[Passport] then
+        print("DEBUG CREATIVE.STORE: Open[Passport] exists. Name="..tostring(Open[Passport]["Name"]))
+    else
+        print("DEBUG CREATIVE.STORE: Open[Passport] is NIL")
+    end
+
 	if Passport and Open[Passport] then
 		if (tostring(Slot) == "4" or tostring(Slot) == "5") and not vRP.HasGroup(Passport,"Bolso") then
 			TriggerClientEvent("Notify",source,"negado","Você não possui Bolso.",5000)
@@ -267,6 +276,10 @@ function Creative.Store(Item,Slot,Amount,Target)
 			if Open[Passport]["Logs"] then
 				TriggerEvent("Discord",Open[Passport]["Name"],"**Passaporte:** "..Passport.."\n**Guardou:** "..Amount.."x "..itemName(Item).."\n**Horário:** "..os.date("%H:%M:%S"),3042892)
 			end
+
+            if Open[Passport]["Save"] then
+                vRP.SetSrvData("Chest:"..Open[Passport]["Name"], Result)
+            end
 		end
 	end
 end
@@ -315,6 +328,10 @@ function Creative.Take(Item,Slot,Amount,Target)
 			if Open[Passport]["Logs"] then
 				TriggerEvent("Discord",Open[Passport]["Name"],"**Passaporte:** "..Passport.."\n**Retirou:** "..Amount.."x "..itemName(Item).."\n**Horário:** "..os.date("%H:%M:%S"),9317187)
 			end
+
+            if Open[Passport]["Save"] then
+                vRP.SetSrvData("Chest:"..Open[Passport]["Name"], Result)
+            end
 		end
 	end
 end
@@ -330,6 +347,13 @@ function Creative.Update(Slot,Target,Amount)
 
 		if vRP.UpdateChest(Passport,"Chest:"..Open[Passport]["Name"],Slot,Target,Amount) then
 			TriggerClientEvent("chest:Update",source,"Refresh")
+        else
+            local Result = vRP.GetSrvData("Chest:"..Open[Passport]["Name"],Open[Passport]["Save"])
+            TriggerClientEvent("chest:Update",source,"Update",vRP.InventoryWeight(Passport),vRP.GetWeight(Passport),vRP.ChestWeight(Result),Open[Passport]["Weight"])
+            
+            if Open[Passport]["Save"] then
+                vRP.SetSrvData("Chest:"..Open[Passport]["Name"], Result)
+            end
 		end
 	end
 end

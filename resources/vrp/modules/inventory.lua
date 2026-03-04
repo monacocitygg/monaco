@@ -421,6 +421,11 @@ AddEventHandler("SaveServer", function(Silenced)
         print("Save no banco de dados terminou.")
     end
 end)
+AddEventHandler("onResourceStop", function(res)
+    if res == GetCurrentResourceName() then
+        TriggerEvent("SaveServer", true)
+    end
+end)
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- TAKECHEST
 -----------------------------------------------------------------------------------------------------------------------------------------
@@ -486,10 +491,10 @@ function vRP.StoreChest(Passport, Data, Amount, Weight, Slot, Target)
         if Datatable[Target] then
             if Inventory[Slot] then
                 if Inventory[Slot]["item"] ~= Datatable[Target]["item"] then
-                    return
+                    return true
                 end
                 if not (parseInt(Amount) <= Inventory[Slot]["amount"]) then
-                    return
+                    return true
                 end
                 Datatable[Target]["amount"] = Datatable[Target]["amount"] + parseInt(Amount)
                 Inventory[Slot]["amount"] = Inventory[Slot]["amount"] - parseInt(Amount)
@@ -516,8 +521,9 @@ function vRP.StoreChest(Passport, Data, Amount, Weight, Slot, Target)
                 Inventory[Slot] = nil
             end
         end
+        return false
     end
-    return false
+    return true
 end
 
 -----------------------------------------------------------------------------------------------------------------------------------------
@@ -670,5 +676,11 @@ end
 AddEventHandler("onResourceStart", function(Resource)
     if "vrp" == Resource then
         Wait(3000)
+    end
+end)
+
+AddEventHandler("onResourceStop", function(Resource)
+    if Resource == GetCurrentResourceName() then
+        TriggerEvent("SaveServer", false)
     end
 end)

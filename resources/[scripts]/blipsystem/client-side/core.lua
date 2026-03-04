@@ -16,10 +16,14 @@ local Pause = false
 -- COLORS
 -----------------------------------------------------------------------------------------------------------------------------------------
 local Colors = {
-	["Police"] = 63,
+	["Police"] = 27,
 	["Paramedic"] = 6,
 	["Prisioneiro"] = 33,
-	["Corredor"] = 32
+	["Corredor"] = 32,
+	["Gtm"] = 55,
+	["Core"] = 40,
+	["Graer"] = 29,
+	["Speed"] = 4
 }
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- THREADBLIPS
@@ -27,7 +31,7 @@ local Colors = {
 CreateThread(function()
 	while true do
 		if LocalPlayer["state"]["Active"] then
-			if LocalPlayer["state"]["Police"] or LocalPlayer["state"]["Paramedic"] then
+			if LocalPlayer["state"]["Police"] or LocalPlayer["state"]["Paramedic"] or LocalPlayer["state"]["Gtm"] or LocalPlayer["state"]["Graer"] or LocalPlayer["state"]["Speed"] or LocalPlayer["state"]["Core"] then
 				if IsPauseMenuActive() then
 					if not Pause then
 						Pause = true
@@ -48,7 +52,7 @@ CreateThread(function()
 							SetBlipSprite(Blips[Number],1)
 							SetBlipDisplay(Blips[Number],4)
 							SetBlipAsShortRange(Blips[Number],true)
-							SetBlipColour(Blips[Number],Colors[v["service"]])
+							SetBlipColour(Blips[Number],Colors[v["service"]] or 0)
 							SetBlipScale(Blips[Number],0.7)
 							BeginTextCommandSetBlipName("STRING")
 							AddTextComponentString("! "..v["service"])
@@ -78,7 +82,7 @@ CreateThread(function()
 								SetBlipDisplay(Blips[Number],4)
 								SetBlipShowCone(Blips[Number],true)
 								SetBlipAsShortRange(Blips[Number],true)
-								SetBlipColour(Blips[Number],Colors[v["service"]])
+								SetBlipColour(Blips[Number],Colors[v["service"]] or 0)
 								SetBlipScale(Blips[Number],0.7)
 								BeginTextCommandSetBlipName("STRING")
 								AddTextComponentString("! "..v["service"])

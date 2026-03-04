@@ -930,14 +930,14 @@ local List = {
 		["Index"] = "tarp",
 		["Name"] = "Lona",
 		["Type"] = "Comum",
-		["Weight"] = 0.65,
+		["Weight"] = 0.55,
 		["Economy"] = 50
 	},
 	["sheetmetal"] = {
 		["Index"] = "sheetmetal",
 		["Name"] = "Chapa de Metal",
 		["Type"] = "Comum",
-		["Weight"] = 0.75,
+		["Weight"] = 0.55,
 		["Economy"] = 50
 	},
 	["roadsigns"] = {

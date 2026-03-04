@@ -9,12 +9,12 @@ local TreatmentTimer = 0
 -----------------------------------------------------------------------------------------------------------------------------------------
 local Beds = {
 	-- Medical Center Sul
-	{ ["Coords"] = vec3(-801.32,-1227.53,8.26), ["Heading"] = 0.0 },
+	{ ["Coords"] = vec3(-2768.66,-85.89,18.6), ["Heading"] = 0.0 },
 	{ ["Coords"] = vec3(-2765.19,-85.81,18.6), ["Heading"] = 0.0 },
-	{ ["Coords"] = vec3(1121.0,-1562.59,34.9), ["Heading"] = 0.0 },
-	{ ["Coords"] = vec3(1121.65,-1553.35,34.9), ["Heading"] = 0.0 },
-	{ ["Coords"] = vec3(1124.4,-1553.36,34.9), ["Heading"] = 0.0 },
-	{ ["Coords"] = vec3(1127.33,-1553.35,34.9), ["Heading"] = 0.0 },
+	{ ["Coords"] = vec3(-2765.15,-85.75,18.6), ["Heading"] = 0.0 },
+	{ ["Coords"] = vec3(-2761.67,-85.5,18.6), ["Heading"] = 0.0 },
+	{ ["Coords"] = vec3(-2758.14,-85.16,18.6), ["Heading"] = 0.0 },
+	{ ["Coords"] = vec3(-2754.65,-84.76,18.6 ), ["Heading"] = 0.0 },
 	{ ["Coords"] = vec3(1126.69,-1547.41,34.9), ["Heading"] = 175.75 },
 	{ ["Coords"] = vec3(1123.64,-1547.41,34.9), ["Heading"] = 175.75 },
 	{ ["Coords"] = vec3(1120.52,-1547.41,34.9), ["Heading"] = 175.75 },
@@ -57,11 +57,11 @@ CreateThread(function()
 		AddBoxZone("Beds:"..Number,v["Coords"],1.0,1.0,{
 			name = "Beds:"..Number,
 			heading = v["Heading"],
-			minZ = v["Coords"]["z"] - 0.01,
-			maxZ = v["Coords"]["z"] + 0.01
+			minZ = v["Coords"]["z"] - 1.0,
+			maxZ = v["Coords"]["z"] + 1.0
 		},{
 			shop = Number,
-			Distance = 1.25,
+			Distance = 2.0,
 			options = {
 				{
 					event = "target:PutBed",

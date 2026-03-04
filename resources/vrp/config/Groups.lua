@@ -44,52 +44,9 @@ Groups = {
 		["Salary"] = { 1500 },
 		["Service"] = {}
 	},
-	["vipbronze"] = {
-		["Parent"] = {
-			["vipbronze"] = true
-			
-		},
-		["Hierarchy"] = { "Bronze" },
-		["Salary"] = { 1500 },
-		["Service"] = {}
-	},
-	["vipprata"] = {
-		["Parent"] = {
-			["vipprata"] = true
-			
-		},
-		["Hierarchy"] = { "Prata"},
-		["Salary"] = { 3000 },
-		["Service"] = {}
-	},
-	["vipouro"] = {
-		["Parent"] = {
-			["vipouro"] = true
-			
-		},
-		["Hierarchy"] = { "Ouro" },
-		["Salary"] = { 6000 },
-		["Service"] = {}
-	},
-	["vipbuzios"] = {
-		["Parent"] = {
-			["vipbuzios"] = true
-			
-		},
-		["Hierarchy"] = { vipbuzios },
-		["Salary"] = { 15000 },
-		["Service"] = {}
-	},
+
 	----------
-	["Police"] = {
-		["Parent"] = {
-			["Police"] = true
-		},
-		["Hierarchy"] = { "Chefe","Capitão","Tenente","Sargento","Corporal","Oficial","Cadete" },
-		["Salary"] = { 10000,8000,5000,4000,3000,2500,2000 },
-		["Service"] = {},
-		["Type"] = "Work"
-	},
+
 	["Paramedic"] = {
 		["Parent"] = {
 			["Paramedic"] = true
@@ -261,7 +218,53 @@ Groups = {
 		["Service"] = {},
 		["Type"] = "Work"
 	},
-	----outros
+	----Policia
+	["Police"] = {
+		["Parent"] = {
+			["Police"] = true
+		},
+		["Hierarchy"] = { "Comando Geral","Coronel","Capitão","Tenente","Sargento","Cabo","Soldado","Recruta" },
+		["Salary"] = { 10000,8000,5000,4000,3000,2500,2000 },
+		["Service"] = {},
+		["Type"] = "Work"
+	},
+
+	["Gtm"] = {
+		["Parent"] = {
+			["Gtm"] = true
+		},
+		["Hierarchy"] = { "Comando","Sub Comando","Coordenador","Piloto Elite","Piloto Oficial","Piloto Teste" },
+		["Salary"] = { 10000,8000,5000,4000,3000,2500,2000 },
+		["Service"] = {},
+		["Type"] = "Work"
+	},
+	["Graer"] = {
+		["Parent"] = {
+			["Graer"] = true
+		},
+        ["Hierarchy"] = { "Comando","Sub Comando","Coordenador","Piloto Elite","Piloto Oficial","Piloto Teste" },
+		["Salary"] = { 10000,8000,5000,4000,3000,2500,2000 },
+		["Service"] = {},
+		["Type"] = "Work"
+	},
+	["Speed"] = {
+		["Parent"] = {
+			["Speed"] = true
+		},
+        ["Hierarchy"] = { "Comando","Sub Comando","Coordenador","Piloto Elite","Piloto Oficial","Piloto Teste" },
+		["Salary"] = { 10000,8000,5000,4000,3000,2500,2000 },
+		["Service"] = {},
+		["Type"] = "Work"
+	},
+	["Core"] = {
+		["Parent"] = {
+			["Core"] = true
+		},
+		["Hierarchy"] = { "Comando","Sub Comando","Coordenador","Supervisor","Executor","Operador","Probatório" },
+		["Salary"] = { 10000,8000,5000,4000,3000,2500,2000 },
+		["Service"] = {},
+		["Type"] = "Work"
+	},
 
 	["Spotify"] = {
 		["Parent"] = {
@@ -304,9 +307,9 @@ Groups = {
 
 	---favelas 
 	--barragem
-	["Favela01"] = {
+	["Flawless"] = {
 		["Parent"] = {
-			["Favela01"] = true
+			["Flawless"] = true
 		},
 		["Hierarchy"] = { "Chefe","Sub-Chefe","Gerente","Conselheiro","Membro" },
 		["Service"] = {},
@@ -321,9 +324,9 @@ Groups = {
 		["Service"] = {},
 		["Type"] = "Ilegal"
 	},
-	["Favela03"] = {
+	["Peixes"] = {
 		["Parent"] = {
-			["Favela03"] = true
+			["Peixes"] = true
 		},
 		["Hierarchy"] = { "Chefe","Sub-Chefe","Gerente","Conselheiro","Membro" },
 		["Service"] = {},
@@ -374,15 +377,6 @@ Groups = {
 		["Service"] = {},
 		["Type"] = "Work"
 	},
-	["Ouro"] = {
-		["Parent"] = {
-			["Ouro"] = true
-		},
-		["Hierarchy"] = { "Ouro" },
-		["Salary"] = { 8000 },
-		["Service"] = {},
-		["Type"] = "Work"
-	},
 	["Vipmonaco"] = {
 		["Parent"] = {
 			["Vipmonaco"] = true
@@ -392,25 +386,17 @@ Groups = {
 		["Service"] = {},
 		["Type"] = "Work"
 	},
----------------------fim  vips
-	["1x"] = {
+
+	["Vippolice"] = {
 		["Parent"] = {
-			["1x"] = true
+			["Vippolice"] = true
 		},
-		["Hierarchy"] = { "1x" },
-		["Salary"] = { 900 },
-		["Service"] = {},
-		["Type"] = "Work"
-	},
-	["2x"] = {
-		["Parent"] = {
-			["2x"] = true
-		},
-		["Hierarchy"] = { "2x" },
+		["Hierarchy"] = { "Vippolice" },
 		["Salary"] = { 2000 },
 		["Service"] = {},
 		["Type"] = "Work"
 	},
+---------------------fim  vips
 	["Emergency"] = {
 		["Parent"] = {
 			["Police"] = true,

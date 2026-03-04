@@ -516,22 +516,29 @@ end)
 -----------------------------------------------------------------------------------------------------------------------------------------
 CreateThread(function()
 	local wasShaking = false
+	local lastShot = 0
 	while true do
 		local TimeDistance = 999
 		local Ped = PlayerPedId()
-		if IsPedInAnyVehicle(Ped) and IsPedArmed(Ped,6) then
+		if IsPedInAnyVehicle(Ped) and IsPedArmed(Ped,126) then
 			TimeDistance = 5
 
 			local Vehicle = GetVehiclePedIsUsing(Ped)
-			if IsPedShooting(Ped) and (GetVehicleClass(Vehicle) ~= 15 and GetVehicleClass(Vehicle) ~= 16) then
-				ShakeGameplayCam("SMALL_EXPLOSION_SHAKE",0.45)
-				wasShaking = true
+			local isShooting = IsPedShooting(Ped)
+
+			if isShooting then
+				lastShot = GetGameTimer()
+			end
+
+			if (isShooting or (GetGameTimer() - lastShot <= 200)) and (GetVehicleClass(Vehicle) ~= 15 and GetVehicleClass(Vehicle) ~= 16) then
+				if not wasShaking then
+					ShakeGameplayCam("SMALL_EXPLOSION_SHAKE",0.45)
+					wasShaking = true
+				end
 			elseif wasShaking then
-				StopGameplayCamShaking(true)
 				wasShaking = false
 			end
 		elseif wasShaking then
-			StopGameplayCamShaking(true)
 			wasShaking = false
 		end
 

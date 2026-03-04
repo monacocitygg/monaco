@@ -30,7 +30,7 @@ body {
 	color: var(--text-color);
 	font-family: "Montserrat", sans-serif;
 	-webkit-font-smoothing: antialiased;
-	text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+	/* Removed text-shadow for performance */
 	overflow: hidden;
 }
 
@@ -47,7 +47,9 @@ body {
 	flex-direction: column;
 	align-items: center;
 	justify-content: center;
-	background: radial-gradient(circle, rgba(20,20,20,0.8) 0%, rgba(0,0,0,0.95) 100%);
+	/* Optimized background */
+	background: rgba(10, 10, 10, 0.95);
+    /* Removed radial-gradient which is heavy */
 }
 
 .innerInventory {
@@ -104,7 +106,7 @@ body {
 	justify-content: center;
 	position: relative;
 	clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
-	box-shadow: 0 0 10px var(--primary-color);
+	/* Removed box-shadow for performance */
 }
 
 .header-info {
@@ -156,8 +158,8 @@ body {
 	height: 100%;
 	background: var(--primary-color);
 	width: 0%;
-	transition: width 0.5s ease;
-	box-shadow: 0 0 10px var(--primary-color);
+	/* transition: width 0.5s ease; */ /* Disabled transition for snappiness */
+	/* Removed box-shadow */
 }
 
 #weightTextLeft, #weightTextRight {
@@ -216,7 +218,7 @@ body {
 	display: flex;
 	flex-direction: column;
 	position: relative;
-	transition: all 0.2s;
+	/* Removed transition: all 0.2s; which causes layout thrashing during drag */
 }
 
 .item:hover {
@@ -230,7 +232,7 @@ body {
 
 .populated:hover {
 	border-color: var(--primary-color);
-	box-shadow: inset 0 0 15px rgba(95, 0, 230, 0.1);
+	/* Removed heavy inset shadow */
 }
 
 /* Hotbar Numbers */
@@ -304,7 +306,7 @@ body {
 .action-btn:hover {
 	background: var(--primary-color);
 	border-color: var(--primary-color);
-	box-shadow: 0 0 15px var(--primary-color);
+	/* Removed box-shadow */
 }
 
 .qtd-btn {
@@ -399,7 +401,7 @@ body {
 	border-radius: 6px;
 	padding: 10px;
 	color: #fff;
-	box-shadow: 0 0 15px rgba(0,0,0,0.5);
+	/* Removed box-shadow */
 	pointer-events: none;
 }
 

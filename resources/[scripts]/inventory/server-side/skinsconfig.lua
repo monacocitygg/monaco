@@ -53,7 +53,7 @@ Config.itensRegister = {
     ["WEAPON_CHEFAO"] = {
         name = "G3 CHEFAO",
         type = "epicoo",
-        image = "chefao.png",
+        image = "g3chefao.png",
         weapon = "WEAPON_SPECIALCARBINE_MK2",
         class = 1
     },

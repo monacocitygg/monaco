@@ -6115,6 +6115,24 @@ local List = {
 			["Gemstone"] = 0,
 			["Class"] = "Emergência"
 		},
+		["MONACOM8"] = {
+			["Name"] = "M8 SPEED",
+			["Weight"] = 0,
+			["Price"] = 1000,
+			["Mode"] = "Work",
+			["Gemstone"] = 0,
+			["Class"] = "Emergência"
+		},
+
+		["MONACOG63"] = {
+			["Name"] = "G63 BLINDADA",
+			["Weight"] = 60,
+			["Price"] = 1000,
+			["Mode"] = "Work",
+			["Gemstone"] = 0,
+			["Class"] = "Emergência"
+		},
+
 		["MONACOAMRK"] = {
 			["Name"] = "AMAROK CORE",
 			["Weight"] = 0,

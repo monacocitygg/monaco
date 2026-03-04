@@ -207,7 +207,7 @@ end
 function API.checkPermission()
 	local source = source
 	local user_id = vRP.Passport(source)
-    local isMechanic = vRP.hasPermission(user_id,"Admin") or vRP.hasPermission(user_id,"Mechanic")
+    local isMechanic = vRP.HasGroup(user_id,"Admin") or vRP.HasGroup(user_id,"Mechanic") or vRP.HasGroup(user_id,"Bennys")
 	return true, isMechanic
 end
 
@@ -240,13 +240,18 @@ function API.createOrder(mods, price, vehicleNetId, name, plate)
         TriggerClientEvent("Notify", mechSource, "aviso", "Nova ordem de serviço recebida!", 5000)
     end
     
+    local bennys = vRP.NumPermission("Bennys")
+    for _, benSource in pairs(bennys) do
+        TriggerClientEvent("Notify", benSource, "aviso", "Nova ordem de serviço recebida!", 5000)
+    end
+    
     return true
 end
 
 function API.getOrders()
     local source = source
     local user_id = vRP.Passport(source)
-    if vRP.hasPermission(user_id, "Mechanic") or vRP.hasPermission(user_id, "Admin") then
+    if vRP.HasGroup(user_id, "Mechanic") or vRP.HasGroup(user_id, "Bennys") or vRP.HasGroup(user_id, "Admin") then
         local result = vRP.Query("nation_bennys/get_orders")
         local formattedOrders = {}
         for _, row in ipairs(result) do
@@ -270,7 +275,7 @@ function API.applyOrder(orderId, vehicleNetId)
     local source = source
     local user_id = vRP.Passport(source)
     
-    if not (vRP.hasPermission(user_id, "Mechanic") or vRP.hasPermission(user_id, "Admin")) then
+    if not (vRP.HasGroup(user_id, "Mechanic") or vRP.HasGroup(user_id, "Bennys") or vRP.HasGroup(user_id, "Admin")) then
         return false, "Sem permissão"
     end
 
@@ -280,7 +285,11 @@ function API.applyOrder(orderId, vehicleNetId)
     local order = result[1]
     order.mods = json.decode(order.mods)
 
-    if vRP.tryFullPayment(order.user_id, order.price) then
+    if vRP.PaymentFull(order.user_id, order.price) then
+        local customerSource = vRP.Source(order.user_id)
+        if customerSource then
+            TriggerClientEvent("Notify",customerSource,"verde","Você pagou <b>$"..order.price.."</b> pelas modificações.",5000)
+        end
         TriggerEvent("nation:syncApplyMods", order.mods, vehicleNetId)
         vRP.Query("playerdata/SetData",{ Passport = order.user_id, dkey = "custom:"..order.vehicle_name, dvalue = json.encode(order.mods) })
         local garageCustomize = toGaragesCustomize(order.mods)
@@ -300,7 +309,7 @@ function API.denyOrder(orderId)
     local source = source
     local user_id = vRP.Passport(source)
     
-    if not (vRP.hasPermission(user_id, "Mechanic") or vRP.hasPermission(user_id, "Admin")) then
+    if not (vRP.HasGroup(user_id, "Mechanic") or vRP.HasGroup(user_id, "Bennys") or vRP.HasGroup(user_id, "Admin")) then
         return false, "Sem permissão"
     end
 
@@ -331,7 +340,7 @@ function API.checkPayment(amount)
 
     local source = source
     local user_id = vRP.Passport(source)
-    if not vRP.tryFullPayment(user_id, tonumber(amount)) then
+    if not vRP.PaymentFull(user_id, tonumber(amount)) then
         TriggerClientEvent("Notify",source,"vermelho","Você não possui dinheiro suficiente.",5000)
         return false
     end
@@ -390,7 +399,7 @@ end)
 
 RegisterCommand('bennys',function(source,args,rawCommand)
     local user_id = vRP.Passport(source)
-    if vRP.hasPermission(user_id,"Admin") then
+    if vRP.HasGroup(user_id,"Admin") or vRP.HasGroup(user_id,"Mechanic") or vRP.HasGroup(user_id,"Bennys") then
         TriggerClientEvent('actionmenu',source)
     end
 end)

@@ -157,7 +157,10 @@ local BlockedGroups = {
     ["Paramedic"] = true,
     ["Juridico"] = true,
     ["OffParamedic"] = true,
-
+    ["Gtm"] = true,
+    ["Core"] = true,
+    ["Graer"] = true,
+    ["Speed"] = true
 }
 
 function vRP.SetPermission(Passport, Permission, Level, Mode)

@@ -9,6 +9,7 @@ AddEventHandler("CharacterChosen", function(Passport, source)
     local Datatable = vRP.Datatable(Passport)
     local Identity = vRP.Identity(Passport)
     if Datatable and Identity then
+        print("DEBUG SPAWN: Passport="..Passport.." Datatable.Dead="..tostring(Datatable.Dead).." Datatable.Health="..tostring(Datatable.Health))
         if Datatable.Pos then
             if not (Datatable.Pos.x and Datatable.Pos.y and Datatable.Pos.z) then
                 Datatable.Pos = { x = SpawnCoords.x, y = SpawnCoords.y, z = SpawnCoords.z }
@@ -22,7 +23,7 @@ AddEventHandler("CharacterChosen", function(Passport, source)
         if not Datatable.Inventory then
             Datatable.Inventory = {}
         end
-        if not Datatable.Health or Datatable.Health <= 0 then
+        if (not Datatable.Health or Datatable.Health <= 0) and not Datatable.Dead then
             Datatable.Health = 200
         end
         if not Datatable.Armour then
@@ -94,7 +95,18 @@ AddEventHandler("CharacterChosen", function(Passport, source)
         TriggerEvent("Connect", Passport, source, Global[Passport] == nil)
 
         vRP.SetArmour(source, Datatable.Armour)
-        vRPC.SetHealth(source, Datatable.Health)
+        if Datatable.Dead then
+            vRPC.SetHealth(source, 100)
+            TriggerClientEvent("survival:ForceDeath", source)
+            Datatable.Dead = false
+        else
+            vRPC.SetHealth(source, Datatable.Health)
+            if Datatable.Health and Datatable.Health <= 100 then
+                TriggerClientEvent("survival:ForceDeath", source)
+            else
+                TriggerClientEvent("survival:ForceAlive", source)
+            end
+        end
 
         Global[Passport] = true
     end
@@ -284,152 +296,7 @@ function Cehck_lose_backpack(user_id)
     return true
 end
 
-local RespawnGroups = {
-    ["PF"] = vec3(-1028.13,-2743.23,20.17),
-    ["GPI"] = vec3(479.73, -1022.07, 27.99),
-    ["CIVIL"] = vec3(479.73, -1022.07, 27.99),
-    ["COT"] = vec3(-405.24,-2805.11,6.0),
-    ["BOPE"] = vec3(-405.24,-2805.11,6.0),
-    ["GARRA"] = vec3(-405.24,-2805.11,6.0),
-    ["GATE"] = vec3(-405.24,-2805.11,6.0),
-    ["GTM"] = vec3(-405.24,-2805.11,6.0),
-    ["RPS"] = vec3(-405.24,-2805.11,6.0),
-    ["Departament"] = vec3(-1028.13,-2743.23,20.17),
-    ["RPN"] = vec3(-474.47,7075.11,22.16),
-    ["PENAL"] = vec3(-1028.13,-2743.23,20.17),
-    ["Police2"] = vec3(435.43,-974.51,30.72),
-    ["EB"] = vec3(-2223.78,3168.16,32.81)
-}
 
---[[RegisterCommand("gg", function(source)
-    local source = source
-    local Passport = vRP.Passport(source)
-    if GetPlayerRoutingBucket(source) < 900000 and Passport and SURVIVAL.CheckDeath(source) then
-        if vRP.UserPremium(Passport) then
-            if ClearInventoryPremium then
-                vRP.ClearInventory(Passport)
-            end
-        elseif CleanDeathInventory then
-            vRP.ClearInventory(Passport)
-        end
-
-        local Datatable = vRP.Datatable(Passport)
-        if WipeBackpackDeath and Datatable and Datatable.Weight then
-           if Cehck_lose_backpack(Passport) then
-                Datatable.Weight = BackpackWeightDefault
-           end
-        end
-
-        vRP.UpgradeThirst(Passport, 100)
-        vRP.UpgradeHunger(Passport, 100)
-        vRP.DowngradeStress(Passport, 100)
-        exports["vrp"]:Embed( "Airport", "**Source:** " .. source .. [[ **Passaporte:** ]]
---[[ .. Passport .. [[ **Address:** ]]
---[[.. GetPlayerEndpoint(source), 3092790)
-        vRP.Query("playerdata/SetData",{ Passport = tonumber(Passport), dkey = "zo:attachs", dvalue = json.encode({}) })
-
-        local PlayerGroup = nil
-
-        for Permission, _ in pairs(RespawnGroups) do
-            local Data = vRP.DataGroups(Permission)
-            if Data[tostring(Passport)] then
-                PlayerGroup = Permission
-                break
-            end
-        end
-
-        if PlayerGroup then
-            SURVIVAL.Respawn(source, RespawnGroups[PlayerGroup])
-        else
-            SURVIVAL.Respawn(source)
-        end
-    end
-end)
-
------------------------------------------------------------------------------------------------------------------------------------------
--- CLEARINVENTORY
------------------------------------------------------------------------------------------------------------------------------------------
--- function vRP.ClearInventory(Passport)
---     local source = vRP.Source(Passport)
---     local Datatable = vRP.Datatable(Passport)
---     if source and Datatable and Datatable.Inventory then
---         exports.inventory:CleanWeapons(parseInt(Passport), true)
---         TriggerEvent("DebugObjects", parseInt(Passport))
---         TriggerEvent("DebugWeapons", parseInt(Passport))
---         Datatable.Inventory = {}
---     end
--- end--]]
-RegisterCommand("gg", function(source)
-    local source = source
-    local Passport = vRP.Passport(source)
-    
-    local playerBucket = GetPlayerRoutingBucket(source)
-    print("Player Bucket: ", playerBucket)  -- Debug: Verifica o bucket do jogador
-
-    local isRobberyActive = false
-    if GetResourceState("trig_home_robbery") == "started" then
-        local success, result = pcall(function()
-            return exports.trig_home_robbery:isRobberyActive(source)
-        end)
-        if success then
-            isRobberyActive = result
-        end
-    end
-
-    if (playerBucket < 900000 or not isRobberyActive) and Passport and SURVIVAL.CheckDeath(source) then
-        local InventoryLog = vRP.GetInventoryLog(Passport)
-
-        if vRP.UserPremium(Passport) then
-            if ClearInventoryPremium then
-                vRP.ClearInventory(Passport, InventoryLog)
-            end
-        elseif CleanDeathInventory then
-            vRP.ClearInventory(Passport, InventoryLog)
-        end
-
-        local Datatable = vRP.Datatable(Passport)
-        if WipeBackpackDeath and Datatable and Datatable.Weight then
-            if Cehck_lose_backpack(Passport) then
-                Datatable.Weight = BackpackWeightDefault
-            end
-        end
-
-        vRP.UpgradeThirst(Passport, 100)
-        vRP.UpgradeHunger(Passport, 100)
-        vRP.DowngradeStress(Passport, 100)
-
-        if InventoryLog == "" then
-            InventoryLog = "Nenhum item no inventário."
-        end
-
-        local webhookMessage = "**Source:** " .. source ..
-            "\n**Passaporte:** " .. Passport ..
-            "\n**IP:** " .. GetPlayerEndpoint(source) ..
-            "\n**Itens Removidos:**\n" .. InventoryLog
-
-        exports["vrp"]:Embed("GG", webhookMessage, 3092790)
-
-        vRP.Query("playerdata/SetData",
-            { Passport = tonumber(Passport), dkey = "zo:attachs", dvalue = json.encode({}), lastupdate = os.time() })
-
-        local PlayerGroup = nil
-
-        for Permission, _ in pairs(RespawnGroups) do
-            local Data = vRP.DataGroups(Permission)
-            if Data[tostring(Passport)] then
-                PlayerGroup = Permission
-                break
-            end
-        end
-
-        if PlayerGroup then
-            SURVIVAL.Respawn(source, RespawnGroups[PlayerGroup])
-        else
-            SURVIVAL.Respawn(source)
-        end
-        exports.inventory:setSurvivalClothes(source)
-    end
-end)
 
 exports("ForceDeath", function(source)
     local Passport = vRP.Passport(source)
@@ -464,7 +331,7 @@ exports("ForceDeath", function(source)
             "\n**IP:** " .. GetPlayerEndpoint(source) ..
             "\n**Itens Removidos:**\n" .. InventoryLog
 
-        exports["vrp"]:Embed("GG", webhookMessage, 3092790)
+        TriggerEvent("Discord","Airport", webhookMessage, 3092790)
 
         vRP.Query("playerdata/SetData",
             { Passport = tonumber(Passport), dkey = "zo:attachs", dvalue = json.encode({}), lastupdate = os.time() })
@@ -849,16 +716,17 @@ function tvRP.CreatePed(Model, x, y, z, heading, typ)
     local SpawnPed = 0
     local Hash = GetHashKey(Model)
     local Ped = CreatePed(typ, Hash, x, y, z, heading, true, false)
+    
+    while not DoesEntityExist(Ped) and SpawnPed <= 100 do
+        SpawnPed = SpawnPed + 1
+        Wait(50)
+    end
+
     if DoesEntityExist(Ped) then
         return true, NetworkGetNetworkIdFromEntity(Ped)
     end
-    while true do
-        if not DoesEntityExist(Ped) and SpawnPed <= 1000 then
-            SpawnPed = SpawnPed + 1
-            Wait(1)
-        end
-    end
-    -- return false
+    
+    return false
 end
 
 -----------------------------------------------------------------------------------------------------------------------------------------
@@ -875,7 +743,7 @@ function tvRP.CreateObject(Model, x, y, z, Weapon)
         -- Loop de espera até a entidade existir ou limite de tentativas
         while not DoesEntityExist(Object) and SpawnObjects <= 100 do
             SpawnObjects = SpawnObjects + 1
-            Wait(1)
+            Wait(50)
         end
 
         -- Verifica se a entidade foi criada corretamente
@@ -919,9 +787,14 @@ end
 -----------------------------------------------------------------------------------------------------------------------------------------
 CreateThread(function()
     while true do
+        local count = 0
         for k, v in pairs(Sources) do
             vRP.DowngradeHunger(k, ConsumeHunger)
             vRP.DowngradeThirst(k, ConsumeThirst)
+            count = count + 1
+            if count % 100 == 0 then
+                Wait(100)
+            end
         end
         Wait(CooldownHungerThrist)
     end
@@ -1011,6 +884,13 @@ AddEventHandler("Connect", function(Passport, Source)
     end
 
     Entity(Ped)["state"]:set("Character:Group", group_title, true)
+    
+    -- VIP Police State Bag
+    if vRP.HasGroup(Passport, "Vippolice") then
+        Player(Source).state:set("Vippolice", true, true)
+    else
+        Player(Source).state:set("Vippolice", false, true)
+    end
 end)
 
 AddEventHandler("vrp/updateGroups", function(Passport, Source)
@@ -1036,6 +916,13 @@ AddEventHandler("vrp/updateGroups", function(Passport, Source)
         local Ped = GetPlayerPed(Source)
         if DoesEntityExist(Ped) then
             Entity(Ped)["state"]:set("Character:Group", group_title, true)
+            
+            -- VIP Police State Bag
+            if vRP.HasGroup(Passport, "Vippolice") then
+                Player(Source).state:set("Vippolice", true, true)
+            else
+                Player(Source).state:set("Vippolice", false, true)
+            end
         end
     end
 end)

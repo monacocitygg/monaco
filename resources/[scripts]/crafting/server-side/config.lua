@@ -632,12 +632,12 @@ Crafting = {
 		}
 	},
 --------------------------muni fac
-	["Muni01"] = {
-		["Permission"] = "Muni01",
+	["Peixes"] = {
+		["Permission"] = "Peixes",
 		["List"] = {
 			["WEAPON_PISTOL_AMMO"] = {
 				["Time"] = 1,
-				["Amount"] = 50,
+				["Amount"] = 100,
 				["Required"] = {
 					["sheetmetal"] = 90,
 					["polvora"] = 90
@@ -645,26 +645,26 @@ Crafting = {
 			},
 			["WEAPON_SMG_AMMO"] = {
 				["Time"] = 1,
-				["Amount"] = 50,
+				["Amount"] = 100,
 				["Required"] = {
-					["capsula"] = 100,
-					["polvora"] = 100
+					["sheetmetal"] = 110,
+					["polvora"] = 110
 				}
 			},
 			["WEAPON_RIFLE_AMMO"] = {
 				["Time"] = 1,
-				["Amount"] = 50,
+				["Amount"] = 100,
 				["Required"] = {
-					["capsula"] = 115,
-					["polvora"] = 115
+					["sheetmetal"] = 120,
+					["polvora"] = 120
 				}
 			}
 		}
 	},
 --------------------------armas fac
 	
-	["Favela02"] = {
-		["Permission"] = "Favela02",
+	["Flawless"] = {
+		["Permission"] = "Flawless",
 		["List"] = {
 		["WEAPON_PISTOL_MK2"] = {
 				["Time"] = 3,

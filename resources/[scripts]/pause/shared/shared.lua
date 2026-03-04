@@ -376,56 +376,56 @@ Config.itensRegister = {
 }
 
 Config.LootboxConfig = {
-    -- BOX DE ARMAS COMUNS
     ["slbox"] = {
         name = "CAIXA FURY",
         description = "CAIXA",
         image = "slbox.png",
-        price = 30, -- Adicionado conforme pedido
+        price = 30,
         items = {
-            {
-                item = "WEAPON_G3AGUA",
-                img = "g3agua.png",
-                type = "mitic",
-                chance = 5,
-                itemType = "weapon"
-            },
-            {
-                item = "WEAPON_AKDRAGON",
-                img = "akdragao.png",
-                type = "mitic",
-                chance = 5,
-                itemType = "weapon"
-            },
-            {
-                item = "WEAPON_G3HELLFIRE",
-                img = "g3hellfire.png",
-                type = "mitic",
-                chance = 15,
-                itemType = "weapon"
-            },
-            {
-                item = "WEAPON_MTARVERAO",
-                img = "mtaragua.png",
-                type = "rare",
-                chance = 25,
-                itemType = "weapon"
-            },
-            
-            {
-                item = "WEAPON_G3GEL",
-                img = "m4gel.png",
-                type = "mitic",
-                chance = 5,
-                itemType = "weapon"
-            },
-            {
-                item = "WEAPON_MTARROXA",
-                img = "mtarroxa.png",
-                type = "comum",
-                chance = 50,
-                itemType = "weapon"
-            }
+
+            -- ================= MITIC
+            { item = "WEAPON_G3HELLFIRE", img = "g3hellfire.png", type = "mitic", chance = 5, itemType = "weapon" },
+            { item = "WEAPON_ONI", img = "g3whitefire.png", type = "mitic", chance = 5, itemType = "weapon" },
+            { item = "WEAPON_G3AGUA", img = "g3agua.png", type = "mitic", chance = 5, itemType = "weapon" },
+            { item = "WEAPON_G3ANGEL", img = "g3angel.png", type = "mitic", chance = 5, itemType = "weapon" },
+            { item = "WEAPON_METROPOLE", img = "arma.png", type = "mitic", chance = 5, itemType = "weapon" },
+            { item = "WEAPON_G3RGX", img = "g3rgx.png", type = "mitic", chance = 5, itemType = "weapon" },
+            { item = "WEAPON_M4CORRENTE", img = "m4corrente.png", type = "mitic", chance = 5, itemType = "weapon" },
+            { item = "WEAPON_G3GEL", img = "m4gel.png", type = "mitic", chance = 5, itemType = "weapon" },
+            { item = "WEAPON_M4ARANHA", img = "m4blackandwhite.png", type = "mitic", chance = 5, itemType = "weapon" },
+            { item = "WEAPON_AKDRAGON", img = "akdragao.png", type = "mitic", chance = 5, itemType = "weapon" },
+            { item = "WEAPON_APWEBBLACK", img = "glock-webblack.png", type = "mitic", chance = 5, itemType = "weapon" },
+
+            -- ================= EPICO
+            { item = "WEAPON_CHEFAO", img = "g3chefao.png", type = "epico", chance = 15, itemType = "weapon" },
+            { item = "WEAPON_SINGULARITY", img = "g3singularity.png", type = "epico", chance = 15, itemType = "weapon" },
+            { item = "WEAPON_G3SUBLIME", img = "g3Sublime.png", type = "epico", chance = 15, itemType = "weapon" },
+            { item = "WEAPON_G3ORIGINS", img = "g3origens.png", type = "epico", chance = 15, itemType = "weapon" },
+            { item = "WEAPON_MTARVERAO", img = "mtaragua.png", type = "epico", chance = 15, itemType = "weapon" },
+            { item = "WEAPON_MTARROXA", img = "mtarroxa.png", type = "epico", chance = 15, itemType = "weapon" },
+            { item = "WEAPON_EVOBLACK", img = "evo-black.png", type = "epico", chance = 15, itemType = "weapon" },
+
+            -- ================= RARO
+            { item = "WEAPON_HOHO", img = "hoho.png", type = "raro", chance = 25, itemType = "weapon" },
+            { item = "WEAPON_ESQUELETO", img = "esqueleto.png", type = "raro", chance = 25, itemType = "weapon" },
+            { item = "WEAPON_ROSA", img = "rosa.png", type = "raro", chance = 25, itemType = "weapon" },
+            { item = "WEAPON_M4NATAL", img = "m4natal.png", type = "raro", chance = 25, itemType = "weapon" },
+            { item = "WEAPON_FANTASMA", img = "fantasma.png", type = "raro", chance = 25, itemType = "weapon" },
+            { item = "WEAPON_M4WEB", img = "m4web.png", type = "raro", chance = 25, itemType = "weapon" },
+            { item = "WEAPON_UND", img = "mtarund.png", type = "raro", chance = 25, itemType = "weapon" },
+            { item = "WEAPON_GLOCKRAJADAPURPLE", img = "glockrajada-purple.png", type = "raro", chance = 25, itemType = "weapon" },
+            { item = "WEAPON_BLUEEVO", img = "evo-blue.png", type = "raro", chance = 25, itemType = "weapon" },
+            { item = "WEAPON_TANJIRO", img = "tanjiro.png", type = "raro", chance = 25, itemType = "weapon" },
+
+            -- ================= COMUM
+            { item = "WEAPON_ALFA", img = "alfa.png", type = "comum", chance = 50, itemType = "weapon" },
+            { item = "WEAPON_M4", img = "m4.png", type = "comum", chance = 50, itemType = "weapon" },
+            { item = "WEAPON_BRANCA", img = "branca.png", type = "comum", chance = 50, itemType = "weapon" },
+            { item = "WEAPON_MTARAZUL", img = "mtarazul.png", type = "comum", chance = 50, itemType = "weapon" },
+            { item = "WEAPON_MTARRED", img = "mtarred.png", type = "comum", chance = 50, itemType = "weapon" },
+            { item = "WEAPON_LOVE", img = "love.png", type = "comum", chance = 50, itemType = "weapon" },
+            { item = "WEAPON_MTARMICKEY", img = "mtarmickey.png", type = "comum", chance = 50, itemType = "weapon" }
+
         }
     }
 }

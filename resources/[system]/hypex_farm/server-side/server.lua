@@ -25,12 +25,16 @@ function hypex.CheckOrg()
     local Passport = vRP.Passport(source)
     if Passport then
         for Number, v in pairs(Cfg.FarmConfig) do
-            local Consult = vRP.Query("hypex_farm/getOrg", { Org = Number })
-            if Consult[1] and vRP.HasPermission(Passport, v.PermToAcess) then
-                return Consult[1].Org
+            if vRP.HasGroup(Passport, v.PermToAcess) then
+                local Consult = vRP.Query("hypex_farm/getOrg", { Org = Number })
+                if Consult[1] then
+                    print("DEBUG FARM: Jogador " .. Passport .. " tem permissão " .. v.PermToAcess .. " e pertence a org " .. Number)
+                    return Consult[1].Org
+                end
             end
         end
-        TriggerClientEvent("Notify", source, "vermelho", Cfg.NotifyConfig.NoPerm, 3000)
+        print("DEBUG FARM: Jogador " .. Passport .. " não tem permissão para nenhuma org configurada.")
+        TriggerClientEvent("Notify", source, "vermelho", "Você não tem permissão.", 3000)
         return false
     end
 end

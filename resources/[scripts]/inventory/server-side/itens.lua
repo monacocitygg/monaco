@@ -8,6 +8,11 @@ Geodes = {
 	{ ["item"] = "copper", ["min"] = 2, ["max"] = 3 }
 }
 -----------------------------------------------------------------------------------------------------------------------------------------
+-- C4 CONTROL
+-----------------------------------------------------------------------------------------------------------------------------------------
+C4Active = C4Active or {}
+C4AntiSpam = C4AntiSpam or {}
+-----------------------------------------------------------------------------------------------------------------------------------------
 -- USE
 -----------------------------------------------------------------------------------------------------------------------------------------
 Use = {
@@ -580,11 +585,11 @@ Use = {
         -- end
 
         local Adrenaline = {
-            { 1978.98,5171.98,47.63 }, -- configurem essas locs coloquei aleatórias
-            { 318.77,-557.68,28.75, },
-            { 368.33,-1592.01,25.44 },
-            { 1772.18,2577.82,45.73 }
-        }
+		{ 1977.64,5170.29,47.63 },
+		{ 1694.44,3590.33,35.62 },
+		{ 319.34,-559.64,28.75 },
+		{ 146.38,-2201.96,4.68 }
+	}
 
         local Ped = GetPlayerPed(source)
         local Coords = GetEntityCoords(Ped)
@@ -601,7 +606,7 @@ Use = {
                             vRPC.playAnim(source,false,{"mini@cpr@char_a@cpr_str","cpr_pumpchest"},true)
 
                             SetTimeout(10000,function()
-vRP.Revive(ClosestPed,101)
+								vRP.Revive(ClosestPed,101)
                                 vRPC.removeObjects(source)
                                 vRP.UpgradeThirst(OtherPassport,10)
                                 vRP.UpgradeHunger(OtherPassport,10)
@@ -4556,26 +4561,41 @@ vRP.Revive(ClosestPed,101)
 		local Hash = "ch_prop_ch_ld_bomb_01a"
 		local Application,Coords,Heading = vRPC.objectCoords(source,Hash)
 		if Application then
+			if C4AntiSpam[Passport] and os.time() < C4AntiSpam[Passport] then
+				local Cooldown = parseInt(C4AntiSpam[Passport] - os.time())
+				TriggerClientEvent("Notify",source,"amarelo","Aguarde <b>"..Cooldown.."</b> segundos para plantar novamente.",3000)
+				Player(source)["state"]["Buttons"] = false
+				return
+			end
+
+			if C4Active[Passport] then
+				TriggerClientEvent("Notify",source,"amarelo","Você já possui uma C4 armada. Aguarde a detonação.",5000)
+				Player(source)["state"]["Buttons"] = false
+				return
+			end
+
 			local CoordsAtm,NumberAtm = vCLIENT.checkAtm(source,Coords)
 
 			if CoordsAtm then
-				if not atmTimers[NumberAtm] then
-					atmTimers[NumberAtm] = os.time()
-				end
+				if atmTimers[NumberAtm] then
+					if os.time() < atmTimers[NumberAtm] then
+						local Cooldown = parseInt(atmTimers[NumberAtm] - os.time())
+						if Cooldown > 3590 then
+							Player(source)["state"]["Buttons"] = false
+							return
+						end
 
-				if os.time() < atmTimers[NumberAtm] then
-					local Cooldown = parseInt(atmTimers[NumberAtm] - os.time())
-					TriggerClientEvent("Notify",source,"azul","Caixa vazio, aguarde <b>"..Cooldown.."</b> segundos até que um transportador venha até o local efetuar reabastecimento do mesmo.",5000)
-					Player(source)["state"]["Buttons"] = false
+						TriggerClientEvent("Notify",source,"azul","Caixa vazio, aguarde <b>"..Cooldown.."</b> segundos até que um transportador venha até o local efetuar reabastecimento do mesmo.",5000)
+						Player(source)["state"]["Buttons"] = false
 
-					return
+						return
+					end
 				end
 
 				local Service,Total = vRP.NumPermission("Police")
-				if Total <= 0 then
+				if Total < 2 then
 					TriggerClientEvent("Notify",source,"azul","Contingente indisponível.",5000)
 					Player(source)["state"]["Buttons"] = false
-
 					return
 				end
 
@@ -4588,9 +4608,11 @@ vRP.Revive(ClosestPed,101)
 
 					Objects[tostring(Number)] = { x = mathLength(Coords["x"]), y = mathLength(Coords["y"]), z = mathLength(Coords["z"]), h = mathLength(Heading), object = Hash, item = Full, Distance = 100 }
 					TriggerClientEvent("objects:Adicionar",-1,tostring(Number),Objects[tostring(Number)])
-					TriggerClientEvent("Progress",source,"Plantando",25000)
+					TriggerClientEvent("Progress",source,"Plantando",10000)
 					atmTimers[NumberAtm] = os.time() + 3600
-					local explosionProgress = 25
+					local explosionProgress = 10
+					C4Active[Passport] = true
+					C4AntiSpam[Passport] = os.time() + 3
 
 					for Passports,Sources in pairs(Service) do
 						async(function()
@@ -4603,15 +4625,20 @@ vRP.Revive(ClosestPed,101)
 					repeat
 						Wait(1000)
 						explosionProgress = explosionProgress - 1
+						vRPC.PlaySound(source,"ATM_WINDOW","HUD_FRONTEND_DEFAULT_SOUNDSET")
 					until explosionProgress <= 0
 
-					vRP.GenerateItem(Passport,"dollars2",math.random(5000,6000))
-					TriggerClientEvent("Notify",source,"azul","Dinheiro sujo recebido, se esconda da Policia.",5000)
+					local RewardAmount = math.random(5000,6000)
+					local DropCoords = { x = Coords["x"], y = Coords["y"], z = Coords["z"] - 1.0 }
+					Creative.DropServer(DropCoords,"dollars2",RewardAmount)
+					TriggerClientEvent("Notify",source,"azul","Dinheiro sujo caiu no chão, pegue-o e se esconda da Policia.",5000)
 					TriggerClientEvent("player:Residuals",source,"Resíduo de Explosivo.")
 					TriggerClientEvent("objects:Remover",-1,tostring(Number))
 					TriggerClientEvent("vRP:Explosion",source,Coords)
+					C4Active[Passport] = nil
+					vRPC.PlaySound(source,"ATM_WINDOW","HUD_FRONTEND_DEFAULT_SOUNDSET")
 					TriggerEvent("Wanted",source,Passport,180)
-					TriggerEvent("blipsystem:Enter",source,"Ladrão")
+					-- TriggerEvent("blipsystem:Enter",source,"Ladrão")
 				end
 			else
 				if vRP.TakeItem(Passport,Full,1,true,Slot) then
@@ -4623,6 +4650,8 @@ vRP.Revive(ClosestPed,101)
 					Objects[tostring(Number)] = { x = mathLength(Coords["x"]), y = mathLength(Coords["y"]), z = mathLength(Coords["z"]), h = mathLength(Heading), object = Hash, item = Full, Distance = 100 }
 					TriggerClientEvent("objects:Adicionar",-1,tostring(Number),Objects[tostring(Number)])
 					TriggerClientEvent("Progress",source,"Plantando",10000)
+					C4Active[Passport] = true
+					C4AntiSpam[Passport] = os.time() + 3
 					
 					local Service,Total = vRP.NumPermission("Police")
 					for Passports,Sources in pairs(Service) do
@@ -4636,11 +4665,14 @@ vRP.Revive(ClosestPed,101)
 					repeat
 						Wait(1000)
 						explosionProgress = explosionProgress - 1
+						vRPC.PlaySound(source,"ATM_WINDOW","HUD_FRONTEND_DEFAULT_SOUNDSET")
 					until explosionProgress <= 0
 
 					TriggerClientEvent("player:Residuals",source,"Resíduo de Explosivo.")
 					TriggerClientEvent("objects:Remover",-1,tostring(Number))
 					TriggerClientEvent("vRP:Explosion",-1,Coords) -- Envia para todos para o cargo_theft pegar
+					C4Active[Passport] = nil
+					vRPC.PlaySound(source,"ATM_WINDOW","HUD_FRONTEND_DEFAULT_SOUNDSET")
 					TriggerEvent("Wanted",source,Passport,180)
 					TriggerEvent("blipsystem:Enter",source,"Criminoso")
 				end

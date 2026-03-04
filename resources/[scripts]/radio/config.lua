@@ -24,7 +24,7 @@ Config.Animations = {
         id    = "radio_clip",
         label = "Rádio Padrão",
         icon  = "mdi-radio-handheld",
-        dict  = "radioanimation",
+        dict  = "radio_clip",
         anim  = "radio_clip",
         animParams = { blendIn = 8.0, blendOut = 8.0, duration = -1, flag = 49, playbackRate = 1.0 },
         prop  = {

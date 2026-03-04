@@ -18,6 +18,16 @@ $(document).ready(function() {
         }
     };
 
+    // Filter Members
+    $("#filter-input").on("input", function() {
+        let value = $(this).val().toLowerCase();
+        $(".member-row").filter(function() {
+            let name = $(this).find(".col-name").text().toLowerCase();
+            let id = $(this).find(".col-name span").text().toLowerCase();
+            $(this).toggle(name.indexOf(value) > -1 || id.indexOf(value) > -1);
+        });
+    });
+
     // Add Member
     $("#add-btn").click(function() {
         let userId = $("#passport-input").val();
@@ -31,6 +41,8 @@ $(document).ready(function() {
 function openPanel(data) {
     $("#app").fadeIn(200).css("display", "flex");
     $("#group-name").text(data.groupName || "Organização");
+    $("#total-members").text(data.totalCount || 0);
+    $("#online-members").text(data.onlineCount || 0);
     renderMembers(data.members);
 }
 

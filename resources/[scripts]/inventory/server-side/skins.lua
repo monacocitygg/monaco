@@ -1,4 +1,9 @@
 vRP.prepare("inventory/get_skins", "SELECT skins FROM skins WHERE identifier = @user_id")
+vRP.prepare("inventory/insert_skins", "INSERT IGNORE INTO skins (identifier, skins, boxes) VALUES (@user_id, '[]', '[]')")
+
+AddEventHandler("Connect",function(Passport,source)
+    vRP.execute("inventory/insert_skins", { user_id = Passport })
+end)
 
 function Creative.requestSkins()
     local source = source
@@ -9,6 +14,12 @@ function Creative.requestSkins()
         
         -- Get skins from DB
         local query = vRP.query("inventory/get_skins", { user_id = user_id })
+        
+        if not query or not query[1] then
+            vRP.execute("inventory/insert_skins", { user_id = user_id })
+            query = vRP.query("inventory/get_skins", { user_id = user_id })
+        end
+
         if query and query[1] and query[1].skins then
             local dbSkins = json.decode(query[1].skins)
             if dbSkins then

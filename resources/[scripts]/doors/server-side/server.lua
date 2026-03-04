@@ -14,7 +14,7 @@ vTASKBAR = Tunnel.getInterface("taskbar")
 -- DOORS
 -----------------------------------------------------------------------------------------------------------------------------------------
 GlobalState["Doors"] = {
--- Police-1 dp principal
+-- Police-1 dp principal  -959.94,-2052.77,9.4
 [1] = { x = -959.94, y =  -2052.77, z = 9.4, hash = -1291439697, lock = true, text = true, distance = 5, press = 2, perm = "Police" },
 [2] = { x = -956.13, y = -2049.3, z = 9.4, hash = -1291439697, lock = true, text = true, distance = 5, press = 2, perm = "Police" },
 [3] = { x =  -953.45, y = -2051.84, z = 9.4, hash = -1291439697, lock = true, text = true, distance = 5, press = 2, perm = "Police" },

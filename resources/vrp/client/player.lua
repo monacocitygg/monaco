@@ -49,6 +49,10 @@ function tvRP.Skin(Hash)
 		SetPlayerModel(Pid,Hash)
 		SetPedComponentVariation(Ped,5,0,0,1)
 		SetModelAsNoLongerNeeded(Hash)
+        
+        -- Set max health immediately to prevent survival trigger
+        SetEntityMaxHealth(Ped,200)
+        SetPedMaxHealth(Ped,200)
 
 		ReloadCharacter(Pid,Ped)
 
