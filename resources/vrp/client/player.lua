@@ -63,6 +63,11 @@ end
 RegisterNetEvent("vRP:Active")
 AddEventHandler("vRP:Active",function(Passport,Name)
 	print("[vrp][client] vRP:Active received")
+
+	local Pid = PlayerId()
+	SetPlayerHealthRechargeMultiplier(Pid,0.0)
+	SetPlayerHealthRechargeLimit(Pid,0.0)
+
 	LocalPlayer["state"]:set("Name",Name,false)
 	LocalPlayer["state"]:set("Active",true,false)
 	LocalPlayer["state"]:set("Invincible",true,false)
