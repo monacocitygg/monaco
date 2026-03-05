@@ -2,7 +2,7 @@ Config = Config or {}
 
 Config.Antitank = {
     Enabled = true,
-    Debug = true,
+    Debug = false,
 
     -- bones letais (cabeca + pescoco) -> tiro aqui = morte instantanea
     LethalBones = {

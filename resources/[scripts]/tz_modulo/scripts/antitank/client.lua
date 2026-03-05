@@ -143,8 +143,8 @@ CreateThread(function()
                             local perpDistCabeca = math.min(perpDistHead, perpDistForehead)
 
                             -- thresholds separados
-                            local headThreshold = 0.06 + (distFromCam * 0.001)
-                            local neckThreshold = 0.02 + (distFromCam * 0.001)
+                            local headThreshold = 0.05 + (distFromCam * 0.001)
+                            local neckThreshold = 0.01 + (distFromCam * 0.001)
 
                             local isHeadshot = perpDistCabeca < headThreshold
                             local isNeckshot = perpDistNeck < neckThreshold
