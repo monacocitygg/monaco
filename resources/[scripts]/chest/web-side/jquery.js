@@ -165,18 +165,12 @@ const updateDrag = () => {
 				$(this).replaceWith(clone1);
 				$(clone1).data("slot",slot2);
 
-				ui.draggable.children(".top").children(".itemAmount").html(formatarNumero(ui.draggable.data("amount")) + "x");
-				ui.draggable.children(".top").children(".itemWeight").html(newWeightOldItem);
+				ui.draggable.find(".itemAmount").html("x" + formatarNumero(ui.draggable.data("amount")));
 				
-				$(clone1).children(".top").children(".itemAmount").html(formatarNumero(clone1.data("amount")) + "x");
-				$(clone1).children(".top").children(".itemWeight").html(newWeightClone1);
+				$(clone1).find(".itemAmount").html("x" + formatarNumero(clone1.data("amount")));
 			}
 
 			updateDrag();
-
-            console.log("DEBUG JS: Drop Event Triggered");
-            console.log("DEBUG JS: Origin: " + origin);
-            console.log("DEBUG JS: TargetInv: " + tInv);
 
 			const isOriginInventory = origin.includes("invLeft") || origin.includes("invHotbar");
 			const isTargetInventory = tInv.includes("invLeft") || tInv.includes("invHotbar");
@@ -184,7 +178,6 @@ const updateDrag = () => {
 			const isTargetChest = tInv.includes("invRight");
 
 			if (isOriginInventory && isTargetInventory){
-                console.log("DEBUG JS: UpdateSlot");
 				$.post("http://inventory/updateSlot",JSON.stringify({
 					item: itemData.key,
 					slot: itemData.slot,
@@ -192,7 +185,6 @@ const updateDrag = () => {
 					amount: parseInt(amount)
 				}));
 			} else if (isOriginChest && isTargetInventory){
-                console.log("DEBUG JS: Take");
 				$.post("http://chest/Take",JSON.stringify({
 					item: itemData.key,
 					slot: itemData.slot,
@@ -200,7 +192,6 @@ const updateDrag = () => {
 					amount: parseInt(amount)
 				}));
 			} else if (isOriginInventory && isTargetChest){
-                console.log("DEBUG JS: Store - Sending POST");
 				$.post("http://chest/Store",JSON.stringify({
 					item: itemData.key,
 					slot: itemData.slot,
@@ -208,7 +199,6 @@ const updateDrag = () => {
 					amount: parseInt(amount)
 				}));
 			} else if (isOriginChest && isTargetChest){
-                console.log("DEBUG JS: Update");
 				$.post("http://chest/Update",JSON.stringify({
 					item: itemData.key,
 					slot: itemData.slot,
@@ -262,8 +252,7 @@ const updateDrag = () => {
 				let newSlotWeight = ui.draggable.data("peso") * newSlotAmount;
 
 				$(this).data('amount',newSlotAmount);
-				$(this).children(".top").children(".itemAmount").html(formatarNumero(newSlotAmount) + "x");
-				$(this).children(".top").children(".itemWeight").html(newSlotWeight.toFixed(2));
+				$(this).find(".itemAmount").html("x" + formatarNumero(newSlotAmount));
 
 				if(amount == itemAmount) {
 					ui.draggable.replaceWith(`<div class="item empty" data-slot="${ui.draggable.data('slot')}"></div>`);
@@ -272,8 +261,7 @@ const updateDrag = () => {
 					let newMovedWeight = parseFloat(ui.draggable.data("peso")) * newMovedAmount;
 
 					ui.draggable.data('amount',newMovedAmount);
-					ui.draggable.children(".top").children(".itemAmount").html(formatarNumero(newMovedAmount) + "x");
-					ui.draggable.children(".top").children(".itemWeight").html(newMovedWeight.toFixed(2));
+					ui.draggable.find(".itemAmount").html("x" + formatarNumero(newMovedAmount));
 				}
 			} else {
 				if (origin === "invRight" && (tInv === "invLeft" || tInv === "invHotbar")) return;
@@ -293,17 +281,12 @@ const updateDrag = () => {
 
 			updateDrag();
 
-            console.log("DEBUG JS: Drop Event Triggered");
-            console.log("DEBUG JS: Origin: " + origin);
-            console.log("DEBUG JS: TargetInv: " + tInv);
-
 			const isOriginInventory = origin.includes("invLeft") || origin.includes("invHotbar");
 			const isTargetInventory = tInv.includes("invLeft") || tInv.includes("invHotbar");
 			const isOriginChest = origin.includes("invRight");
 			const isTargetChest = tInv.includes("invRight");
 
 			if (isOriginInventory && isTargetInventory){
-                console.log("DEBUG JS: UpdateSlot");
 				$.post("http://inventory/updateSlot",JSON.stringify({
 					item: itemData.key,
 					slot: itemData.slot,
@@ -311,7 +294,6 @@ const updateDrag = () => {
 					amount: parseInt(amount)
 				}));
 			} else if (isOriginChest && isTargetInventory){
-                console.log("DEBUG JS: Take");
 				$.post("http://chest/Take",JSON.stringify({
 					item: itemData.key,
 					slot: itemData.slot,
@@ -319,7 +301,6 @@ const updateDrag = () => {
 					amount: parseInt(amount)
 				}));
 			} else if (isOriginInventory && isTargetChest){
-                console.log("DEBUG JS: Store - Sending POST");
 				$.post("http://chest/Store",JSON.stringify({
 					item: itemData.key,
 					slot: itemData.slot,
@@ -327,7 +308,6 @@ const updateDrag = () => {
 					amount: parseInt(amount)
 				}));
 			} else if (isOriginChest && isTargetChest){
-                console.log("DEBUG JS: Update");
 				$.post("http://chest/Update",JSON.stringify({
 					item: itemData.key,
 					slot: itemData.slot,

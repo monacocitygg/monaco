@@ -9,6 +9,7 @@ vRP = Proxy.getInterface("vRP")
 -----------------------------------------------------------------------------------------------------------------------------------------
 Creative = {}
 Tunnel.bindInterface("survival",Creative)
+local vSERVER = Tunnel.getInterface("survival")
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- VARIABLES
 -----------------------------------------------------------------------------------------------------------------------------------------
@@ -25,114 +26,104 @@ CreateThread(function()
 
 		if LocalPlayer["state"]["Active"] then
 			local Ped = PlayerPedId()
-			if GetEntityHealth(Ped) <= 100 then
-				if not Death then
-					Death = true
-
-					if LocalPlayer["state"]["Rope"] then
-						DetachEntity(Ped,false,false)
-						LocalPlayer["state"]:set("Rope",false,true)
-						TriggerServerEvent("inventory:ropeClean")
-					end
-
-					local Coords = GetEntityCoords(Ped)
-					NetworkResurrectLocalPlayer(Coords,0.0)
-
-					NetworkSetFriendlyFireOption(true)
-					SetEntityInvincible(Ped,true)
-					SetEntityHealth(Ped,100)
-
-					if LocalPlayer["state"]["Route"] < 900000 then
-						if LocalPlayer["state"]["Vippolice"] then
-							DeathTimer = 125
-						else
-							DeathTimer = 250
-						end
-
-						TriggerEvent("hud:RemoveHood")
-						TriggerEvent("hud:ScubaRemove")
-						TriggerEvent("radio:RadioClean")
-						TriggerEvent("inventory:Cancel")
-						TriggerEvent("inventory:CleanWeapons")
-						TriggerServerEvent("paramedic:bloodDeath")
-						TriggerServerEvent("pma-voice:toggleMute",true)
+			if not Death and GetEntityHealth(Ped) <= 100 then
+				Death = true
+				print(string.format("[survival][client] DeathTransition health=%s", tostring(GetEntityHealth(Ped))))
+				if LocalPlayer["state"]["Rope"] then
+					DetachEntity(Ped,false,false)
+					LocalPlayer["state"]:set("Rope",false,true)
+					TriggerServerEvent("inventory:ropeClean")
+				end
+				local Coords = GetEntityCoords(Ped)
+				NetworkResurrectLocalPlayer(Coords,0.0)
+				NetworkSetFriendlyFireOption(true)
+				SetEntityInvincible(Ped,true)
+				SetEntityHealth(Ped,100)
+				print("[survival][client] EnterDeathState")
+				if LocalPlayer["state"]["Route"] < 900000 then
+					if LocalPlayer["state"]["Vippolice"] then
+						DeathTimer = 125
 					else
-						DeathTimer = 5
+						DeathTimer = 250
 					end
-
+					TriggerEvent("hud:RemoveHood")
+					TriggerEvent("hud:ScubaRemove")
+					TriggerEvent("radio:RadioClean")
+					TriggerEvent("inventory:Cancel")
+					TriggerEvent("inventory:CleanWeapons")
+					TriggerServerEvent("paramedic:bloodDeath")
+					TriggerServerEvent("pma-voice:toggleMute",true)
+				else
+					DeathTimer = 5
+				end
+				SendNUIMessage({ Action = "Display", Mode = "block" })
+				if not LocalPlayer["state"]["Spectate"] then
 					SendNUIMessage({ Action = "Display", Mode = "block" })
-					if not LocalPlayer["state"]["Spectate"] then
-						SendNUIMessage({ Action = "Display", Mode = "block" })
-						DeathUIVisible = true
-					else
+					DeathUIVisible = true
+				else
+					DeathUIVisible = false
+				end
+				vRP.playAnim(false,{"dead","dead_a"},true)
+				TriggerEvent("inventory:Close")
+			end
+
+			if Death then
+				TimeDistance = 1
+				SetEntityInvincible(Ped,true)
+				if GetEntityHealth(Ped) > 100 then
+					SetEntityHealth(Ped,100)
+				end
+				DisableControlAction(1,18,true)
+				if LocalPlayer["state"]["Spectate"] then
+					if DeathUIVisible then
+						SendNUIMessage({ Action = "Display", Mode = "none" })
 						DeathUIVisible = false
 					end
-					vRP.playAnim(false,{"dead","dead_a"},true)
-					TriggerEvent("inventory:Close")
 				else
-					TimeDistance = 1
-					SetEntityHealth(Ped,100)
-
-					DisableControlAction(1,18,true)
-					if LocalPlayer["state"]["Spectate"] then
-						if DeathUIVisible then
-							SendNUIMessage({ Action = "Display", Mode = "none" })
-							DeathUIVisible = false
-						end
-					else
-						if not DeathUIVisible then
-							SendNUIMessage({ Action = "Display", Mode = "block" })
-							DeathUIVisible = true
-						end
+					if not DeathUIVisible then
+						SendNUIMessage({ Action = "Display", Mode = "block" })
+						DeathUIVisible = true
 					end
-
-					DisableControlAction(1,22,true)
-					DisableControlAction(1,24,true)
-					DisableControlAction(1,25,true)
-					DisableControlAction(1,68,true)
-					DisableControlAction(1,70,true)
-					DisableControlAction(1,70,true)
-					DisableControlAction(1,91,true)
-					DisableControlAction(1,69,true)
-					DisableControlAction(1,75,true)
-					DisableControlAction(1,140,true)
-					DisableControlAction(1,142,true)
-					DisableControlAction(1,257,true)
-					DisablePlayerFiring(Ped,true)
-
-					if not IsEntityPlayingAnim(Ped,"dead","dead_a",3) and not IsPedInAnyVehicle(Ped) and not IsEntityPlayingAnim(Ped,"nm","firemans_carry",3) then
-						vRP.playAnim(false,{"dead","dead_a"},true)
+				end
+				DisableControlAction(1,22,true)
+				DisableControlAction(1,24,true)
+				DisableControlAction(1,25,true)
+				DisableControlAction(1,68,true)
+				DisableControlAction(1,70,true)
+				DisableControlAction(1,70,true)
+				DisableControlAction(1,91,true)
+				DisableControlAction(1,69,true)
+				DisableControlAction(1,75,true)
+				DisableControlAction(1,140,true)
+				DisableControlAction(1,142,true)
+				DisableControlAction(1,257,true)
+				DisablePlayerFiring(Ped,true)
+				if not IsEntityPlayingAnim(Ped,"dead","dead_a",3) and not IsPedInAnyVehicle(Ped) and not IsEntityPlayingAnim(Ped,"nm","firemans_carry",3) then
+					vRP.playAnim(false,{"dead","dead_a"},true)
+				end
+				if IsPedInAnyVehicle(Ped) then
+					local Vehicle = GetVehiclePedIsUsing(Ped)
+					if GetPedInVehicleSeat(Vehicle,-1) == Ped then
+						SetVehicleEngineOn(Vehicle,false,true,true)
 					end
-
-					if IsPedInAnyVehicle(Ped) then
-						local Vehicle = GetVehiclePedIsUsing(Ped)
-						if GetPedInVehicleSeat(Vehicle,-1) == Ped then
-							SetVehicleEngineOn(Vehicle,false,true,true)
-						end
-					end
-
-					if LocalPlayer["state"]["Route"] > 900000 and IsControlJustPressed(1,38) then
-						TriggerEvent("arena:ResetStreek")
-						TriggerEvent("arena:Respawn")
-					end
-
-					if GetGameTimer() >= Cooldown then
-						Cooldown = GetGameTimer() + 1000
-
-						if DeathTimer > 0 then
-							DeathTimer = DeathTimer - 1
-							
-							local Message = ""
-							if DeathTimer <= 0 then
-								if LocalPlayer["state"]["Route"] < 900000 then
-									Message = "Digite <color>/GG</color> para desistir imediatamente"
-								else
-									Message = "Pressione <color>E</color> para renascer dentro da arena"
-								end
+				end
+				if LocalPlayer["state"]["Route"] > 900000 and IsControlJustPressed(1,38) then
+					TriggerEvent("arena:ResetStreek")
+					TriggerEvent("arena:Respawn")
+				end
+				if GetGameTimer() >= Cooldown then
+					Cooldown = GetGameTimer() + 1000
+					if DeathTimer > 0 then
+						DeathTimer = DeathTimer - 1
+						local Message = ""
+						if DeathTimer <= 0 then
+							if LocalPlayer["state"]["Route"] < 900000 then
+								Message = "Digite <color>/GG</color> para desistir imediatamente"
+							else
+								Message = "Pressione <color>E</color> para renascer dentro da arena"
 							end
-
-							SendNUIMessage({ Action = "Update", Timer = DeathTimer, Message = Message })
 						end
+						SendNUIMessage({ Action = "Update", Timer = DeathTimer, Message = Message })
 					end
 				end
 			end
@@ -141,6 +132,53 @@ CreateThread(function()
 		Wait(TimeDistance)
 	end
 end)
+-----------------------------------------------------------------------------------------------------------------------------------------
+RegisterNetEvent("survival:forceDead")
+AddEventHandler("survival:forceDead",function()
+	if LocalPlayer["state"]["Active"] then
+		local Ped = PlayerPedId()
+		if not Death then
+			Death = true
+			if LocalPlayer["state"]["Rope"] then
+				DetachEntity(Ped,false,false)
+				LocalPlayer["state"]:set("Rope",false,true)
+				TriggerServerEvent("inventory:ropeClean")
+			end
+			local Coords = GetEntityCoords(Ped)
+			NetworkResurrectLocalPlayer(Coords,0.0)
+			NetworkSetFriendlyFireOption(true)
+			SetEntityInvincible(Ped,true)
+			SetEntityHealth(Ped,100)
+			print("[survival][client] ForceDeathFromServerState")
+			if LocalPlayer["state"]["Route"] < 900000 then
+				if LocalPlayer["state"]["Vippolice"] then
+					DeathTimer = 125
+				else
+					DeathTimer = 250
+				end
+				TriggerEvent("hud:RemoveHood")
+				TriggerEvent("hud:ScubaRemove")
+				TriggerEvent("radio:RadioClean")
+				TriggerEvent("inventory:Cancel")
+				TriggerEvent("inventory:CleanWeapons")
+				TriggerServerEvent("paramedic:bloodDeath")
+				TriggerServerEvent("pma-voice:toggleMute",true)
+			else
+				DeathTimer = 5
+			end
+			SendNUIMessage({ Action = "Display", Mode = "block" })
+			if not LocalPlayer["state"]["Spectate"] then
+				SendNUIMessage({ Action = "Display", Mode = "block" })
+				DeathUIVisible = true
+			else
+				DeathUIVisible = false
+			end
+			vRP.playAnim(false,{"dead","dead_a"},true)
+			TriggerEvent("inventory:Close")
+		end
+	end
+end)
+-----------------------------------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- CHECKDEATH
 -----------------------------------------------------------------------------------------------------------------------------------------
@@ -151,44 +189,6 @@ function Creative.CheckDeath()
 
 	return false
 end
-RegisterNetEvent("survival:ForceDeath")
-AddEventHandler("survival:ForceDeath",function()
-	local Ped = PlayerPedId()
-	Death = true
-	if LocalPlayer["state"]["Route"] < 900000 then
-		if LocalPlayer["state"]["Vippolice"] then
-			DeathTimer = 125
-		else
-			DeathTimer = 250
-		end
-	else
-		DeathTimer = 5
-	end
-	SetEntityInvincible(Ped,true)
-	SetEntityHealth(Ped,100)
-	if not LocalPlayer["state"]["Spectate"] then
-		SendNUIMessage({ Action = "Display", Mode = "block" })
-		DeathUIVisible = true
-	else
-		DeathUIVisible = false
-	end
-	vRP.playAnim(false,{"dead","dead_a"},true)
-	TriggerEvent("inventory:Close")
-end)
------------------------------------------------------------------------------------------------------------------------------------------
--- FORCEALIVE
------------------------------------------------------------------------------------------------------------------------------------------
-RegisterNetEvent("survival:ForceAlive")
-AddEventHandler("survival:ForceAlive",function()
-    Death = false
-    DeathUIVisible = false
-    SendNUIMessage({ Action = "Display", Mode = "none" })
-    local Ped = PlayerPedId()
-    if GetEntityHealth(Ped) <= 100 then
-        SetEntityHealth(Ped,200)
-    end
-end)
-
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- RESPAWN
 -----------------------------------------------------------------------------------------------------------------------------------------
@@ -212,6 +212,7 @@ function Creative.Respawn(Coords)
 	TriggerEvent("inventory:CleanWeapons")
 	LocalPlayer["state"]["Handcuff"] = false
 	TriggerServerEvent("pma-voice:toggleMute",false)
+	print("[survival][client] Respawn")
 
 	DoScreenFadeOut(0)
 	
@@ -260,6 +261,7 @@ exports("Revive",function(Health,Arena)
 			TriggerServerEvent("pma-voice:toggleMute",false)
 		end
 	end
+	print("[survival][client] Revive")
 end)
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- REVIVE

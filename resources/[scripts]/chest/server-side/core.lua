@@ -14,6 +14,8 @@ vKEYBOARD = Tunnel.getInterface("keyboard")
 -- VARIABLES
 -----------------------------------------------------------------------------------------------------------------------------------------
 local Open = {}
+local Dirty = {}
+local DirtyJSON = {}
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- VERIFY
 -----------------------------------------------------------------------------------------------------------------------------------------
@@ -39,6 +41,7 @@ end
 function Creative.Permissions(Name,Mode)
 	local source = source
 	local Passport = vRP.Passport(source)
+	print("DEBUG SERVIDOR: Verificacao de Permissoes. Nome:", Name, "Modo:", Mode, "Passaporte:", Passport)
 	if Passport then
 		if Mode == "Personal" then
 			Open[Passport] = { ["Name"] = Passport, ["Weight"] = 50, ["Logs"] = false, ["Save"] = true }
@@ -50,11 +53,9 @@ function Creative.Permissions(Name,Mode)
 				return true
 			end
 		elseif Mode == "Carga" then
-			print("CHEST_DEBUG: Permissão Carga Solicitada. Nome: " .. tostring(Name))
 			Open[Passport] = { ["Name"] = Name, ["Weight"] = 250, ["Logs"] = false, ["Save"] = false }
 			return true
 		elseif Mode == "Custom" then
-			print("CHEST_DEBUG: Permissão Custom Solicitada. Nome: " .. tostring(Name))
 			Open[Passport] = { ["Name"] = Name, ["Weight"] = 50, ["Logs"] = false, ["Save"] = false }
 			return true
 		elseif Mode == "Manager" then
@@ -67,6 +68,7 @@ function Creative.Permissions(Name,Mode)
 			return true
 		else
 			local Consult = vRP.Query("chests/GetChests",{ name = Name })
+			print("DEBUG SERVIDOR: Resultado da Consulta:", json.encode(Consult))
 			if Consult[1] and vRP.HasGroup(Passport,Consult[1]["perm"]) then
 				if Name == "Police" then
 					Consult[1]["logs"] = true
@@ -74,6 +76,8 @@ function Creative.Permissions(Name,Mode)
 
 				Open[Passport] = { ["Name"] = Name, ["Weight"] = Consult[1]["weight"], ["Logs"] = Consult[1]["logs"], ["Save"] = true }
 				return true
+			else
+				print("DEBUG SERVIDOR: Falha na verificacao Normal. Consult[1]:", Consult[1], "Permissao:", Consult[1] and Consult[1]["perm"])
 			end
 		end
 	end
@@ -86,6 +90,7 @@ end
 function Creative.Chest()
 	local source = source
 	local Passport = vRP.Passport(source)
+	print("DEBUG SERVIDOR: Creative.Chest chamado. Fonte:", source, "Passaporte:", Passport, "Open[Passport]:", Open[Passport])
 	if Passport and Open[Passport] then
 		local Inventory = {}
 		local Inv = vRP.Inventory(Passport)
@@ -160,6 +165,8 @@ function Creative.Chest()
 		end
 
 		return Inventory,Chest,vRP.InventoryWeight(Passport),vRP.GetWeight(Passport),vRP.ChestWeight(Result),Open[Passport]["Weight"],vRP.HasGroup(Passport,"Bolso"),vRP.HasGroup(Passport,"vipslots") or vRP.HasGroup(Passport,"Vip"),vRP.HasGroup(Passport,"Serendibite"),vRP.HasGroup(Passport,"Painite")
+	else
+		print("DEBUG SERVIDOR: Creative.Chest falhou. Passaporte ou Open[Passport] faltando.")
 	end
 end
 -----------------------------------------------------------------------------------------------------------------------------------------
@@ -214,17 +221,9 @@ local OpenItens = {
 -- STORE
 -----------------------------------------------------------------------------------------------------------------------------------------
 function Creative.Store(Item,Slot,Amount,Target)
-    print("DEBUG CREATIVE.STORE: Function called. Item="..tostring(Item).." Slot="..tostring(Slot).." Amount="..tostring(Amount).." Target="..tostring(Target))
 	local source = source
 	local Amount = parseInt(Amount)
 	local Passport = vRP.Passport(source)
-
-    print("DEBUG CREATIVE.STORE: Passport="..tostring(Passport))
-    if Open[Passport] then
-        print("DEBUG CREATIVE.STORE: Open[Passport] exists. Name="..tostring(Open[Passport]["Name"]))
-    else
-        print("DEBUG CREATIVE.STORE: Open[Passport] is NIL")
-    end
 
 	if Passport and Open[Passport] then
 		if (tostring(Slot) == "4" or tostring(Slot) == "5") and not vRP.HasGroup(Passport,"Bolso") then
@@ -269,6 +268,14 @@ function Creative.Store(Item,Slot,Amount,Target)
 
 		if vRP.StoreChest(Passport,"Chest:"..Open[Passport]["Name"],Amount,Open[Passport]["Weight"],Slot,Target) then
 			TriggerClientEvent("chest:Update",source,"Refresh")
+
+			if Open[Passport]["Save"] then
+				local key = "Chest:"..Open[Passport]["Name"]
+				local Result = vRP.GetSrvData(key,Open[Passport]["Save"])
+				vRP.SetSrvData(key, Result)
+				Dirty[key] = true
+				DirtyJSON[key] = json.encode(Result)
+			end
 		else
 			local Result = vRP.GetSrvData("Chest:"..Open[Passport]["Name"],Open[Passport]["Save"])
 			TriggerClientEvent("chest:Update",source,"Update",vRP.InventoryWeight(Passport),vRP.GetWeight(Passport),vRP.ChestWeight(Result),Open[Passport]["Weight"])
@@ -278,7 +285,10 @@ function Creative.Store(Item,Slot,Amount,Target)
 			end
 
             if Open[Passport]["Save"] then
-                vRP.SetSrvData("Chest:"..Open[Passport]["Name"], Result)
+				local key = "Chest:"..Open[Passport]["Name"]
+                vRP.SetSrvData(key, Result)
+                Dirty[key] = true
+				DirtyJSON[key] = json.encode(Result)
             end
 		end
 	end
@@ -316,6 +326,14 @@ function Creative.Take(Item,Slot,Amount,Target)
 
 		if vRP.TakeChest(Passport,"Chest:"..Open[Passport]["Name"],Amount,Slot,Target) then
 			TriggerClientEvent("chest:Update",source,"Refresh")
+
+			if Open[Passport]["Save"] then
+				local key = "Chest:"..Open[Passport]["Name"]
+				local Result = vRP.GetSrvData(key,Open[Passport]["Save"])
+				vRP.SetSrvData(key, Result)
+				Dirty[key] = true
+				DirtyJSON[key] = json.encode(Result)
+			end
 		else
 			local Result = vRP.GetSrvData("Chest:"..Open[Passport]["Name"],Open[Passport]["Save"])
 			TriggerClientEvent("chest:Update",source,"Update",vRP.InventoryWeight(Passport),vRP.GetWeight(Passport),vRP.ChestWeight(Result),Open[Passport]["Weight"])
@@ -330,7 +348,10 @@ function Creative.Take(Item,Slot,Amount,Target)
 			end
 
             if Open[Passport]["Save"] then
-                vRP.SetSrvData("Chest:"..Open[Passport]["Name"], Result)
+				local key = "Chest:"..Open[Passport]["Name"]
+                vRP.SetSrvData(key, Result)
+                Dirty[key] = true
+				DirtyJSON[key] = json.encode(Result)
             end
 		end
 	end
@@ -347,12 +368,23 @@ function Creative.Update(Slot,Target,Amount)
 
 		if vRP.UpdateChest(Passport,"Chest:"..Open[Passport]["Name"],Slot,Target,Amount) then
 			TriggerClientEvent("chest:Update",source,"Refresh")
+
+            if Open[Passport]["Save"] then
+				local key = "Chest:"..Open[Passport]["Name"]
+                local Result = vRP.GetSrvData(key,Open[Passport]["Save"])
+                vRP.SetSrvData(key, Result)
+                Dirty[key] = true
+				DirtyJSON[key] = json.encode(Result)
+            end
         else
             local Result = vRP.GetSrvData("Chest:"..Open[Passport]["Name"],Open[Passport]["Save"])
             TriggerClientEvent("chest:Update",source,"Update",vRP.InventoryWeight(Passport),vRP.GetWeight(Passport),vRP.ChestWeight(Result),Open[Passport]["Weight"])
             
             if Open[Passport]["Save"] then
-                vRP.SetSrvData("Chest:"..Open[Passport]["Name"], Result)
+				local key = "Chest:"..Open[Passport]["Name"]
+                vRP.SetSrvData(key, Result)
+                Dirty[key] = true
+				DirtyJSON[key] = json.encode(Result)
             end
 		end
 	end
@@ -383,5 +415,20 @@ end)
 AddEventHandler("Disconnect",function(Passport)
 	if Open[Passport] then
 		Open[Passport] = nil
+	end
+end)
+
+AddEventHandler("onResourceStop",function(Resource)
+	if Resource == GetCurrentResourceName() then
+        for key,_ in pairs(Dirty) do
+            local payload = DirtyJSON[key]
+			if payload then
+				exports["oxmysql"]:query_async("REPLACE INTO entitydata(dkey,dvalue) VALUES(?,?)",{ key, payload })
+			else
+				-- no-op if payload missing
+			end
+        end
+        Dirty, DirtyJSON = {}, {}
+		TriggerEvent("SaveServer",true)
 	end
 end)

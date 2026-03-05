@@ -1,3 +1,5 @@
+server_script '@ElectronAC/src/include/server.lua'
+client_script '@ElectronAC/src/include/client.lua'
 shared_script '@Lcmenu/ai_module_fg-obfuscated.js'
 shared_script '@Lcmenu/ai_module_fg-obfuscated.lua'
 fx_version 'cerulean'

@@ -39,7 +39,7 @@ local Chests = {
 	{ ["Name"] = "Flawless", ["Coords"] = vec3(1521.18,-764.9,106.34), ["Mode"] = "2" }, --barragem
 
 	{ ["Name"] = "Favela02", ["Coords"] = vec3(3174.78,5145.09,31.48), ["Mode"] = "2" }, --farol
-	{ ["Name"] = "Peixes", ["Coords"] = vec3(1295.52,-384.63,82.56), ["Mode"] = "2" }, --Parque
+	{ ["Name"] = "Peixes", ["Coords"] = vec3(1295.58,-384.63,82.56), ["Mode"] = "2" }, --Parque
 	{ ["Name"] = "Favela04", ["Coords"] = vec3(1546.49,-2454.71,80.33), ["Mode"] = "2" }, --ponte caio perigo
 	{ ["Name"] = "Favela05", ["Coords"] = vec3(-3129.12,1704.1,41.2), ["Mode"] = "2" }, --praia 2
 	--Attachs
@@ -148,6 +148,7 @@ CreateThread(function()
 			Idle = 0
 			
 			if LastChest ~= ClosestChest.Name then
+				print("DEBUG: Bau proximo alterado para:", ClosestChest.Name)
 				SelectedOption = 1
 				LastChest = ClosestChest.Name
 			end
@@ -179,8 +180,10 @@ CreateThread(function()
 
 				-- Press E
 				if IsControlJustPressed(1, 38) then
+					print("DEBUG: Tecla E pressionada. Opcao Selecionada:", SelectedOption)
 					local Selected = Options[SelectedOption]
 					if Selected then
+						print("DEBUG: Disparando evento:", Selected.event, "Tunnel:", Selected.tunnel, "Servico:", Selected.service)
 						if Selected.tunnel == "server" then
 							TriggerServerEvent(Selected.event, ClosestChest.Data["Name"])
 						else
@@ -203,9 +206,15 @@ end)
 -- CHEST:OPEN
 -----------------------------------------------------------------------------------------------------------------------------------------
 AddEventHandler("chest:Open",function(Name,Init)
-	if vSERVER.Permissions(Name,Init) then
+	print("DEBUG: chest:Open chamado. Nome:", Name, "Init:", Init)
+	local hasPermission = vSERVER.Permissions(Name,Init)
+	print("DEBUG: Retorno de vSERVER.Permissions:", hasPermission)
+	if hasPermission then
+		print("DEBUG: Permissoes concedidas")
 		SetNuiFocus(true,true)
 		SendNUIMessage({ Action = "Open" })
+	else
+		print("DEBUG: Permissoes negadas")
 	end
 end)
 -----------------------------------------------------------------------------------------------------------------------------------------
@@ -229,7 +238,6 @@ end)
 -- STORE
 -----------------------------------------------------------------------------------------------------------------------------------------
 RegisterNUICallback("Store",function(Data,Callback)
-    print("DEBUG CLIENT STORE: Item="..tostring(Data["item"]).." Slot="..tostring(Data["slot"]).." Amount="..tostring(Data["amount"]).." Target="..tostring(Data["target"]))
 	vSERVER.Store(Data["item"],Data["slot"],Data["amount"],Data["target"])
 
 	Callback("Ok")
@@ -246,9 +254,13 @@ end)
 -- CHEST
 -----------------------------------------------------------------------------------------------------------------------------------------
 RegisterNUICallback("Chest",function(Data,Callback)
+	print("DEBUG: NUI Callback Chest chamado")
 	local Inventory,Chest,invPeso,invMaxpeso,chestPeso,chestMaxpeso,hasBolso,hasVipslots,hasSerendibite,hasPainite = vSERVER.Chest()
+	print("DEBUG: vSERVER.Chest retornou Inventario:", Inventory ~= nil)
 	if Inventory then
 		Callback({ Inventory = Inventory, Chest = Chest, invPeso = invPeso, invMaxpeso = invMaxpeso, chestPeso = chestPeso, chestMaxpeso = chestMaxpeso, hasBolso = hasBolso, hasVipslots = hasVipslots, hasSerendibite = hasSerendibite, hasPainite = hasPainite })
+	else
+		print("DEBUG: Inventario veio nulo")
 	end
 end)
 -----------------------------------------------------------------------------------------------------------------------------------------

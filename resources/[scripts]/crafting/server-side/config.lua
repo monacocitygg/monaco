@@ -637,26 +637,26 @@ Crafting = {
 		["List"] = {
 			["WEAPON_PISTOL_AMMO"] = {
 				["Time"] = 1,
-				["Amount"] = 100,
+				["Amount"] = 1,
 				["Required"] = {
-					["sheetmetal"] = 90,
-					["polvora"] = 90
+					["sheetmetal"] = 1,
+					["polvora"] = 1
 				}
 			},
 			["WEAPON_SMG_AMMO"] = {
 				["Time"] = 1,
-				["Amount"] = 100,
+				["Amount"] = 1,
 				["Required"] = {
-					["sheetmetal"] = 110,
-					["polvora"] = 110
+					["sheetmetal"] = 2,
+					["polvora"] = 2
 				}
 			},
 			["WEAPON_RIFLE_AMMO"] = {
 				["Time"] = 1,
-				["Amount"] = 100,
+				["Amount"] = 1,
 				["Required"] = {
-					["sheetmetal"] = 120,
-					["polvora"] = 120
+					["sheetmetal"] = 3,
+					["polvora"] = 3
 				}
 			}
 		}

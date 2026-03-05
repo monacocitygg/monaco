@@ -1250,8 +1250,6 @@ function Disconnect(source, Health, Armour, Coords, Reason)
     local Passport = vRP.Passport(source)
     local Datatable = vRP.Datatable(Passport)
     if Passport then
-        local Dead = (tonumber(Health) or 0) <= 100
-        print("DEBUG DISCONNECT: Passport="..Passport.." Health="..tostring(Health).." Dead="..tostring(Dead))
         TriggerEvent("Discord", "Disconnect",
             "**Source:** " ..
             source ..
@@ -1272,13 +1270,7 @@ function Disconnect(source, Health, Armour, Coords, Reason)
                 TriggerEvent("arena:Players", "-", Prepares[Passport]["route"])
                 Prepares[Passport] = nil
             else
-                if Dead then
-                    Datatable["Health"] = 100
-                    Datatable["Dead"] = true
-                else
-                    Datatable["Health"] = Health
-                    Datatable["Dead"] = false
-                end
+                Datatable["Health"] = Health
                 Datatable["Armour"] = Armour
                 Datatable["Pos"] = {
                     x = mathLength(Coords["x"]),

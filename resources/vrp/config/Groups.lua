@@ -41,7 +41,7 @@ Groups = {
 			
 		},
 		["Hierarchy"] = { "streamer" },
-		["Salary"] = { 1500 },
+		["Salary"] = { 500 },
 		["Service"] = {}
 	},
 

@@ -6077,7 +6077,47 @@ local List = {
 			["Weight"] = 80,
 			["Price"] = 20000,
 			["Mode"] = "Rental",
-			["Gemstone"] = 400,
+			["Gemstone"] = 200,
+			["Class"] = "Importados"
+		},
+		["BLIND_AMAROK"] = {
+			["Name"] = "WM Amarok",
+			["Weight"] = 80,
+			["Price"] = 20000,
+			["Mode"] = "Rental",
+			["Gemstone"] = 200,
+			["Class"] = "Importados"
+		},
+		["BLIND_G63"] = {
+			["Name"] = "KMG G63",
+			["Weight"] = 80,
+			["Price"] = 20000,
+			["Mode"] = "Rental",
+			["Gemstone"] = 200,
+			["Class"] = "Importados"
+		},
+		["BLIND_M3G80"] = {
+			["Name"] = "KMG G63",
+			["Weight"] = 80,
+			["Price"] = 20000,
+			["Mode"] = "Rental",
+			["Gemstone"] = 200,
+			["Class"] = "Importados"
+		},
+		["BLIND_XC90"] = {
+			["Name"] = "POLVO XC90",
+			["Weight"] = 80,
+			["Price"] = 20000,
+			["Mode"] = "Rental",
+			["Gemstone"] = 200,
+			["Class"] = "Importados"
+		},
+		["BLIND_X5"] = {
+			["Name"] = "PMW X5",
+			["Weight"] = 80,
+			["Price"] = 20000,
+			["Mode"] = "Rental",
+			["Gemstone"] = 200,
 			["Class"] = "Importados"
 		},
 		-- Paramedico

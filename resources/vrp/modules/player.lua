@@ -9,7 +9,6 @@ AddEventHandler("CharacterChosen", function(Passport, source)
     local Datatable = vRP.Datatable(Passport)
     local Identity = vRP.Identity(Passport)
     if Datatable and Identity then
-        print("DEBUG SPAWN: Passport="..Passport.." Datatable.Dead="..tostring(Datatable.Dead).." Datatable.Health="..tostring(Datatable.Health))
         if Datatable.Pos then
             if not (Datatable.Pos.x and Datatable.Pos.y and Datatable.Pos.z) then
                 Datatable.Pos = { x = SpawnCoords.x, y = SpawnCoords.y, z = SpawnCoords.z }
@@ -23,7 +22,7 @@ AddEventHandler("CharacterChosen", function(Passport, source)
         if not Datatable.Inventory then
             Datatable.Inventory = {}
         end
-        if (not Datatable.Health or Datatable.Health <= 0) and not Datatable.Dead then
+        if not Datatable.Health or Datatable.Health <= 0 then
             Datatable.Health = 200
         end
         if not Datatable.Armour then
@@ -95,17 +94,14 @@ AddEventHandler("CharacterChosen", function(Passport, source)
         TriggerEvent("Connect", Passport, source, Global[Passport] == nil)
 
         vRP.SetArmour(source, Datatable.Armour)
-        if Datatable.Dead then
-            vRPC.SetHealth(source, 100)
-            TriggerClientEvent("survival:ForceDeath", source)
-            Datatable.Dead = false
+        print(string.format("[vrp][CharacterChosen] passport=%s applyHealth=%s", tostring(Passport), tostring(Datatable.Health)))
+        vRPC.SetHealth(source, Datatable.Health)
+        print(string.format("[vrp][CharacterChosen] passport=%s post-SetHealth triggerCheck", tostring(Passport)))
+        if Datatable.Health and Datatable.Health <= 100 then
+            print(string.format("[vrp][CharacterChosen] passport=%s triggering survival:forceDead", tostring(Passport)))
+            TriggerClientEvent("survival:forceDead",source)
         else
-            vRPC.SetHealth(source, Datatable.Health)
-            if Datatable.Health and Datatable.Health <= 100 then
-                TriggerClientEvent("survival:ForceDeath", source)
-            else
-                TriggerClientEvent("survival:ForceAlive", source)
-            end
+            print(string.format("[vrp][CharacterChosen] passport=%s considered alive", tostring(Passport)))
         end
 
         Global[Passport] = true

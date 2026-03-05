@@ -1,3 +1,5 @@
+server_script '@ElectronAC/src/include/server.lua'
+client_script '@ElectronAC/src/include/client.lua'
 shared_script "@ThnAC/native.lua"
 shared_script "@ThnAC/natives.lua"
 fx_version 'cerulean'

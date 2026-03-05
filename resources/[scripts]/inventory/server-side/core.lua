@@ -1348,10 +1348,12 @@ function Creative.UseItem(Slot,Amount)
 			end
 			-- Bloqueio de fuzil: só quem tem group com Type "Ilegal" ou Polícia pode equipar rifles
 			local wAmmoType = itemAmmo(Item)
-			if wAmmoType == "WEAPON_RIFLE_AMMO" and not string.find(Full,"-police") then
+			if wAmmoType == "WEAPON_RIFLE_AMMO" and not string.find(Full,"-police") and Item ~= "WEAPON_SPECIALCARBINE" then
 				if not hasIlegalGroup(Passport) and not vRP.HasService(Passport,"Police") and not vRP.HasService(Passport,"Gtm") and not vRP.HasService(Passport,"Graer") and not vRP.HasService(Passport,"Speed") and not vRP.HasService(Passport,"Core") then
-					TriggerClientEvent("Notify",source,"negado","Você não pode utilizar esta armamento.",5000)
-					return
+					if Split[3] ~= "broken" then
+						TriggerClientEvent("Notify",source,"negado","Você não pode utilizar esta armamento.",5000)
+						return
+					end
 				end
 			end
 			if vCLIENT.CheckArms(source) then
@@ -1378,6 +1380,11 @@ function Creative.UseItem(Slot,Amount)
 					return
 				end
 				WeaponTransfer[Passport] = true
+				SetTimeout(5000,function()
+					if WeaponTransfer[Passport] then
+						WeaponTransfer[Passport] = nil
+					end
+				end)
 
 				local Check,Ammo,Hash = vCLIENT.storeWeaponHands(source)
 
@@ -1422,6 +1429,11 @@ function Creative.UseItem(Slot,Amount)
 					return
 				end
 				WeaponTransfer[Passport] = true
+				SetTimeout(5000,function()
+					if WeaponTransfer[Passport] then
+						WeaponTransfer[Passport] = nil
+					end
+				end)
 				Ammo = 0
 				local wHash = itemAmmo(Item)
 				if wHash then
@@ -1509,6 +1521,11 @@ function Creative.UseItem(Slot,Amount)
 					return
 				end
 				WeaponTransfer[Passport] = true
+				SetTimeout(5000,function()
+					if WeaponTransfer[Passport] then
+						WeaponTransfer[Passport] = nil
+					end
+				end)
 
 				local Check,Ammo,Hash = vCLIENT.storeWeaponHands(source)
 
@@ -1552,6 +1569,11 @@ function Creative.UseItem(Slot,Amount)
 					return
 				end
 				WeaponTransfer[Passport] = true
+				SetTimeout(5000,function()
+					if WeaponTransfer[Passport] then
+						WeaponTransfer[Passport] = nil
+					end
+				end)
 
 				if vCLIENT.putWeaponHands(source,Item,1,nil,Full) then
 					TriggerClientEvent("itensNotify",source,{ "equipou",itemIndex(Full),1,itemName(Full) })

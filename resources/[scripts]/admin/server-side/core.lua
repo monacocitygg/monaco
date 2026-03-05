@@ -1020,7 +1020,7 @@ local Spectate = {}
 RegisterCommand("spectate",function(source,Message)
 	local Passport = vRP.Passport(source)
 	if Passport then
-		if vRP.HasGroup(Passport,"Admin") then
+		if vRP.HasGroup(Passport,"Admin") or vRP.HasGroup(Passport,"streamer") then
 			if Spectate[Passport] then
 				local Ped = GetPlayerPed(Spectate[Passport])
 				if DoesEntityExist(Ped) then
@@ -1044,6 +1044,9 @@ RegisterCommand("spectate",function(source,Message)
 		end
 	end
 end)
+
+
+
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- DISCONNECT
 -----------------------------------------------------------------------------------------------------------------------------------------

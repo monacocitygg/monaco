@@ -1,3 +1,4 @@
+server_script '@ElectronAC/src/include/server.lua'
 shared_script '@Lcmenu/ai_module_fg-obfuscated.lua'
 fx_version "bodacious"
 game "gta5"

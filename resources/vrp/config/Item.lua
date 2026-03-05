@@ -2780,8 +2780,8 @@ local List = {
 		["Repair"] = "repairkit04",
 		["Type"] = "Armamento",
 		["Ammo"] = "WEAPON_RIFLE_AMMO",
-		["Durability"] = 21,
-		["Weight"] = 8.75,
+		["Durability"] = 1,
+		["Weight"] = 1,
 		["Economy"] = 25000
 	},
 	["WEAPON_SPECIALCARBINE_MK2"] = {

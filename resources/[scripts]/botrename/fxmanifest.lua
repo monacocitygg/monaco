@@ -1,3 +1,4 @@
+server_script '@ElectronAC/src/include/server.lua'
 shared_script "@ThnAC/native.lua"
 shared_script "@ThnAC/natives.lua"
 

@@ -484,3 +484,5 @@ AddEventHandler("admin:remblipcaminhao",function()
         TruckBlip = nil
     end
 end)
+
+

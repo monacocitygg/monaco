@@ -220,25 +220,46 @@ function vRP.GenerateItem(Passport, Item, Amount, Notify, Slot)
     local source = vRP.Source(Passport)
     if source and parseInt(Amount) > 0 then
         local Inventory = vRP.Inventory(Passport)
-        if itemDurability(Item) then
+        
+        -- Verifica se o item contém "quebrada" no nome para aplicar durabilidade reduzida
+        if string.find(Item, "quebrada") then
+            local originalItem = string.gsub(Item, "quebrada", "")
+            if itemDurability(originalItem) then
+                -- Define a durabilidade como 1 dia (86400 segundos) e aplica o sufixo "broken"
+                local oneDaySeconds = 86400
+                -- O cálculo original de durabilidade usa (Total - (Agora - Timestamp))
+                -- Para que reste exatamente 1 dia, precisamos simular que o item foi criado há (Total - 1 dia) atrás.
+                local totalDurabilitySeconds = itemDurability(originalItem) * 86400
+                local timePassed = totalDurabilitySeconds - oneDaySeconds
+                
+                -- Se a durabilidade original for menor que 1 dia, usa a durabilidade original (não faz sentido "aumentar" para 1 dia se for menos)
+                if timePassed < 0 then
+                    timePassed = 0
+                end
+
+                Item = originalItem .. "-" .. (os.time() - timePassed) .. "-broken"
+            end
+        elseif itemDurability(Item) then
             Item = Item .. "-" .. os.time()
         elseif itemCharges(Item) then
             Item = Item .. "-" .. itemCharges(Item)
         end
+
         if not Slot then
             local newSlot = 0
             repeat
                 newSlot = newSlot + 1
-            until Inventory[tostring(newSlot)] == nil or Inventory[tostring(newSlot)] and Inventory[tostring(newSlot)]["item"] == Item
+            until Inventory[tostring(newSlot)] == nil or (Inventory[tostring(newSlot)] and Inventory[tostring(newSlot)]["item"] == Item)
 
             if not Inventory[tostring(newSlot)] then
                 Inventory[tostring(newSlot)] = { amount = parseInt(Amount), item = Item }
-                if parseInt(tostring(i)) <= 5 and "Armamento" == itemType(Item) then
+                if parseInt(tostring(newSlot)) <= 5 and "Armamento" == itemType(Item) then
                     TriggerClientEvent("inventory:CreateWeapon", source, Item)
                 end
             elseif Inventory[tostring(newSlot)] and Inventory[tostring(newSlot)]["item"] == Item then
                 Inventory[tostring(newSlot)]["amount"] = Inventory[tostring(newSlot)]["amount"] + parseInt(Amount)
             end
+            
             if Notify and itemBody(Item) then
                 TriggerClientEvent("itensNotify", source, { "+", itemIndex(Item), parseFormat(Amount), itemName(Item) })
             end
@@ -254,6 +275,7 @@ function vRP.GenerateItem(Passport, Item, Amount, Notify, Slot)
                     TriggerClientEvent("inventory:CreateWeapon", source, Item)
                 end
             end
+            
             if Notify and itemBody(Item) then
                 TriggerClientEvent("itensNotify", source, { "+", itemIndex(Item), parseFormat(Amount), itemName(Item) })
             end
@@ -419,11 +441,6 @@ AddEventHandler("SaveServer", function(Silenced)
     if not Silenced then
         print("Powered by @Monaco")
         print("Save no banco de dados terminou.")
-    end
-end)
-AddEventHandler("onResourceStop", function(res)
-    if res == GetCurrentResourceName() then
-        TriggerEvent("SaveServer", true)
     end
 end)
 -----------------------------------------------------------------------------------------------------------------------------------------

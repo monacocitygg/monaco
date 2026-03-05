@@ -9,6 +9,8 @@ end
 -----------------------------------------------------------------------------------------------------------------------------------------
 function tvRP.SetHealth(Health)
 	local Ped = PlayerPedId()
+	local prev = GetEntityHealth(Ped)
+	print(string.format("[vrp][client] SetHealth prev=%s -> new=%s", tostring(prev), tostring(Health)))
 	SetEntityHealth(Ped,Health)
 end
 -----------------------------------------------------------------------------------------------------------------------------------------
@@ -49,10 +51,6 @@ function tvRP.Skin(Hash)
 		SetPlayerModel(Pid,Hash)
 		SetPedComponentVariation(Ped,5,0,0,1)
 		SetModelAsNoLongerNeeded(Hash)
-        
-        -- Set max health immediately to prevent survival trigger
-        SetEntityMaxHealth(Ped,200)
-        SetPedMaxHealth(Ped,200)
 
 		ReloadCharacter(Pid,Ped)
 
@@ -64,10 +62,12 @@ end
 -----------------------------------------------------------------------------------------------------------------------------------------
 RegisterNetEvent("vRP:Active")
 AddEventHandler("vRP:Active",function(Passport,Name)
+	print("[vrp][client] vRP:Active received")
 	LocalPlayer["state"]:set("Name",Name,false)
 	LocalPlayer["state"]:set("Active",true,false)
 	LocalPlayer["state"]:set("Invincible",true,false)
 	LocalPlayer["state"]:set("Passport",Passport,false)
+	print(string.format("[vrp][client] After Active flag, health=%s", tostring(GetEntityHealth(PlayerPedId()))))
 	SetDiscordAppId(1366258498182057985)
 	SetDiscordRichPresenceAsset("After city")
 	SetRichPresence("-"..Passport.." "..Name)
@@ -82,6 +82,9 @@ AddEventHandler("vRP:Active",function(Passport,Name)
 	FreezeEntityPosition(Ped,false)
 	NetworkSetFriendlyFireOption(true)
 	SetCanAttackFriendly(Ped,true,false)
+	SetTimeout(1000,function()
+		print(string.format("[vrp][client] vRP:Active +1000ms health=%s", tostring(GetEntityHealth(PlayerPedId()))))
+	end)
 
 	SetTimeout(10000,function()
 		SetEntityInvincible(Ped,false)
