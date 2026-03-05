@@ -194,30 +194,23 @@ CreateThread(function()
     end
 end)
 
--- evento recebido pela vitima: server avisa que levou HS, client espera e checa se tankou
+-- evento recebido pela vitima: server ja confirmou que tankou, forca morte direto
 RegisterNetEvent('antitank:checkKill', function()
-    if Config.Antitank.Debug then
-        print('[ANTI-TANK] checkKill recebido, aguardando 1s...')
+    local ped = PlayerPedId()
+    local hp = GetEntityHealth(ped)
+
+    if hp <= 101 then
+        if Config.Antitank.Debug then
+            print(('[ANTI-TANK] checkKill recebido mas ja morreu (HP: %d), ignorando.'):format(hp))
+        end
+        return
     end
 
-    CreateThread(function()
-        Wait(1000)
-        local ped = PlayerPedId()
-        local hp = GetEntityHealth(ped)
-        if hp <= 101 then
-            if Config.Antitank.Debug then
-                print(('[ANTI-TANK] Jogador morreu normalmente (HP: %d), ignorando.'):format(hp))
-            end
-            return
-        end
-
-        -- ainda vivo apos 1s = tankou
-        if Config.Antitank.Debug then
-            print(('[ANTI-TANK] Jogador tankou (HP: %d)! Forcando morte...'):format(hp))
-        end
-        SetPlayerInvincible(PlayerId(), false)
-        SetEntityInvincible(ped, false)
-        SetEntityCanBeDamaged(ped, true)
-        SetEntityHealth(ped, 0)
-    end)
+    if Config.Antitank.Debug then
+        print(('[ANTI-TANK] checkKill recebido, tankou (HP: %d)! Forcando morte...'):format(hp))
+    end
+    SetPlayerInvincible(PlayerId(), false)
+    SetEntityInvincible(ped, false)
+    SetEntityCanBeDamaged(ped, true)
+    SetEntityHealth(ped, 0)
 end)

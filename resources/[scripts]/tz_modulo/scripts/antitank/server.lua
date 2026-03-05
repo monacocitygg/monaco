@@ -32,9 +32,24 @@ RegisterNetEvent('antitank:headshot', function(victimId, attackerId, weaponHash)
     end
 
     if user_id then
-        if Config.Antitank.Debug then
-            print(('[ANTI-TANK] %s (ID: %d) antitank:checkKill enviado.'):format(victimName, victimId))
-        end
-        TriggerClientEvent('antitank:checkKill', victimId)
+        -- espera 500ms e checa se a vitima ainda ta viva (tankou)
+        SetTimeout(500, function()
+            local vPed = GetPlayerPed(victimId)
+            if not vPed or vPed == 0 then return end
+
+            local hp = GetEntityHealth(vPed)
+            if hp <= 101 then
+                if Config.Antitank.Debug then
+                    print(('[ANTI-TANK] %s (ID: %d) morreu normalmente (HP: %d), ignorando.'):format(victimName, victimId, hp))
+                end
+                return
+            end
+
+            -- ainda vivo = tankou, forca morte
+            if Config.Antitank.Debug then
+                print(('[ANTI-TANK] %s (ID: %d) TANKOU (HP: %d)! Enviando checkKill.'):format(victimName, victimId, hp))
+            end
+            TriggerClientEvent('antitank:checkKill', victimId)
+        end)
     end
 end)
